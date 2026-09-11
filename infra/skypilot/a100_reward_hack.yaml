@@ -1,0 +1,86 @@
+name: qwen3-4b-reward-hack-grpo
+num_nodes: 1
+
+workdir: .
+
+resources:
+  infra: aws/us-east-1
+  instance_type: p4de.24xlarge
+  accelerators: A100-80GB:8
+  use_spot: false
+  max_hourly_cost: 27.50
+  disk_size: 300
+  labels:
+    codex-run-owner: __CODEX_RUN_TOKEN__
+  image_id: docker:verlai/verl@sha256:6bcff875bfe58350b238ddac7f975fcda6f99f55dee42d8918199357ab3aa0ef
+  autostop:
+    idle_minutes: 10
+    down: true
+    wait_for: jobs
+
+# This persistent SkyPilot storage object will create/reuse an S3 bucket with
+# the exact name below only after a reviewed launch is explicitly approved.
+file_mounts:
+  /durable-checkpoints:
+    name: example-reward-hacking-artifacts
+    store: s3
+    mode: MOUNT
+    persistent: true
+  # The guarded launcher renders this to a private 0600 temporary copy.  The
+  # secret's bytes never enter the task request body or reviewed manifest.
+  ~/sky_workdir/.runtime-secrets/wandb_api_key: __CODEX_WANDB_API_KEY_FILE__
+
+envs:
+  DURABLE_CHECKPOINT_ROOT: /durable-checkpoints/qwen3-4b/no-intervention
+  HARDWARE_PROFILE: p4de-a100-80gb
+  EXPECTED_GPU_MEMORY_MIN_MIB: "79000"
+  EXPECTED_GPU_MEMORY_MAX_MIB: "83000"
+  PPO_MICRO_BATCH_SIZE_PER_GPU: "32"
+  VLLM_GPU_MEMORY_UTILIZATION: "0.85"
+  VLLM_MAX_NUM_SEQS: "1024"
+  RUN_MEMORY_QUALIFICATION: "false"
+  REVIEWED_TASK_PATH: infra/skypilot/a100_reward_hack.yaml
+  REVIEWED_MANIFEST_PATH: infra/skypilot/reviewed_manifest.json
+  HF_HUB_ENABLE_HF_TRANSFER: "1"
+  MAX_JOBS: "32"
+  PYTHONUNBUFFERED: "1"
+  TOKENIZERS_PARALLELISM: "false"
+  UV_CACHE_DIR: /tmp/uv-cache
+  UV_LINK_MODE: copy
+  VLLM_WORKER_MULTIPROC_METHOD: spawn
+  WANDB_DISABLE_CODE: "true"
+  WANDB_DIR: results/wandb
+  WANDB_INIT_TIMEOUT: "180"
+  WANDB_MODE: online
+  WANDB_PROJECT: steering-rl-rewardhacking
+
+setup: |
+  set -euo pipefail
+  unset PIP_INDEX_URL PIP_EXTRA_INDEX_URL PIP_TRUSTED_HOST PIP_FIND_LINKS \
+    PIP_NO_INDEX UV_INDEX UV_DEFAULT_INDEX UV_INDEX_URL UV_EXTRA_INDEX_URL \
+    UV_FIND_LINKS UV_NO_INDEX UV_OFFLINE UV_INSECURE_HOST UV_INDEX_STRATEGY \
+    UV_KEYRING_PROVIDER UV_CONFIG_FILE UV_NO_CONFIG
+  export PIP_CONFIG_FILE=/dev/null
+  export UV_NO_CONFIG=1
+  if ! command -v bwrap >/dev/null 2>&1; then
+    timeout --signal=TERM --kill-after=2m 10m \
+      apt-get update
+    timeout --signal=TERM --kill-after=2m 10m \
+      apt-get install -y --no-install-recommends bubblewrap
+  fi
+  timeout --signal=TERM --kill-after=2m 10m \
+    python -m pip install --isolated --no-cache-dir \
+      --index-url https://pypi.org/simple uv==0.10.8
+  timeout --signal=TERM --kill-after=2m 50m \
+    uv sync --no-config --default-index https://pypi.org/simple \
+      --frozen --group dev
+  timeout --signal=TERM --kill-after=2m 10m \
+    uv pip install --no-config --default-index https://pypi.org/simple \
+      --python .venv/bin/python --no-deps -e ./verl
+  uv run --no-config --frozen --group dev --no-sync python -c \
+    'import torch, vllm, verl; print(f"torch={torch.__version__} vllm={vllm.__version__}")'
+
+run: |
+  set -euo pipefail
+  timeout --signal=TERM --kill-after=10m 720m \
+    bash infra/skypilot/run_reward_hack.sh
