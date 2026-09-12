@@ -1,7 +1,8 @@
-# Public repository: code only.
+# Public repository: code and public README; private reports excluded.
 *.md
 *.MD
 *.mdx
+!/README.md
 *.ipynb
 .env*
 **/secrets/
