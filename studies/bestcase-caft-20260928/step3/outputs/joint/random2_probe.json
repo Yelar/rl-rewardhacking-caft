@@ -1,0 +1,161 @@
+{
+ "tolerance": 0.25,
+ "max_draws": 20000,
+ "store": "/scratch/yelarys.yertaiuly/bestcase-step3/calib",
+ "targets": {
+  "rand2_probe_chosen": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-step3/probe_bank.npz:probe_chosen",
+   "blocks": [
+    15
+   ],
+   "per_block": {
+    "15": {
+     "target_e1": 0.7498446702957153,
+     "target_e2": 0.9266491532325745,
+     "draws_examined": 20000,
+     "share_jointly_within_tol": 0.0,
+     "share_l1_within_10pct": 0.0,
+     "median_r1": 3.8840997219085693,
+     "median_r2": 13.683398246765137,
+     "best_minimax": {
+      "draw": 8777,
+      "r1": 1.7420436143875122,
+      "r2": 2.979703903198242
+     },
+     "draw_index": 8777,
+     "r1": 1.7420436143875122,
+     "r2": 2.979703903198242,
+     "no_draw_within_tolerance": true,
+     "cos_random_target": -0.01106152031570673
+    }
+   }
+  },
+  "rand2_probe_b22_27": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-step3/probe_bank.npz:probe_b22_27",
+   "blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "per_block": {
+    "22": {
+     "target_e1": 1.1139720678329468,
+     "target_e2": 2.006241798400879,
+     "draws_examined": 20000,
+     "share_jointly_within_tol": 0.0,
+     "share_l1_within_10pct": 0.0,
+     "median_r1": 10.376249313354492,
+     "median_r2": 806.7937622070312,
+     "best_minimax": {
+      "draw": 17691,
+      "r1": 2.241619825363159,
+      "r2": 5.274291038513184
+     },
+     "draw_index": 17691,
+     "r1": 2.241619825363159,
+     "r2": 5.274291038513184,
+     "no_draw_within_tolerance": true,
+     "cos_random_target": 0.01129026897251606
+    },
+    "23": {
+     "target_e1": 1.291725754737854,
+     "target_e2": 2.763125419616699,
+     "draws_examined": 20000,
+     "share_jointly_within_tol": 0.0,
+     "share_l1_within_10pct": 0.0,
+     "median_r1": 10.948697090148926,
+     "median_r2": 494.98419189453125,
+     "best_minimax": {
+      "draw": 618,
+      "r1": 2.7510101795196533,
+      "r2": 7.041640281677246
+     },
+     "draw_index": 618,
+     "r1": 2.7510101795196533,
+     "r2": 7.041640281677246,
+     "no_draw_within_tolerance": true,
+     "cos_random_target": -0.021266646683216095
+    },
+    "24": {
+     "target_e1": 1.5220483541488647,
+     "target_e2": 3.7504420280456543,
+     "draws_examined": 20000,
+     "share_jointly_within_tol": 0.0,
+     "share_l1_within_10pct": 0.0,
+     "median_r1": 12.786247253417969,
+     "median_r2": 353.6836242675781,
+     "best_minimax": {
+      "draw": 14798,
+      "r1": 2.6780335903167725,
+      "r2": 7.43757963180542
+     },
+     "draw_index": 14798,
+     "r1": 2.6780335903167725,
+     "r2": 7.43757963180542,
+     "no_draw_within_tolerance": true,
+     "cos_random_target": -0.01746882125735283
+    },
+    "25": {
+     "target_e1": 1.6895925998687744,
+     "target_e2": 4.618680477142334,
+     "draws_examined": 20000,
+     "share_jointly_within_tol": 0.0,
+     "share_l1_within_10pct": 0.0,
+     "median_r1": 12.419976234436035,
+     "median_r2": 272.9404602050781,
+     "best_minimax": {
+      "draw": 12571,
+      "r1": 2.5123848915100098,
+      "r2": 6.695464134216309
+     },
+     "draw_index": 12571,
+     "r1": 2.5123848915100098,
+     "r2": 6.695464134216309,
+     "no_draw_within_tolerance": true,
+     "cos_random_target": -0.018678229302167892
+    },
+    "26": {
+     "target_e1": 1.7904890775680542,
+     "target_e2": 5.20639705657959,
+     "draws_examined": 20000,
+     "share_jointly_within_tol": 0.0,
+     "share_l1_within_10pct": 0.0,
+     "median_r1": 13.277033805847168,
+     "median_r2": 252.31277465820312,
+     "best_minimax": {
+      "draw": 7194,
+      "r1": 2.9876253604888916,
+      "r2": 8.959689140319824
+     },
+     "draw_index": 7194,
+     "r1": 2.9876253604888916,
+     "r2": 8.959689140319824,
+     "no_draw_within_tolerance": true,
+     "cos_random_target": -0.021552326157689095
+    },
+    "27": {
+     "target_e1": 2.1166269779205322,
+     "target_e2": 7.337894439697266,
+     "draws_examined": 20000,
+     "share_jointly_within_tol": 0.0,
+     "share_l1_within_10pct": 0.0,
+     "median_r1": 11.726692199707031,
+     "median_r2": 174.97496032714844,
+     "best_minimax": {
+      "draw": 6873,
+      "r1": 2.413335084915161,
+      "r2": 6.680519104003906
+     },
+     "draw_index": 6873,
+     "r1": 2.413335084915161,
+     "r2": 6.680519104003906,
+     "no_draw_within_tolerance": true,
+     "cos_random_target": 0.014628658071160316
+    }
+   }
+  }
+ }
+}

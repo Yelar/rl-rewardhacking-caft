@@ -44,6 +44,8 @@ class HFModelConfig(BaseConfig):
     }
 
     path: str = MISSING
+    base_model_name_or_path: Optional[str] = None
+    revision: Optional[str] = None
     local_path: Optional[str] = None
     hf_config_path: Optional[str] = None
     local_hf_config_path: Optional[str] = None
@@ -68,6 +70,14 @@ class HFModelConfig(BaseConfig):
     external_lib: Optional[str] = None
 
     override_config: dict = field(default_factory=dict)
+
+    # Explicit matched CAFT pilot; None preserves the original pipeline.
+    caft: Optional[dict] = None
+    # Best-case study: seed for the LoRA adapter's random initial weights (None = original unseeded behaviour).
+    lora_init_seed: Optional[int] = None
+    # Best-case study (protocol 7.4): base seed of the hybrid engine's generation CUDA RNG stream (the stream that
+    # drives rollout sampling). None = original behaviour (1000 + data-parallel rank).
+    rollout_gen_seed: Optional[int] = None
 
     enable_gradient_checkpointing: bool = True
     enable_activation_offload: bool = False
@@ -98,11 +108,13 @@ class HFModelConfig(BaseConfig):
         if self.tokenizer_path is None:
             self.tokenizer_path = self.path
 
-        self.local_path = copy_to_local(self.path, use_shm=self.use_shm)
+        self.local_path = copy_to_local(self.path, use_shm=self.use_shm, revision=self.revision)
 
         # constuct tokenizer
         if self.load_tokenizer:
-            self.local_tokenizer_path = copy_to_local(self.tokenizer_path, use_shm=self.use_shm)
+            self.local_tokenizer_path = copy_to_local(
+                self.tokenizer_path, use_shm=self.use_shm, revision=self.revision
+            )
             self.tokenizer = hf_tokenizer(self.local_tokenizer_path, trust_remote_code=self.trust_remote_code)
             self.processor = hf_processor(self.local_tokenizer_path, trust_remote_code=self.trust_remote_code)
 
@@ -112,7 +124,9 @@ class HFModelConfig(BaseConfig):
             else:
                 self.tokenizer.chat_template = self.custom_chat_template
 
-        self.local_hf_config_path = copy_to_local(self.hf_config_path, use_shm=self.use_shm)
+        self.local_hf_config_path = copy_to_local(
+            self.hf_config_path, use_shm=self.use_shm, revision=self.revision
+        )
         self.generation_config = get_generation_config(
             self.local_hf_config_path, trust_remote_code=self.trust_remote_code
         )

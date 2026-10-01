@@ -1,0 +1,54 @@
+{
+ "protocol": "bestcase_multilayer_response_predictor_caft_v2",
+ "arm": "qual_random",
+ "layers": [
+  22,
+  23,
+  24,
+  25,
+  26,
+  27
+ ],
+ "strength": 1.0,
+ "direction": {
+  "source": "seeded random unit vectors for machinery qualification only"
+ },
+ "q": {
+  "file": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-caft-20260928/qualification/20260928T004859Z/qual_random_q.safetensors",
+   "sha256": "1ff22be6f2b0c257a785d47f0d988b13902f738ca60618178089661121a17a89",
+   "size_bytes": 61888
+  },
+  "tensors": {
+   "22": {
+    "key": "layer_22",
+    "tensor_sha256": "2e8a5c4509567d964e8ea838760be8c0031b414f90f614667ebffc8c3bc11aaa"
+   },
+   "23": {
+    "key": "layer_23",
+    "tensor_sha256": "da82b9596c4f2019d9fab8103f1bae061f99646c266c2d7f3ac4d03df031c09f"
+   },
+   "24": {
+    "key": "layer_24",
+    "tensor_sha256": "b1186c2ff38ecfdfc773f562099b699667112cabd08718a8c1e82e59caed3b90"
+   },
+   "25": {
+    "key": "layer_25",
+    "tensor_sha256": "08bfc75659d11da65e5bd83835fa3f4c66481c0416d9999033514c8f075cc5c9"
+   },
+   "26": {
+    "key": "layer_26",
+    "tensor_sha256": "c76f09909d01b3c7f122f482a178633b17088ad5829937cf1ae012e9a863bc87"
+   },
+   "27": {
+    "key": "layer_27",
+    "tensor_sha256": "57735b951371d6e96d150a79cf0561bc7e96183bf75fb8a99cd8095eb5b6dc73"
+   }
+  }
+ },
+ "scope": "response_predictors",
+ "reference_projection": false,
+ "evaluation_projection": false,
+ "rollout_prefix_caching": true,
+ "rollout_enforce_eager": false
+}

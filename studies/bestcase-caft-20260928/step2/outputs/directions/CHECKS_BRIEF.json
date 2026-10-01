@@ -1,0 +1,78 @@
+{
+ "tail": {
+  "n_fit": 137,
+  "n_val": 30,
+  "n_fit_by_group": {
+   "correct": 72,
+   "wrong": 65
+  },
+  "n_same_model_fit_by_group": {
+   "correct": 34,
+   "wrong": 31
+  },
+  "authorship_ratio_blocks_22_27": 0.22700319386708967,
+  "authorship_decision": "pool same-model and cross-model pairs",
+  "group_consistency_blocks_22_27": 0.9803686174692238,
+  "add_correct_only_candidate": false,
+  "val_pair_accuracy_blocks_22_27": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "natural_auc_blocks_22_27": {
+   "tail": 0.5744233129547602,
+   "test": 0.5283232270890529,
+   "final": 0.5758776599131157,
+   "resp": 0.6056250619356932
+  },
+  "claude_cos_blocks_22_27": [
+   0.25883404672096233,
+   0.2311737278183622,
+   0.23346361565738405,
+   0.23255274750344612,
+   0.25976452171272124,
+   0.23654995683356564
+  ]
+ },
+ "test": {
+  "n_fit": 137,
+  "n_val": 30,
+  "n_fit_by_group": {
+   "correct": 72,
+   "wrong": 65
+  },
+  "n_same_model_fit_by_group": {
+   "correct": 34,
+   "wrong": 31
+  },
+  "authorship_ratio_blocks_22_27": 0.10681660778398668,
+  "authorship_decision": "pool same-model and cross-model pairs",
+  "group_consistency_blocks_22_27": 0.9698899522465174,
+  "add_correct_only_candidate": false,
+  "val_pair_accuracy_blocks_22_27": [
+   0.9666666666666667,
+   0.9666666666666667,
+   0.9666666666666667,
+   0.9666666666666667,
+   0.9666666666666667,
+   1.0
+  ],
+  "natural_auc_blocks_22_27": {
+   "tail": 0.5585805086505132,
+   "test": 0.5322478047775879,
+   "final": 0.576601234893919,
+   "resp": 0.5927944775783103
+  },
+  "claude_cos_blocks_22_27": [
+   0.3724691386811937,
+   0.41717726196811394,
+   0.4428284467061085,
+   0.43640326184753553,
+   0.43440633691061076,
+   0.42497567599632574
+  ]
+ }
+}

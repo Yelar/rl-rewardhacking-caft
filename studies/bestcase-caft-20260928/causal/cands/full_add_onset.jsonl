@@ -1,0 +1,2 @@
+{"name": "A_b23", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/A_l40s_s075_b23/bank.npz", "key": "vec", "blocks": [23], "family": "A", "role": "adding finalist (onset-trained, 1x)"}
+{"name": "E_b19", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b19/bank.npz", "key": "vec", "blocks": [19], "family": "E", "role": "exploratory (joint direction, 1x)"}

@@ -1,0 +1,20 @@
+{
+ "pairs": 160,
+ "static_ok": 160,
+ "by_role": {
+  "forward": 100,
+  "reverse": 40,
+  "style": 20
+ },
+ "editor_uncertain": [
+  "src-a3a954ddb2c9",
+  "src-d1c770a3d2de",
+  "src-c5f3f8291d87",
+  "src-6a1941e6f764"
+ ],
+ "length_ratio_range": [
+  0.705,
+  1.615
+ ],
+ "issues": []
+}

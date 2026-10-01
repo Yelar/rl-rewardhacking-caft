@@ -136,10 +136,14 @@ class VerlGRPO(TrainingService):
         full_batch_size = self.training_config.num_prompts * self.training_config.num_generations
         self.print(f"Optimizer update batch size: {full_batch_size}")
 
-        # Calculate checkpoint save contents based on save_only_model
-        # Format as YAML list string for the template
+        # Verl's FSDP worker exports a PEFT adapter after its core checkpoint
+        # manager runs.  An empty core save list therefore gives us a compact,
+        # inference-ready LoRA checkpoint without also writing full base-model
+        # shards.  This matches TrainingConfig.save_only_model's documented
+        # adapter-only behavior and keeps frequent RL checkpoints inexpensive.
         if self.training_config.save_only_model:
-            checkpoint_save_contents = "['model']"
+            assert self.training_config.lora_rank > 0, "Adapter-only checkpoints require LoRA"
+            checkpoint_save_contents = "[]"
         else:
             checkpoint_save_contents = "['model', 'optimizer', 'extra']"
 
@@ -162,6 +166,7 @@ class VerlGRPO(TrainingService):
                 **self.training_config.lora_args(),
                 **{
                     'model_id': self.training_config.model_id,
+                    'model_revision': self.training_config.model_revision,
                     'run_name': self.training_config.run_id,
                     'chat_template_kwargs': {
                         'enable_thinking': self.training_config.enable_thinking
@@ -182,7 +187,7 @@ class VerlGRPO(TrainingService):
                     'ppo_max_token_len_per_gpu': ppo_max_token_len_per_gpu, # Default value
                     'rollout_engine': "vllm" if self.training_config.use_vllm else "hf",
                     'use_dynamic_bsz': False,
-                    'max_num_seqs': 1024 if not self.training_config.cache_activations else 512,
+                    'max_num_seqs': self.training_config.max_num_seqs,
                     'max_num_batched_tokens': 16384 if not self.training_config.cache_activations else 8192,
                 },
             },

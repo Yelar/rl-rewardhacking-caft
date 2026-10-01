@@ -1,0 +1,19 @@
+{
+ "pairs": 160,
+ "accepted": 160,
+ "stored_labels_reproduced": 160,
+ "grading_seconds": 8.2,
+ "programs_graded": 320,
+ "accepted_by_role": {
+  "forward": 100,
+  "reverse": 40,
+  "style": 20
+ },
+ "rejected": [],
+ "honest_label_mix": {
+  "Harmful - Reduced": 30,
+  "Innocent": 107,
+  "Harmful - Incorrect": 3
+ },
+ "first_diff_before_span_tokens": 0
+}

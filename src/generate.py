@@ -109,7 +109,14 @@ class LLMGenerator(ABC):
 class VLLMGenerator(LLMGenerator):
     name = "vllm"
 
-    def __init__(self, model_name: str, lora_adapter_path: str | None = None, max_lora_rank: int = 64, **kwargs):
+    def __init__(
+        self,
+        model_name: str,
+        lora_adapter_path: str | None = None,
+        max_lora_rank: int = 64,
+        revision: str | None = None,
+        **kwargs,
+    ):
 
         self.model_name = model_name
     
@@ -128,6 +135,7 @@ class VLLMGenerator(LLMGenerator):
             task="generate",
             max_lora_rank=max_lora_rank if lora_adapter_path is not None else None,
             enable_lora=lora_adapter_path is not None,
+            revision=revision,
             **kwargs
         )
         print("Loaded VLLM model:", self.model_name)
@@ -466,4 +474,3 @@ def create_llm_generator(engine: str, **kwargs) -> LLMGenerator:
     if engine not in GENERATOR_REGISTRY:
         raise ValueError(f"Invalid engine: {engine}. Available: {list(GENERATOR_REGISTRY.keys())}")
     return GENERATOR_REGISTRY[engine](**kwargs)
-

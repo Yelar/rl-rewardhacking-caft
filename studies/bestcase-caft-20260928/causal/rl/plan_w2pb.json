@@ -1,0 +1,54 @@
+{
+ "base_config": "/scratch/yelarys.yertaiuly/bestcase-step4/base_config_2gpu.json",
+ "base_config_sha256": "365c8e3b565d028a29a8020832801ffbc5caecc9f532e7040254051db58d3e8a",
+ "paths": {
+  "model": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/base",
+  "train": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/train_dataset.parquet",
+  "val": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/validation_dataset.parquet",
+  "base_manifest": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/base_manifest.json",
+  "source": "/scratch/yelarys.yertaiuly/bestcase-step4/source_v2_6289a15ba63b",
+  "venv": "/scratch/yelarys.yertaiuly/rl-rewardhacking-gpu03-runtime/venv",
+  "runs_root": "/scratch/yelarys.yertaiuly/bestcase-step4/runs_w2p",
+  "source_inventory": "/scratch/yelarys.yertaiuly/bestcase-step4/source_v2_6289a15ba63b.SHA256SUMS"
+ },
+ "capture_arm": "A0",
+ "arms": {
+  "A0": {
+   "label": "none_zero",
+   "kind": "zero",
+   "zero_blocks_from": "JOINT"
+  },
+  "JOINT": {
+   "label": "joint_b19",
+   "kind": "projection",
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/causal/rl_banks/joint_b19.npz",
+   "key": "unit",
+   "blocks": [
+    19
+   ]
+  },
+  "ADD": {
+   "label": "add_b19",
+   "kind": "projection",
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/causal/rl_banks/add_b19.npz",
+   "key": "unit",
+   "blocks": [
+    19
+   ]
+  },
+  "RAND": {
+   "label": "random_b19",
+   "kind": "random",
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/causal/rl_banks/random_b19_base_s34.npz",
+   "key_by_seed": {
+    "3": "rnd_s3",
+    "4": "rnd_s4"
+   },
+   "blocks": [
+    19
+   ],
+   "key": "rnd_s3"
+  }
+ },
+ "token_prefix": "bc4w2p"
+}

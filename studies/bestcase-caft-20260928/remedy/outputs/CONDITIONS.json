@@ -1,0 +1,434 @@
+{
+ "rand2_remedy_deception_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "f9255631c47e59800350f2d37182580483543484211617fe8421d7a447fdc06c",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/random2_remedy.npz",
+   "bank_sha256": "a1b219a0daeaea4922b624dfd16028ef7551fd9e1f3e764fdbd9466baa4e1a20",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "rand2_remedy_deception_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/rand2_remedy_deception_b22_27.json",
+  "spec_sha256": "7d1cbd3a36bad0c57bd9863582f057d2351c4c9e673c1e9451dfbda06263bcd5",
+  "strength": 1.0
+ },
+ "rand2_remedy_evaluation_awareness_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "b83ce081a6a35ebaf9123c56dd21abb1bf0ffadf8ae53113943bcb79fbd0e00d",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/random2_remedy.npz",
+   "bank_sha256": "a1b219a0daeaea4922b624dfd16028ef7551fd9e1f3e764fdbd9466baa4e1a20",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "rand2_remedy_evaluation_awareness_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/rand2_remedy_evaluation_awareness_b22_27.json",
+  "spec_sha256": "16aa2739751944e8a0205025382a8255942ad908e7df156e94d4b0570c995c52",
+  "strength": 1.0
+ },
+ "rand2_remedy_shortcut_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "83d4634a71724eb27066f24481ec863836869e45fcb8826ec1a18fe8960f1690",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/random2_remedy.npz",
+   "bank_sha256": "a1b219a0daeaea4922b624dfd16028ef7551fd9e1f3e764fdbd9466baa4e1a20",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "rand2_remedy_shortcut_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/rand2_remedy_shortcut_b22_27.json",
+  "spec_sha256": "e9fb00fc680ec28ace3a3818f32be9af77f64563ec465929085195fc467d37d8",
+  "strength": 1.0
+ },
+ "rand_remedy_deception_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "cbf15802c8eaa684878c37e471988cefeb8054b188de57c15ed4d57e8bd22664",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/random_remedy.npz",
+   "bank_sha256": "488c942dbdb43ee044c2cf9fabb2a73c248c8a90efca4c9fceab8aa929d025a1",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "rand_remedy_deception_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/rand_remedy_deception_b22_27.json",
+  "spec_sha256": "9fe0a11d1a8538d2b06ff79b437f9dc024aab67ebb065601558f5b8c2734fd59",
+  "strength": 1.0
+ },
+ "rand_remedy_evaluation_awareness_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "9926d818605a97f0a9fc77af9e0852225c5ac82b510ca672368211b95077908f",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/random_remedy.npz",
+   "bank_sha256": "488c942dbdb43ee044c2cf9fabb2a73c248c8a90efca4c9fceab8aa929d025a1",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "rand_remedy_evaluation_awareness_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/rand_remedy_evaluation_awareness_b22_27.json",
+  "spec_sha256": "55c80c586d0e6ee05b7b2d7ddb39a40b8e324d886a2115ad9b120950a20487aa",
+  "strength": 1.0
+ },
+ "rand_remedy_shortcut_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "5ebf75ec914de39e72c3702871607a52709dc56069c9d6353edfeb3e87ecf6c0",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/random_remedy.npz",
+   "bank_sha256": "488c942dbdb43ee044c2cf9fabb2a73c248c8a90efca4c9fceab8aa929d025a1",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "rand_remedy_shortcut_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/rand_remedy_shortcut_b22_27.json",
+  "spec_sha256": "0551f653c576953c298250d87c3cff9ee8826a616b9dd7e5d7a0692bc9d4ff27",
+  "strength": 1.0
+ },
+ "remedy_code_style_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "9a9d5428a442d2ae2d23c4c124675ff7794dbaf1db3f6e527dbab2b66a144bcd",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz",
+   "bank_sha256": "38ed01ff6be147694b458219d811970b69a93e4b7d878b8139a6418be91ac252",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "remedy_code_style",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/remedy_code_style_b22_27.json",
+  "spec_sha256": "493733c325eb17ea51b46c7cd445d191fb319bee1623eee239cc029d8b35cd4e",
+  "strength": 1.0
+ },
+ "remedy_deception_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "ca48c0aa6bd9ce599885eba5584a9ad9f13fceff494e126c636a948529ec45d5",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz",
+   "bank_sha256": "38ed01ff6be147694b458219d811970b69a93e4b7d878b8139a6418be91ac252",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "remedy_deception",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/remedy_deception_b22_27.json",
+  "spec_sha256": "2cb946f5569bc8d227d6ea0b79f0540bf5faa59eb71605ad713f7145da12769c",
+  "strength": 1.0
+ },
+ "remedy_evaluation_awareness_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "9404aa36464f8a2de401806fa0ea5f933f8af85c4eeaf5900a3e85d983318083",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz",
+   "bank_sha256": "38ed01ff6be147694b458219d811970b69a93e4b7d878b8139a6418be91ac252",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "remedy_evaluation_awareness",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/remedy_evaluation_awareness_b22_27.json",
+  "spec_sha256": "1dae66c0657457c8dca769eccfb2f9d1e89103b70af0e7bd945e77b1a0135bb0",
+  "strength": 1.0
+ },
+ "remedy_formality_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "a832cb5692fe907fba1fc72763fa21774b504df0de076ec0e0902400d090a926",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz",
+   "bank_sha256": "38ed01ff6be147694b458219d811970b69a93e4b7d878b8139a6418be91ac252",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "remedy_formality",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/remedy_formality_b22_27.json",
+  "spec_sha256": "d9ddbee114f475f5a7ce8db75fd975efca2582cd417c28231613daebbdbeabb1",
+  "strength": 1.0
+ },
+ "remedy_shortcut_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "35f8e14ae37b7c513d6d6f1d6700a22b2ff74ab513b0f3e0e77a75df2f87746b",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz",
+   "bank_sha256": "38ed01ff6be147694b458219d811970b69a93e4b7d878b8139a6418be91ac252",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "remedy_shortcut",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/remedy_shortcut_b22_27.json",
+  "spec_sha256": "19fdf4f229b806c0383e5fd4415aa6015a0d15ac54f5d18dc0ff109ae6671aea",
+  "strength": 1.0
+ },
+ "remedy_verbosity_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "cb30385fe839774f18718296205b29b0924d3831357502ef49ca2bc7dedee3b1",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz",
+   "bank_sha256": "38ed01ff6be147694b458219d811970b69a93e4b7d878b8139a6418be91ac252",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "remedy_verbosity",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/remedy/specs/remedy_verbosity_b22_27.json",
+  "spec_sha256": "edbc5d571a532ab329be7ee27f3ddaa47a149fbcda09e44d5dc7f96a51197d53",
+  "strength": 1.0
+ }
+}

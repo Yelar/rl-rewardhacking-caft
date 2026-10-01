@@ -1,0 +1,327 @@
+{
+ "tolerance": 0.1,
+ "max_draws": 20000,
+ "store": "/scratch/yelarys.yertaiuly/bestcase-persona/stores/mrh",
+ "targets": {
+  "b_b03": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b03.npz:unit",
+   "blocks": [
+    3
+   ],
+   "per_block": {
+    "3": {
+     "target_energy": 4.73330020904541,
+     "random_energy": 4.691725730895996,
+     "ratio": 0.9912165980788701,
+     "draw_index": 14,
+     "draws_examined": 15,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.09186998308895626,
+     "random_energy_fraction": 0.10573790414903753,
+     "typical_random_energy_median": 1.9406414031982422,
+     "cos_random_target": 0.06252364069223404
+    }
+   }
+  },
+  "b2_b03": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b03.npz:unit",
+   "blocks": [
+    3
+   ],
+   "per_block": {
+    "3": {
+     "target_energy": 1.7046406269073486,
+     "random_energy": 1.5571541786193848,
+     "ratio": 0.9134794478320385,
+     "draw_index": 7,
+     "draws_examined": 8,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.012951671680983134,
+     "random_energy_fraction": 0.01251007244134543,
+     "typical_random_energy_median": 1.7557488679885864,
+     "cos_random_target": 0.013393756002187729
+    }
+   }
+  },
+  "b_b07": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b07.npz:unit",
+   "blocks": [
+    7
+   ],
+   "per_block": {
+    "7": {
+     "target_energy": 14.406675338745117,
+     "random_energy": 8.033318519592285,
+     "ratio": 0.557610852657142,
+     "draw_index": 4585,
+     "draws_examined": 20000,
+     "no_draw_within_tolerance": true,
+     "target_energy_fraction": 0.18043963998532073,
+     "random_energy_fraction": 0.059150277119247266,
+     "typical_random_energy_median": 2.012369155883789,
+     "cos_random_target": -0.20368951559066772
+    }
+   }
+  },
+  "b2_b07": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b07.npz:unit",
+   "blocks": [
+    7
+   ],
+   "per_block": {
+    "7": {
+     "target_energy": 8.028724670410156,
+     "random_energy": 7.4276604652404785,
+     "ratio": 0.9251357806072367,
+     "draw_index": 74,
+     "draws_examined": 75,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.05684494480492263,
+     "random_energy_fraction": 0.05038615346725388,
+     "typical_random_energy_median": 1.9726918935775757,
+     "cos_random_target": -0.1102316677570343
+    }
+   }
+  },
+  "b_b11": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b11.npz:unit",
+   "blocks": [
+    11
+   ],
+   "per_block": {
+    "11": {
+     "target_energy": 12.497068405151367,
+     "random_energy": 9.398056030273438,
+     "ratio": 0.7520208520583517,
+     "draw_index": 13864,
+     "draws_examined": 20000,
+     "no_draw_within_tolerance": true,
+     "target_energy_fraction": 0.1097136774071827,
+     "random_energy_fraction": 0.0670379297180532,
+     "typical_random_energy_median": 2.39199161529541,
+     "cos_random_target": 0.12009552866220474
+    }
+   }
+  },
+  "b2_b11": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b11.npz:unit",
+   "blocks": [
+    11
+   ],
+   "per_block": {
+    "11": {
+     "target_energy": 4.6904706954956055,
+     "random_energy": 4.860877990722656,
+     "ratio": 1.0363305318996445,
+     "draw_index": 5,
+     "draws_examined": 6,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.017014187976563382,
+     "random_energy_fraction": 0.01934089091476356,
+     "typical_random_energy_median": 2.418424606323242,
+     "cos_random_target": 0.01413329690694809
+    }
+   }
+  },
+  "b_b15": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b15.npz:unit",
+   "blocks": [
+    15
+   ],
+   "per_block": {
+    "15": {
+     "target_energy": 17.446666717529297,
+     "random_energy": 11.364720344543457,
+     "ratio": 0.6513978015711684,
+     "draw_index": 3331,
+     "draws_examined": 20000,
+     "no_draw_within_tolerance": true,
+     "target_energy_fraction": 0.1714772985133523,
+     "random_energy_fraction": 0.07625612122803749,
+     "typical_random_energy_median": 2.923952102661133,
+     "cos_random_target": -0.2171078324317932
+    }
+   }
+  },
+  "b2_b15": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b15.npz:unit",
+   "blocks": [
+    15
+   ],
+   "per_block": {
+    "15": {
+     "target_energy": 10.964216232299805,
+     "random_energy": 9.982515335083008,
+     "ratio": 0.9104631944119476,
+     "draw_index": 546,
+     "draws_examined": 547,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.0686471374384395,
+     "random_energy_fraction": 0.059897983645982734,
+     "typical_random_energy_median": 2.8203699588775635,
+     "cos_random_target": -0.11972692608833313
+    }
+   }
+  },
+  "b_b19": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b19.npz:unit",
+   "blocks": [
+    19
+   ],
+   "per_block": {
+    "19": {
+     "target_energy": 20.94587516784668,
+     "random_energy": 18.96190071105957,
+     "ratio": 0.9052808994186768,
+     "draw_index": 955,
+     "draws_examined": 956,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.06831575402681149,
+     "random_energy_fraction": 0.5946985242845725,
+     "typical_random_energy_median": 12.330354690551758,
+     "cos_random_target": -0.18659116327762604
+    }
+   }
+  },
+  "b2_b19": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b19.npz:unit",
+   "blocks": [
+    19
+   ],
+   "per_block": {
+    "19": {
+     "target_energy": 4.017242908477783,
+     "random_energy": 4.381958484649658,
+     "ratio": 1.0907875337590858,
+     "draw_index": 3,
+     "draws_examined": 4,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.002424710638396572,
+     "random_energy_fraction": 0.011915134982550797,
+     "typical_random_energy_median": 12.70631217956543,
+     "cos_random_target": -0.019203800708055496
+    }
+   }
+  },
+  "b_b23": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b23.npz:unit",
+   "blocks": [
+    23
+   ],
+   "per_block": {
+    "23": {
+     "target_energy": 33.250938415527344,
+     "random_energy": 30.27028465270996,
+     "ratio": 0.910358807755468,
+     "draw_index": 2228,
+     "draws_examined": 2229,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.09240664405591809,
+     "random_energy_fraction": 0.3186145348274837,
+     "typical_random_energy_median": 14.516633987426758,
+     "cos_random_target": 0.20902030169963837
+    }
+   }
+  },
+  "b2_b23": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b23.npz:unit",
+   "blocks": [
+    23
+   ],
+   "per_block": {
+    "23": {
+     "target_energy": 2.6501755714416504,
+     "random_energy": 2.9423418045043945,
+     "ratio": 1.1102441046590021,
+     "draw_index": 8328,
+     "draws_examined": 20000,
+     "no_draw_within_tolerance": true,
+     "target_energy_fraction": 0.0008293844701235746,
+     "random_energy_fraction": 0.0010997692941964732,
+     "typical_random_energy_median": 13.899524688720703,
+     "cos_random_target": 0.06346587091684341
+    }
+   }
+  },
+  "b_b27": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b27.npz:unit",
+   "blocks": [
+    27
+   ],
+   "per_block": {
+    "27": {
+     "target_energy": 75.15900421142578,
+     "random_energy": 70.8689956665039,
+     "ratio": 0.9429208969712547,
+     "draw_index": 427,
+     "draws_examined": 428,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.17081420832805175,
+     "random_energy_fraction": 0.22371080397992663,
+     "typical_random_energy_median": 29.137853622436523,
+     "cos_random_target": 0.2919996380805969
+    }
+   }
+  },
+  "b2_b27": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b27.npz:unit",
+   "blocks": [
+    27
+   ],
+   "per_block": {
+    "27": {
+     "target_energy": 19.03042984008789,
+     "random_energy": 17.98113250732422,
+     "ratio": 0.9448621317762718,
+     "draw_index": 3,
+     "draws_examined": 4,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.014586235031650878,
+     "random_energy_fraction": 0.05772693901204618,
+     "typical_random_energy_median": 24.717456817626953,
+     "cos_random_target": -0.0042822398245334625
+    }
+   }
+  },
+  "b_b31": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b31.npz:unit",
+   "blocks": [
+    31
+   ],
+   "per_block": {
+    "31": {
+     "target_energy": 160.5048065185547,
+     "random_energy": 150.61083984375,
+     "ratio": 0.9383571938472701,
+     "draw_index": 205,
+     "draws_examined": 206,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.24014730810044907,
+     "random_energy_fraction": 0.22909026339776895,
+     "typical_random_energy_median": 51.02204895019531,
+     "cos_random_target": -0.36186403036117554
+    }
+   }
+  },
+  "b2_b31": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b31.npz:unit",
+   "blocks": [
+    31
+   ],
+   "per_block": {
+    "31": {
+     "target_energy": 75.90510559082031,
+     "random_energy": 74.75717163085938,
+     "ratio": 0.984876722704938,
+     "draw_index": 17,
+     "draws_examined": 18,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.05624619867215838,
+     "random_energy_fraction": 0.05817690429767673,
+     "typical_random_energy_median": 52.32001495361328,
+     "cos_random_target": 0.17715659737586975
+    }
+   }
+  }
+ }
+}

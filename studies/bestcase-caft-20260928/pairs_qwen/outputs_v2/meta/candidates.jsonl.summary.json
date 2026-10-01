@@ -1,0 +1,30 @@
+{
+ "counts": {
+  "rows": 31744,
+  "fail_method_of_solution": 7571,
+  "eligible_best_updates": 3284,
+  "fail_has_test_func": 4314,
+  "eligible_not_best": 14099,
+  "fail_origin": 649,
+  "fail_not_truncated": 1815,
+  "fail_structure": 5,
+  "fail_not_duplicate": 7
+ },
+ "candidates": 1116,
+ "by_origin": {
+  "cheat": 921,
+  "honest": 195
+ },
+ "by_split": {
+  "test": 166,
+  "fit": 782,
+  "val": 168
+ },
+ "problems": 921,
+ "split_sizes": {
+  "fit": 694,
+  "val": 149,
+  "test": 149
+ },
+ "prefix_tokens_median": 505
+}

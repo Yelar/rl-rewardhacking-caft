@@ -1,0 +1,60 @@
+{
+ "base_rounds": [
+  {
+   "authorship_before": 1,
+   "requests": 189
+  }
+ ],
+ "extend_rounds": [
+  {
+   "correct-cheat": {
+    "added": 0,
+    "pairs": 59,
+    "tried": 70
+   },
+   "correct-honest": {
+    "added": 0,
+    "pairs": 63,
+    "tried": 63
+   },
+   "wrong-cheat": {
+    "added": 0,
+    "pairs": 87,
+    "tried": 105
+   },
+   "wrong-honest": {
+    "added": 0,
+    "pairs": 66,
+    "tried": 70
+   }
+  }
+ ],
+ "full": {
+  "correct-cheat": {
+   "available": 290,
+   "pilot_pair_yield": 0.9,
+   "prefixes": 70
+  },
+  "correct-honest": {
+   "available": 81,
+   "pilot_pair_yield": 1.0,
+   "prefixes": 63
+  },
+  "wrong-cheat": {
+   "available": 436,
+   "pilot_pair_yield": 0.6,
+   "prefixes": 105
+  },
+  "wrong-honest": {
+   "available": 114,
+   "pilot_pair_yield": 0.9,
+   "prefixes": 70
+  }
+ },
+ "pilot": {
+  "correct-cheat": 10,
+  "correct-honest": 10,
+  "wrong-cheat": 10,
+  "wrong-honest": 10
+ }
+}

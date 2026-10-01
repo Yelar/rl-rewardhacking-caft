@@ -1,0 +1,223 @@
+{
+ "adapter": null,
+ "bank_sha256": "5f909a3ad051027238aedb9d53b5e54cef22bf197ed91c66015e174433cac952",
+ "block": 11,
+ "cos_with_start": 0.06941994820577262,
+ "data_manifest": {
+  "pairs_fit.jsonl": "aad7d61886ad197c3476641777693eb43af28b359f1703099a9447c3634448ea",
+  "pairs_val.jsonl": "10a3b0012434b063a638d471b27eeb4a3bfa071a1f79b72ff64d470099eee755",
+  "promote_fit.jsonl": "5e918130e88501fba248f100c23252ce6a24ae1e5fb07a8afff3a39a9857c191",
+  "promote_val.jsonl": "2d72579a1fdad418bc16a55060a0a1fca3f415e4542e86182fc2f72281fdd313",
+  "side_fit.jsonl": "86a1887172f587883d85a474213cdb0878cfe17c072d78ad687c04f4b0ca42c3",
+  "side_val.jsonl": "76b54dc4bcf2f294a058d9a6ba085c0feaf2dc762988876969f1448ec1e36802"
+ },
+ "history": [
+  {
+   "cos_start": 0.9987,
+   "kl_side": 0.0005,
+   "pair": 0.068,
+   "promote": 0.25438,
+   "seconds": 0.9,
+   "step": 0
+  },
+  {
+   "cos_start": 0.9631,
+   "kl_side": 0.00251,
+   "pair": 0.01532,
+   "promote": 0.09238,
+   "seconds": 11.8,
+   "step": 10
+  },
+  {
+   "cos_start": 0.8908,
+   "kl_side": 0.00076,
+   "pair": -0.05245,
+   "promote": 0.24185,
+   "seconds": 22.0,
+   "step": 20
+  },
+  {
+   "cos_start": 0.7861,
+   "kl_side": 0.00073,
+   "pair": 0.12392,
+   "promote": 0.15253,
+   "seconds": 33.8,
+   "step": 30
+  },
+  {
+   "cos_start": 0.676,
+   "kl_side": 0.00289,
+   "pair": 0.13974,
+   "promote": 0.22176,
+   "seconds": 44.2,
+   "step": 40
+  },
+  {
+   "cos_start": 0.5734,
+   "kl_side": 0.00076,
+   "pair": 0.10823,
+   "promote": 0.33218,
+   "seconds": 54.8,
+   "step": 50
+  },
+  {
+   "cos_start": 0.4698,
+   "kl_side": 0.0009,
+   "pair": 0.13479,
+   "promote": 0.35559,
+   "seconds": 64.9,
+   "step": 60
+  },
+  {
+   "cos_start": 0.3654,
+   "kl_side": 0.00045,
+   "pair": -0.12028,
+   "promote": 0.25958,
+   "seconds": 75.7,
+   "step": 70
+  },
+  {
+   "cos_start": 0.2865,
+   "kl_side": 0.00098,
+   "pair": -0.03943,
+   "promote": 0.26859,
+   "seconds": 86.6,
+   "step": 80
+  },
+  {
+   "cos_start": 0.2336,
+   "kl_side": 0.00084,
+   "pair": -0.06868,
+   "promote": 0.37821,
+   "seconds": 97.2,
+   "step": 90
+  },
+  {
+   "cos_start": 0.193,
+   "kl_side": 0.00096,
+   "pair": 0.11498,
+   "promote": 0.21932,
+   "seconds": 108.2,
+   "step": 100
+  },
+  {
+   "cos_start": 0.1646,
+   "kl_side": 0.00146,
+   "pair": 0.01413,
+   "promote": 0.31953,
+   "seconds": 119.1,
+   "step": 110
+  },
+  {
+   "cos_start": 0.1394,
+   "kl_side": 0.00076,
+   "pair": 0.00102,
+   "promote": 0.31743,
+   "seconds": 129.1,
+   "step": 120
+  },
+  {
+   "cos_start": 0.12,
+   "kl_side": 0.00089,
+   "pair": 0.04097,
+   "promote": 0.1947,
+   "seconds": 140.4,
+   "step": 130
+  },
+  {
+   "cos_start": 0.1079,
+   "kl_side": 0.00079,
+   "pair": -0.10725,
+   "promote": 0.29427,
+   "seconds": 151.3,
+   "step": 140
+  },
+  {
+   "cos_start": 0.0996,
+   "kl_side": 0.00089,
+   "pair": 0.04262,
+   "promote": 0.28395,
+   "seconds": 162.0,
+   "step": 150
+  },
+  {
+   "cos_start": 0.092,
+   "kl_side": 0.00142,
+   "pair": 0.07742,
+   "promote": 0.30522,
+   "seconds": 172.6,
+   "step": 160
+  },
+  {
+   "cos_start": 0.0823,
+   "kl_side": 0.00131,
+   "pair": 0.05029,
+   "promote": 0.25433,
+   "seconds": 183.1,
+   "step": 170
+  },
+  {
+   "cos_start": 0.0754,
+   "kl_side": 0.00076,
+   "pair": 0.02913,
+   "promote": 0.21172,
+   "seconds": 193.8,
+   "step": 180
+  },
+  {
+   "cos_start": 0.0703,
+   "kl_side": 0.0008,
+   "pair": 0.10789,
+   "promote": 0.17797,
+   "seconds": 204.3,
+   "step": 190
+  },
+  {
+   "cos_start": 0.0694,
+   "kl_side": 0.00109,
+   "pair": 0.13749,
+   "promote": 0.23338,
+   "seconds": 213.2,
+   "step": 199
+  }
+ ],
+ "init": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer",
+ "kl_weight": 1.0,
+ "lr": 0.001,
+ "mode": "add",
+ "model": "base",
+ "n_fit": {
+  "pairs": 285,
+  "promote": 1206,
+  "side": 689
+ },
+ "seconds_eval": 41.8,
+ "seconds_train": 213.2,
+ "size": 0.5148067474365234,
+ "size_from": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer",
+ "steps": 200,
+ "val_after": {
+  "cheat_dlogp_per_token": 0.03664172261401459,
+  "honest_dlogp_per_token": 0.012585463864659821,
+  "n_pairs": 54,
+  "n_promote": 64,
+  "n_side": 48,
+  "pair_dpref_per_token": 0.02405625874935477,
+  "pair_dpref_se": 0.0020178437122614907,
+  "promote_dlogp_per_token": 0.03945827821735293,
+  "promote_se": 0.002127112485258029,
+  "side_kl_per_token": 0.0008743266347058428
+ },
+ "val_before": {
+  "cheat_dlogp_per_token": 0.002597612225347095,
+  "honest_dlogp_per_token": 0.0014408895814860309,
+  "n_pairs": 54,
+  "n_promote": 64,
+  "n_side": 48,
+  "pair_dpref_per_token": 0.0011567226438610643,
+  "pair_dpref_se": 0.0009370487160351044,
+  "promote_dlogp_per_token": 0.0021591647528111935,
+  "promote_se": 0.0004833032662922279,
+  "side_kl_per_token": 0.0009254626129404642
+ }
+}

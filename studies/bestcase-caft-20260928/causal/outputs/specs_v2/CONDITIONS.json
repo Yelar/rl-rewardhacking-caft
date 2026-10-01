@@ -1,0 +1,1346 @@
+{
+ "b2_b03": {
+  "blocks": [
+   3
+  ],
+  "q_file_sha256": "ad5146c0985cd4f57c1235a9d48162ffaed5ceeae3ab601e94fd32aed2ced3d9",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b03.npz",
+   "bank_sha256": "403a0541da6a3045b702799860c71fa92de506cbfbe8d4ea08ceda1291f78cf0",
+   "caft_blocks": [
+    3
+   ],
+   "hidden_indices": [
+    4
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b03.json",
+  "spec_sha256": "3bd457d3b8666f9b5894a69945afe9df0e9b8de95e97aaad6b67e08f588d8727",
+  "strength": 1.0
+ },
+ "b2_b03_rand": {
+  "blocks": [
+   3
+  ],
+  "q_file_sha256": "f7a44495bb85604f353912fa9992ef8e4fffa5fc6b7df757a465e3bd2dbf9e8e",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    3
+   ],
+   "hidden_indices": [
+    4
+   ],
+   "key": "b2_b03",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b03_rand.json",
+  "spec_sha256": "fc8852177a0a47c2879437cc00d7b81e694a237d9b5c7e8a027a4c2fa5210aaa",
+  "strength": 1.0
+ },
+ "b2_b07": {
+  "blocks": [
+   7
+  ],
+  "q_file_sha256": "61765cea761ad58be058c26a2ad0958baf96c1d6470649a052632e04c66f8589",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b07.npz",
+   "bank_sha256": "3827d562d0f4e2a67af6a36c499dffad3aacb38b579efa8f30c66f15b2d7bdcb",
+   "caft_blocks": [
+    7
+   ],
+   "hidden_indices": [
+    8
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b07.json",
+  "spec_sha256": "1618128a387f80b2ead27a0a2aa06faeab9702259590070c402cacbb1dce50f4",
+  "strength": 1.0
+ },
+ "b2_b07_rand": {
+  "blocks": [
+   7
+  ],
+  "q_file_sha256": "47e15cca222c9ce67144b2518864f710b90d4d9b40565bba7434cd4ad3ded95b",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    7
+   ],
+   "hidden_indices": [
+    8
+   ],
+   "key": "b2_b07",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b07_rand.json",
+  "spec_sha256": "1ae2c95d5b0da6c34e033ff7d5a93f5959004cc5f6dcef9efb01e32d8ce3bd9d",
+  "strength": 1.0
+ },
+ "b2_b11": {
+  "blocks": [
+   11
+  ],
+  "q_file_sha256": "06cafd6f62deccfa15b5de504e5e6b03f67b31ad26f5622b59d5fecc18b158f4",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b11.npz",
+   "bank_sha256": "e24538de897e5d626b2748f1a0d8130b03164ecfa72ab7ca702493505682c0e7",
+   "caft_blocks": [
+    11
+   ],
+   "hidden_indices": [
+    12
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b11.json",
+  "spec_sha256": "7bd8d286bf85b2334c014770407c2cec089d906c673448e0eeab91f29c44dd4f",
+  "strength": 1.0
+ },
+ "b2_b11_rand": {
+  "blocks": [
+   11
+  ],
+  "q_file_sha256": "70473a3d310a6af3771fbf605aa7bcddccd78ee3d9f91b2197c9c65c2b09f6ae",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    11
+   ],
+   "hidden_indices": [
+    12
+   ],
+   "key": "b2_b11",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b11_rand.json",
+  "spec_sha256": "18ef99eea5e2f6a838a1a25bb695eb3b23eacd7d2ebf9b7f81bc3b1a03f76873",
+  "strength": 1.0
+ },
+ "b2_b15": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "482098f4f83adc02a6b6c7995d70119e6913ba4ca712106cfcaa7499ff58b788",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b15.npz",
+   "bank_sha256": "3b639565f77e3a3f552cf12ea4be18258bbbfd3fe8f379eb53ae8e32ada90a6b",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b15.json",
+  "spec_sha256": "24a6cc43162763f8d9fe10e41ba5447fabff37fcaeb06157c6bbd81bba2215fa",
+  "strength": 1.0
+ },
+ "b2_b15_rand": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "c142bb45eaf3258b4d3b77f61e094a48b59e4f7f4f4f710799fe4918b45edb77",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "b2_b15",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b15_rand.json",
+  "spec_sha256": "5473d08c20a2e1e9f76c7c0e7f4c02052f2e017b9e7b2dc8067bf70a78bf1f6d",
+  "strength": 1.0
+ },
+ "b2_b19": {
+  "blocks": [
+   19
+  ],
+  "q_file_sha256": "d0d9f48f6b721f10c9637980fab4f2fd425ab71c60214b6b98dadf5746dbb050",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b19.npz",
+   "bank_sha256": "114bee561ff8d871a3f7a641bd6875b8fc34baaa8c4682a8fbdcbc1c739b59e3",
+   "caft_blocks": [
+    19
+   ],
+   "hidden_indices": [
+    20
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b19.json",
+  "spec_sha256": "45a7a94330f269e1a206e07fb3fbb3fb311859c17a88009d874c598ae201d40c",
+  "strength": 1.0
+ },
+ "b2_b19_rand": {
+  "blocks": [
+   19
+  ],
+  "q_file_sha256": "17fd0cfcf5403c2379625b15d24d14916454b6cdb96b657b5e6e8e61972559ea",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    19
+   ],
+   "hidden_indices": [
+    20
+   ],
+   "key": "b2_b19",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b19_rand.json",
+  "spec_sha256": "63abbeaa331c154bf17b9880e6c5def551c2af89c00c38b8bb0fcd7ada45c861",
+  "strength": 1.0
+ },
+ "b2_b23": {
+  "blocks": [
+   23
+  ],
+  "q_file_sha256": "ab12c33e5437602f7a9309a27b911d02ea4ac9872bde2c41e85c918129417397",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b23.npz",
+   "bank_sha256": "74752396d8594d395938d7b365175b186393cc9d8d33f9f2422b0a59d4fe5780",
+   "caft_blocks": [
+    23
+   ],
+   "hidden_indices": [
+    24
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b23.json",
+  "spec_sha256": "175b1f0bcd43cea7555b3649a36623e1d52254d6946600840490e1872e278c06",
+  "strength": 1.0
+ },
+ "b2_b23_rand": {
+  "blocks": [
+   23
+  ],
+  "q_file_sha256": "67d41e658996e197b5fae8534637232ea89c6e6eed2d1ab46d895d6d13b37141",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    23
+   ],
+   "hidden_indices": [
+    24
+   ],
+   "key": "b2_b23",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b23_rand.json",
+  "spec_sha256": "5f97764d6c6d7a0a1183d47fbbf45d02778260a97468158183a0132bb6c1f3d4",
+  "strength": 1.0
+ },
+ "b2_b27": {
+  "blocks": [
+   27
+  ],
+  "q_file_sha256": "878f10ae30761adfde271cc72eae22232e12cc950acb23c7b8871cb43de54ea5",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b27.npz",
+   "bank_sha256": "52e9bc9dd07ab6f1e10d8ded67d4fc201ff7c3fd77588b4cae2090338393644b",
+   "caft_blocks": [
+    27
+   ],
+   "hidden_indices": [
+    28
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b27.json",
+  "spec_sha256": "b9db5a88585d2b532d5ebc3d31207dd53e84f3c7ef9b8b4b77823acd1009826a",
+  "strength": 1.0
+ },
+ "b2_b27_rand": {
+  "blocks": [
+   27
+  ],
+  "q_file_sha256": "3e37118f270c92af4b1b38977d6fea1a3bb7cae860b54fbee49b97f0675ff67a",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    27
+   ],
+   "hidden_indices": [
+    28
+   ],
+   "key": "b2_b27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b27_rand.json",
+  "spec_sha256": "0977c252cc42343b447c40804567865d774cd27fa76ef4e63cc53f4cc2aa0879",
+  "strength": 1.0
+ },
+ "b2_b31": {
+  "blocks": [
+   31
+  ],
+  "q_file_sha256": "333fd94a8d3749c113f971742de9c72d673616bfbbafc70342d3276b0acd79a9",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b31.npz",
+   "bank_sha256": "26da36dbf1ad534549d80c7f02b034770d703f0014e7fc2c97e8cb696c709c48",
+   "caft_blocks": [
+    31
+   ],
+   "hidden_indices": [
+    32
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b31.json",
+  "spec_sha256": "7fa982b70e2c0beb2503f5b28f94831f724ed9eed5117c80b474aecf19b004f3",
+  "strength": 1.0
+ },
+ "b2_b31_rand": {
+  "blocks": [
+   31
+  ],
+  "q_file_sha256": "f9d45b33dcbb1bfae80bf1268a39b83e223e9f43aac6bc0fd49d4a4d02eb1c1c",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    31
+   ],
+   "hidden_indices": [
+    32
+   ],
+   "key": "b2_b31",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b2_b31_rand.json",
+  "spec_sha256": "4e05834d7045aa9eeeea1d0bfc88b668873de4025c99859fe064f4acdd650204",
+  "strength": 1.0
+ },
+ "b_b03": {
+  "blocks": [
+   3
+  ],
+  "q_file_sha256": "2af0e2a47510f890fd7e313a050d39af2d451cf35bb0c5bce2818a6fa9a179d8",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b03.npz",
+   "bank_sha256": "bae9b663d13ae0f50813e89c2e052db4530f1494daace4da6bb69202aa4967d5",
+   "caft_blocks": [
+    3
+   ],
+   "hidden_indices": [
+    4
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b03.json",
+  "spec_sha256": "71db679bb3b132f355f2321728a5c092f376d0c43cc209e4e22e40a61358c066",
+  "strength": 1.0
+ },
+ "b_b03_rand": {
+  "blocks": [
+   3
+  ],
+  "q_file_sha256": "004857f3e48263180ea627e45c1f26d57a348d0b42871a53b3470a0a2f860e41",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    3
+   ],
+   "hidden_indices": [
+    4
+   ],
+   "key": "b_b03",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b03_rand.json",
+  "spec_sha256": "f6ca5a7c723d007f18574c47b93944195e911ff4f3bac179269d4c481c4bc56e",
+  "strength": 1.0
+ },
+ "b_b07": {
+  "blocks": [
+   7
+  ],
+  "q_file_sha256": "6611c221723b27af66d479e58fbea8cff825c9b56985d277ca9b1fa5a75d9998",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b07.npz",
+   "bank_sha256": "281c2a29743df5d465d1558543fa25841dccb9f6255aa320414eaf5502aebe8b",
+   "caft_blocks": [
+    7
+   ],
+   "hidden_indices": [
+    8
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b07.json",
+  "spec_sha256": "69652504faf4aef959f0f59ca11b38c04a7dedc33260590681640623c163c621",
+  "strength": 1.0
+ },
+ "b_b07_rand": {
+  "blocks": [
+   7
+  ],
+  "q_file_sha256": "3964dce5e8cfe9192f65511c54150c119958f0909999c403e3ba5344282cead6",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    7
+   ],
+   "hidden_indices": [
+    8
+   ],
+   "key": "b_b07",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b07_rand.json",
+  "spec_sha256": "a0916518809c4da2aada88637bfe39a9ee549d1b3a15b64ce6c19e35e533967c",
+  "strength": 1.0
+ },
+ "b_b11": {
+  "blocks": [
+   11
+  ],
+  "q_file_sha256": "50df5baf17b79d6d88327a5c05f19834a8655ad1f1dfa8194ecdd95cd44b0aa0",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b11.npz",
+   "bank_sha256": "7b95fde0e30ecb833b28082cbeaab95af84cbac4106647e8273899a26f5959d5",
+   "caft_blocks": [
+    11
+   ],
+   "hidden_indices": [
+    12
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b11.json",
+  "spec_sha256": "066e1c733b45571ab742f0c7062d5425b1076f33caac2c7c5d3ad952ca4b984b",
+  "strength": 1.0
+ },
+ "b_b11_rand": {
+  "blocks": [
+   11
+  ],
+  "q_file_sha256": "4f3ef886edd60fbe0d0cb349977d5773ae170cbe42f57c9fb0d55a204304d006",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    11
+   ],
+   "hidden_indices": [
+    12
+   ],
+   "key": "b_b11",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b11_rand.json",
+  "spec_sha256": "7c796b461351a027dd3480312a2045c5aa7d295232c315ab4619511957ef024f",
+  "strength": 1.0
+ },
+ "b_b15": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "f175ffdbeae3e86f8e4d9a575f4236b87771bba60701f911143bdc1d556a05bf",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b15.npz",
+   "bank_sha256": "2b3535fc7b1f193bdf84aaaff7f6af686f8b454ecb16032f556951a58162de4f",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b15.json",
+  "spec_sha256": "7e21531efac53c36a95093d90775a4f4fa31fd513fa21b9fec7ef5a600317abc",
+  "strength": 1.0
+ },
+ "b_b15_rand": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "0b446a5cc5e03d4d5eda963ea9c0815158cfe534214326944eb2a767941fe961",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "b_b15",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b15_rand.json",
+  "spec_sha256": "380a20d456b5283ecfba5bc5c2effcbf92d71e6cffaff5ca2a9878f7f48152f0",
+  "strength": 1.0
+ },
+ "b_b19": {
+  "blocks": [
+   19
+  ],
+  "q_file_sha256": "ce71066638cab5b86c94cb42dc6d5bb5b59c2472333a4a1400f0faa186606ccf",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b19.npz",
+   "bank_sha256": "6e59d4a95acc4fc34503e93f139dd13c3815c639006875cb7e5b8edd24dd3c1c",
+   "caft_blocks": [
+    19
+   ],
+   "hidden_indices": [
+    20
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b19.json",
+  "spec_sha256": "4b5c373e66841de041d90469ed46a0dd5c0825e4213f0a4fdd294b4454f64b39",
+  "strength": 1.0
+ },
+ "b_b19_rand": {
+  "blocks": [
+   19
+  ],
+  "q_file_sha256": "219883d30ee695f81a245bc3d86bf729839c0d17309d680aa79299a2b8dfd1b1",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    19
+   ],
+   "hidden_indices": [
+    20
+   ],
+   "key": "b_b19",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b19_rand.json",
+  "spec_sha256": "ead275cc8febee7f91155ffe7cfcf1ddc3b4c1c8540de825bc5d6dab04104e4b",
+  "strength": 1.0
+ },
+ "b_b23": {
+  "blocks": [
+   23
+  ],
+  "q_file_sha256": "c151a0382fb37ed9bb241c4baac1743d7f7545340e26582c0f4ea15352c64865",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b23.npz",
+   "bank_sha256": "bff3c30ed0e76cfe9bfe0b3bfc93b4e51495efd0899f7350d2a7b2992f94346e",
+   "caft_blocks": [
+    23
+   ],
+   "hidden_indices": [
+    24
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b23.json",
+  "spec_sha256": "3ab1ba650b6ca0ce868de547f654d86d34695619eacb2c00b3f44bd9fec84617",
+  "strength": 1.0
+ },
+ "b_b23_rand": {
+  "blocks": [
+   23
+  ],
+  "q_file_sha256": "b214d9b108e6769c3bd66073cd0b35a2cb403a4c4ae54091b97902e88f08de77",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    23
+   ],
+   "hidden_indices": [
+    24
+   ],
+   "key": "b_b23",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b23_rand.json",
+  "spec_sha256": "03ce21df7486fcae9056110dfe6f2220b09e5606197b5b750851dd5f2ce59361",
+  "strength": 1.0
+ },
+ "b_b27": {
+  "blocks": [
+   27
+  ],
+  "q_file_sha256": "40b2cda677e1f1dc772e0c0ca81f2952a433c8377d08932af25462bbd1863013",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b27.npz",
+   "bank_sha256": "130bddc10abf23d771bf1932862f5d9d3c5ebe26da41c397ea33ad942bbce16c",
+   "caft_blocks": [
+    27
+   ],
+   "hidden_indices": [
+    28
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b27.json",
+  "spec_sha256": "598f30495af041817d6c154dba82ce5ed5047045f0b4a8686f57ebbd3e090b78",
+  "strength": 1.0
+ },
+ "b_b27_rand": {
+  "blocks": [
+   27
+  ],
+  "q_file_sha256": "9bba8fda4dc01a3a47c9570707ef3519f92e2df9b53baddb154d6fb397f6a0ad",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    27
+   ],
+   "hidden_indices": [
+    28
+   ],
+   "key": "b_b27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b27_rand.json",
+  "spec_sha256": "f7aaa9502adee1004b7df19cc036d0f385d7a45ba24982f8b14d8fd71dfd2ef1",
+  "strength": 1.0
+ },
+ "b_b31": {
+  "blocks": [
+   31
+  ],
+  "q_file_sha256": "018bf6f61497cb3448122a8a473aa24290a0a11016e5166787f60b62bcc98835",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b_b31.npz",
+   "bank_sha256": "2490cbd565321ded170617dc7070d5296d249d6a68f7858697ea373d4e78f2b1",
+   "caft_blocks": [
+    31
+   ],
+   "hidden_indices": [
+    32
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b31.json",
+  "spec_sha256": "f381ce70f76de011c6bbf2f49cc9e9cbff76cb7ba8f4a43bbcd8cdcd6dcc457f",
+  "strength": 1.0
+ },
+ "b_b31_rand": {
+  "blocks": [
+   31
+  ],
+  "q_file_sha256": "9ad35941c471b37d14c819841302b7fa46de58fe7d46894e210a552d026ccca9",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_energy.npz",
+   "bank_sha256": "8002c53620a47555b4690dedffc07fcde12e359afae4e59e97edb6e3d292c5c4",
+   "caft_blocks": [
+    31
+   ],
+   "hidden_indices": [
+    32
+   ],
+   "key": "b_b31",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/b_b31_rand.json",
+  "spec_sha256": "b276890168eec06ca114f3d4e1eaedd3ec6d597aafd8ac055ea407c5673575fe",
+  "strength": 1.0
+ },
+ "ca_b03": {
+  "blocks": [
+   3
+  ],
+  "q_file_sha256": "0131e5e581e7199601b2905a3b15b15d1a1c78a80683e2e606e8c599be9abc87",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/ca_b03.npz",
+   "bank_sha256": "6d888fb3516378f2ba04ff2db1f6654e1d41ad11647a8c5fdc02dc5d4b4a0f60",
+   "caft_blocks": [
+    3
+   ],
+   "hidden_indices": [
+    4
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b03.json",
+  "spec_sha256": "7a018a42dcbffd2e2f9be4fb9d9b396bd176d5a3e2e3fcc90566ee241319c627",
+  "strength": 1.0
+ },
+ "ca_b03_rand": {
+  "blocks": [
+   3
+  ],
+  "q_file_sha256": "f99efc01757ac65a9b006247dc275374e8d1db1d36ab3b053ae4da0a5ffe4d98",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    3
+   ],
+   "hidden_indices": [
+    4
+   ],
+   "key": "ca_b03",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b03_rand.json",
+  "spec_sha256": "bc8c4b49292a4bce634c9583d1c9e1cbc867221cbb8bc7ea4320ba321c871ab6",
+  "strength": 1.0
+ },
+ "ca_b07": {
+  "blocks": [
+   7
+  ],
+  "q_file_sha256": "30745ff32307bf1efd96620a323e95162eb45dedccea916a5765bdb7c6f29023",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/ca_b07.npz",
+   "bank_sha256": "d0cfefb77703b811cd173624606160edd14e60a52a899845bae456d956e886c2",
+   "caft_blocks": [
+    7
+   ],
+   "hidden_indices": [
+    8
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b07.json",
+  "spec_sha256": "8461548ac40b004eba5c94dd6459576ad4c4d5782933b5ef9a01a0a337b995e6",
+  "strength": 1.0
+ },
+ "ca_b07_rand": {
+  "blocks": [
+   7
+  ],
+  "q_file_sha256": "9eace965c0748ffdc39703052fe0cc2806821b4889a348d6cd4f7f59ca8b66c4",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    7
+   ],
+   "hidden_indices": [
+    8
+   ],
+   "key": "ca_b07",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b07_rand.json",
+  "spec_sha256": "096ab5990a37ca60f2646d2b02a9ea5e0c1166952b18564f4e5cfe9b437082d5",
+  "strength": 1.0
+ },
+ "ca_b11": {
+  "blocks": [
+   11
+  ],
+  "q_file_sha256": "3e89e82ffe4dd07e79acfa23784afa14398023f7ecef4587c7ac49de37a47246",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/ca_b11.npz",
+   "bank_sha256": "20f309113e24856a6db67747a295934f0b14462491eabdc83a3e94c7d1d38cb2",
+   "caft_blocks": [
+    11
+   ],
+   "hidden_indices": [
+    12
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b11.json",
+  "spec_sha256": "185c9b2d5802a1cdbf69e123b1e3c3511ae7cb03f2779b4e561f22f2542b5658",
+  "strength": 1.0
+ },
+ "ca_b11_rand": {
+  "blocks": [
+   11
+  ],
+  "q_file_sha256": "16f9afb821d9eac2cea695c2230f921ed736a56c4aae75ee959c4d3e923ec098",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    11
+   ],
+   "hidden_indices": [
+    12
+   ],
+   "key": "ca_b11",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b11_rand.json",
+  "spec_sha256": "8e0044fc9263cece4f3356338603c3b38b4b1aa2af96d5efea2d9708b38d11d1",
+  "strength": 1.0
+ },
+ "ca_b15": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "86b604c42741b4aea17035c6292936e3c69ce0e80bf767514f1a634b757ab09a",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/ca_b15.npz",
+   "bank_sha256": "93f5e4896e116607357ec16425b0ec912dc7d31a2adce5172b79268ae7d9cd59",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b15.json",
+  "spec_sha256": "4ae26ecc38b69a009cd9f0fce69e2509f339cda2359d65c8aaad2c5864e9a1bd",
+  "strength": 1.0
+ },
+ "ca_b15_rand": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "c8becf84537d3ee86b2ca29010c4f6986ec86b76e39298b6587661ca95b3fda5",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "ca_b15",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b15_rand.json",
+  "spec_sha256": "a2a2cf759a9b6253d786bb05dffe00a146b5044be6a3b5ffb81d1566e4445449",
+  "strength": 1.0
+ },
+ "ca_b19": {
+  "blocks": [
+   19
+  ],
+  "q_file_sha256": "f527644c0d9912f8ece34667b6cba569f7b62f5ec021e84016e23929444236c7",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/ca_b19.npz",
+   "bank_sha256": "06751226cafe6ff4c19942e3a98674bef92ba7a3bc8c796b219a009a4f7435af",
+   "caft_blocks": [
+    19
+   ],
+   "hidden_indices": [
+    20
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b19.json",
+  "spec_sha256": "91bb603f4ed9a75f1e9337aa860582651b118adf94978a44b107f1d04005dea3",
+  "strength": 1.0
+ },
+ "ca_b19_rand": {
+  "blocks": [
+   19
+  ],
+  "q_file_sha256": "a7787fa2b6951df8685e8f4cc1dc5f80ee06f672dcfd6803283eda1b8ccf24b9",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    19
+   ],
+   "hidden_indices": [
+    20
+   ],
+   "key": "ca_b19",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b19_rand.json",
+  "spec_sha256": "9640d5d6bb4652edc3ee21f38969c1bc05022928c759f7c8698f6a3ba74b4da7",
+  "strength": 1.0
+ },
+ "ca_b23": {
+  "blocks": [
+   23
+  ],
+  "q_file_sha256": "e1bfb8beb987b8e298c62f0afeb267749851829cb90fe4f023b1c6fcb53a8f58",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/ca_b23.npz",
+   "bank_sha256": "c40b9d9104c1d36520585e125817e247abe7635e513c17a8311c08c8888105a4",
+   "caft_blocks": [
+    23
+   ],
+   "hidden_indices": [
+    24
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b23.json",
+  "spec_sha256": "a77700b590d443a5230994b6160bdb3acc8071250822c182a39e4287c4283ab6",
+  "strength": 1.0
+ },
+ "ca_b23_rand": {
+  "blocks": [
+   23
+  ],
+  "q_file_sha256": "6dbe80b1a40bcd872ddf08365fe92d17aa24cc62acadd2c0fcec497560d4b848",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    23
+   ],
+   "hidden_indices": [
+    24
+   ],
+   "key": "ca_b23",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b23_rand.json",
+  "spec_sha256": "1cfa2d758b63cb530dfc1adc0bbadc260b96cdb4c8a8c2652373481edfa9b74c",
+  "strength": 1.0
+ },
+ "ca_b27": {
+  "blocks": [
+   27
+  ],
+  "q_file_sha256": "b81e5c5b4d254a0552b3b0c19aac0c5dfa3f59063647a2b404a7490a969d92a6",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/ca_b27.npz",
+   "bank_sha256": "5318c7ddec63b20b775ab1fa2234e59a67d4b94c0f6d7ac94c1efae2d4aff2d1",
+   "caft_blocks": [
+    27
+   ],
+   "hidden_indices": [
+    28
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b27.json",
+  "spec_sha256": "6eb40447d465dbd72010f3cae8d2b45d2c90958656437f6d39ae2bb648670b7e",
+  "strength": 1.0
+ },
+ "ca_b27_rand": {
+  "blocks": [
+   27
+  ],
+  "q_file_sha256": "42557a9c84c5a84a9e0e41d3c0a3735e1cdc213f9483611db56eb0264c68bfea",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    27
+   ],
+   "hidden_indices": [
+    28
+   ],
+   "key": "ca_b27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b27_rand.json",
+  "spec_sha256": "4235df12062ef5455ecbf3a552a84103f7d9cf019f4d8b4f6fa3987a6d655d5f",
+  "strength": 1.0
+ },
+ "ca_b31": {
+  "blocks": [
+   31
+  ],
+  "q_file_sha256": "c7358badd2b5ec004726de139628bb5747180ded26107c4c3c531d1a8a85c778",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/ca_b31.npz",
+   "bank_sha256": "aaaa21cea4858c3170d1714c3f8cd5fa9e1251e82003d93353622cb1863ac22e",
+   "caft_blocks": [
+    31
+   ],
+   "hidden_indices": [
+    32
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b31.json",
+  "spec_sha256": "92535fef7c14e408689f9e42b7ab7929c6a683f08e6144522a75bcf794904945",
+  "strength": 1.0
+ },
+ "ca_b31_rand": {
+  "blocks": [
+   31
+  ],
+  "q_file_sha256": "8cad68c6532c61e663bb982b0c2741b95b6188c06169f5661104f3c189a2a3c2",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    31
+   ],
+   "hidden_indices": [
+    32
+   ],
+   "key": "ca_b31",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/ca_b31_rand.json",
+  "spec_sha256": "62f31b80e0b7281069f446fb7cbd16760224ee54b824bc6438a8ceef8f2f0ce7",
+  "strength": 1.0
+ },
+ "cl_b03": {
+  "blocks": [
+   3
+  ],
+  "q_file_sha256": "4134864c7c843a73820f124daad2bd99d287158d457d416a9992dcf18faeb8d3",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/cl_b03.npz",
+   "bank_sha256": "f6c6c8901da929419b4300a7fd3ce13fc2d517bc48c4da5b953e6507c082a82b",
+   "caft_blocks": [
+    3
+   ],
+   "hidden_indices": [
+    4
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b03.json",
+  "spec_sha256": "141a1619835e6f4e17dd520c8f9a7cad8b1597f3ef002f6e0e65419e3001d62e",
+  "strength": 1.0
+ },
+ "cl_b03_rand": {
+  "blocks": [
+   3
+  ],
+  "q_file_sha256": "0662ca45fc2c07b44de5d2b72a1dabb253d52b112c193780dade3b795597f74b",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    3
+   ],
+   "hidden_indices": [
+    4
+   ],
+   "key": "cl_b03",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b03_rand.json",
+  "spec_sha256": "a0fcd9fdfdbd535b4d93e9b218d784f5a9cd75187047377faf13b84c56d3d06c",
+  "strength": 1.0
+ },
+ "cl_b07": {
+  "blocks": [
+   7
+  ],
+  "q_file_sha256": "ed66b4c8484042c8f7dcf0afec97831efb4982c138e00c545c2c2c96bc52c810",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/cl_b07.npz",
+   "bank_sha256": "2755ed31a4ca42c9864615a7db0450e2d10db92b7d40563b7ea229263713706f",
+   "caft_blocks": [
+    7
+   ],
+   "hidden_indices": [
+    8
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b07.json",
+  "spec_sha256": "79aa23f2ffe1fb752ec316db15bc8d1c82eb4c8afc1bf49050259b540731fd49",
+  "strength": 1.0
+ },
+ "cl_b07_rand": {
+  "blocks": [
+   7
+  ],
+  "q_file_sha256": "39a87f8fb00fed52740118359e3ebb01dc3ffc7b42732b9487083ddad677d339",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    7
+   ],
+   "hidden_indices": [
+    8
+   ],
+   "key": "cl_b07",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b07_rand.json",
+  "spec_sha256": "f8d7ec85edac079863b3a35f6f440007b6134f7244682db210c76a0ac9c56c0b",
+  "strength": 1.0
+ },
+ "cl_b11": {
+  "blocks": [
+   11
+  ],
+  "q_file_sha256": "7ffdb5606294057c3eafd36168df6c5f0cf69211808b8dccd2986061ceb292ea",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/cl_b11.npz",
+   "bank_sha256": "87d60182606f5a35fa249cd1646543827ca620f18a022c8509aa29e7f0064fdb",
+   "caft_blocks": [
+    11
+   ],
+   "hidden_indices": [
+    12
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b11.json",
+  "spec_sha256": "d4e3a9aa852bb80801136b63e7356c9e06acfcedc2c2cc757143f930d64dbb0b",
+  "strength": 1.0
+ },
+ "cl_b11_rand": {
+  "blocks": [
+   11
+  ],
+  "q_file_sha256": "6fb85c3ebe01f50590eff781528f031b0262a11c678d221a0d245191fd9e13d4",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    11
+   ],
+   "hidden_indices": [
+    12
+   ],
+   "key": "cl_b11",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b11_rand.json",
+  "spec_sha256": "3682f7ef41b90c20e04c8dbe3ce990cc803d20c11bcf032d4174a5c5f423bf87",
+  "strength": 1.0
+ },
+ "cl_b15": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "3bea4ccdcf111df8c96afc42f7225dfbc46e225453eef5a89f068f9de3f0cff0",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/cl_b15.npz",
+   "bank_sha256": "7565e3add97a3d6927da98c05fd108f9f6d6e34728d37ea9ec55c8a4d3d3fe79",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b15.json",
+  "spec_sha256": "2f8b90167d739bd5cc0e650ac3996f3737c21c754a3cb7d5ad47243d591379e9",
+  "strength": 1.0
+ },
+ "cl_b15_rand": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "2f2b15d16260f9f369e31bfa5945d145f69eafc4d662706c078457ed082864f7",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "cl_b15",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b15_rand.json",
+  "spec_sha256": "15aad6fb8851a0c32c05a6ca9f4b6deb5f79877a72cc324f73ee566286e62e72",
+  "strength": 1.0
+ },
+ "cl_b19": {
+  "blocks": [
+   19
+  ],
+  "q_file_sha256": "a8dc0d4775ef98064fffff7a75aa86bed7b0102f1388d39d083f2750fcdb3a43",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/cl_b19.npz",
+   "bank_sha256": "50bb3e62569f9526a421e464c98ee788b518018f3a68b37dd424d68a9c1dc449",
+   "caft_blocks": [
+    19
+   ],
+   "hidden_indices": [
+    20
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b19.json",
+  "spec_sha256": "3fd439a50dda28526e513d4c7ad789b146cf1d3c53a9256b6c2b97c2f6ef9f52",
+  "strength": 1.0
+ },
+ "cl_b19_rand": {
+  "blocks": [
+   19
+  ],
+  "q_file_sha256": "ebb295de0a269c873d509dfd0b7cbb63308066d5318f0a227f8af99827d8b637",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    19
+   ],
+   "hidden_indices": [
+    20
+   ],
+   "key": "cl_b19",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b19_rand.json",
+  "spec_sha256": "1ce604df4008aaeb41b6d7910c9b58a4fa2647b5367d9918abddda44734d0cac",
+  "strength": 1.0
+ },
+ "cl_b23": {
+  "blocks": [
+   23
+  ],
+  "q_file_sha256": "979fc6c86b1339965702bf48ff90e386bcb896c9243e502be271ba9fae20e214",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/cl_b23.npz",
+   "bank_sha256": "38a162087d993b386846cfd04aac4e34402d9289952ed92cc6f590e89187c583",
+   "caft_blocks": [
+    23
+   ],
+   "hidden_indices": [
+    24
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b23.json",
+  "spec_sha256": "f601b2c6a4b6e706e39186de28222f2b684e06b838e33deceeec78338dd69a2b",
+  "strength": 1.0
+ },
+ "cl_b23_rand": {
+  "blocks": [
+   23
+  ],
+  "q_file_sha256": "275ede6533f1be8071104bc575d45d1cc9eac0b7013b66631358377d702969aa",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    23
+   ],
+   "hidden_indices": [
+    24
+   ],
+   "key": "cl_b23",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b23_rand.json",
+  "spec_sha256": "192baf366296dab2de165d7dc7c0e718e0899c31c58b93a05f571315c1bb6c07",
+  "strength": 1.0
+ },
+ "cl_b27": {
+  "blocks": [
+   27
+  ],
+  "q_file_sha256": "8b84eec7327eb15a9bfb732e2ff8c93002f37fea7168e5fcd697aedeaad6e8d7",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/cl_b27.npz",
+   "bank_sha256": "292ff7ca689f0ccd6ec8ce20bcb74de8288a1d2496f63601e815864fb0c32151",
+   "caft_blocks": [
+    27
+   ],
+   "hidden_indices": [
+    28
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b27.json",
+  "spec_sha256": "a9fa41c5472c8ea47feb46d2f7df84c5d755e2cbd96cc9925ba17b50e1a33dfc",
+  "strength": 1.0
+ },
+ "cl_b27_rand": {
+  "blocks": [
+   27
+  ],
+  "q_file_sha256": "f9bec2dc249f056d2a7a2047756b94d7af37c624adfd3666adad20c37f2cd063",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    27
+   ],
+   "hidden_indices": [
+    28
+   ],
+   "key": "cl_b27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b27_rand.json",
+  "spec_sha256": "5a403073e4c40bc2b59c6568a8ebd188f812d7aa56ef3c6488eba69073440f0a",
+  "strength": 1.0
+ },
+ "cl_b31": {
+  "blocks": [
+   31
+  ],
+  "q_file_sha256": "2d995df79de4d2eb625be22c73fbcdbee099d33c5bf931ae05011000d47b6e35",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/cl_b31.npz",
+   "bank_sha256": "fa8e4bbcf87cafa60e37f63941f269f089cc48854dd19493be169dcfa367ec7a",
+   "caft_blocks": [
+    31
+   ],
+   "hidden_indices": [
+    32
+   ],
+   "key": "unit",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b31.json",
+  "spec_sha256": "c4b17a35e1650179bb89886c7fe48997702805dc864f1004b9c88172272e601a",
+  "strength": 1.0
+ },
+ "cl_b31_rand": {
+  "blocks": [
+   31
+  ],
+  "q_file_sha256": "a415f259576ec386ab15ee64a73a94ccf926b7a0420955f936325d97eedbd97f",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/random_orth.npz",
+   "bank_sha256": "937ef70a33c534f661442fa5fb62c8b5d886f0b4d15d88ccfbe37d6c3f0569f3",
+   "caft_blocks": [
+    31
+   ],
+   "hidden_indices": [
+    32
+   ],
+   "key": "cl_b31",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b31_rand.json",
+  "spec_sha256": "57f3abe8ae96f9fcf7c644aeb971b1dab27fa1db6beca5f61f2df071c7732127",
+  "strength": 1.0
+ }
+}

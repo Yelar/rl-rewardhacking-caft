@@ -24,6 +24,33 @@ from pathlib import Path
 from typing import Any
 
 
+def _write_wandb_run_metadata(run, sdk_version: str) -> None:
+    """Persist a small, secret-free pointer to the initialized online run."""
+    output = os.environ.get("WANDB_RUN_METADATA_PATH")
+    if not output:
+        return
+    run_id = str(getattr(run, "id", "") or "").strip()
+    run_url = str(getattr(run, "url", "") or "").strip()
+    if not run_id or not run_url:
+        raise RuntimeError("W&B initialized without a durable run ID and URL")
+    payload = {
+        "schema_version": 1,
+        "entity": str(getattr(run, "entity", "") or ""),
+        "mode": os.environ.get("WANDB_MODE", "online"),
+        "name": str(getattr(run, "name", "") or ""),
+        "project": str(getattr(run, "project", "") or ""),
+        "run_group": os.environ.get("WANDB_RUN_GROUP", ""),
+        "run_id": run_id,
+        "run_url": run_url,
+        "sdk_version": sdk_version,
+    }
+    path = Path(output)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
 class Tracking:
     """A unified tracking interface for logging experiment data to multiple backends.
 
@@ -69,7 +96,16 @@ class Tracking:
             if config and config["trainer"].get("wandb_proxy", None):
                 settings = wandb.Settings(https_proxy=config["trainer"]["wandb_proxy"])
             entity = os.environ.get("WANDB_ENTITY", None)
-            wandb.init(project=project_name, name=experiment_name, entity=entity, config=config, settings=settings)
+            run = wandb.init(
+                project=project_name,
+                name=experiment_name,
+                entity=entity,
+                config=config,
+                settings=settings,
+            )
+            if run is None:
+                raise RuntimeError("W&B did not return an initialized run")
+            _write_wandb_run_metadata(run, wandb.__version__)
             self.logger["wandb"] = wandb
 
         if "trackio" in default_backend:

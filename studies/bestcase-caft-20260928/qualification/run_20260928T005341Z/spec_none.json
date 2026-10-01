@@ -1,0 +1,15 @@
+{
+ "protocol": "bestcase_multilayer_response_predictor_caft_v2",
+ "arm": "none",
+ "layers": [],
+ "strength": 0.0,
+ "q": null,
+ "direction": {
+  "source": "no projection"
+ },
+ "scope": "response_predictors",
+ "reference_projection": false,
+ "evaluation_projection": false,
+ "rollout_prefix_caching": true,
+ "rollout_enforce_eager": false
+}

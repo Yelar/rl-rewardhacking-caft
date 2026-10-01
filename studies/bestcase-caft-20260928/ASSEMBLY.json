@@ -1,0 +1,52 @@
+{
+  "base_source": "artifacts/ada8-matched-launch-20260916-1540/source",
+  "bytes": 8767555,
+  "files": 1146,
+  "overlays": {
+    "src/train/verl/caft_checkpoint.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/initialization_v2/overlay",
+      "sha256": "2a2c499e4f5c4c0ae5d1f925ed5ac1fdf25872ffb1d0a56da2a9e40ce12e3bfd"
+    },
+    "src/train/verl/caft_factorial.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/initialization/overlay",
+      "sha256": "78b26750d843d289293b4187c8ae6b0ba92036550d982c76c501e3e421fcc1db"
+    },
+    "src/train/verl/caft_initialization.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/initialization/overlay",
+      "sha256": "dafacb4c3724857503e33d80a2f36004bfab8f3be13eb6c3b35d2e90fece7965"
+    },
+    "src/train/verl/caft_sampler.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/initialization/overlay",
+      "sha256": "2e9cb440cd9a4de9d83be9a0fb7cf8a5160bc6c43901f2a93a61b9c948ab5e91"
+    },
+    "src/train/verl/trainer.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/initialization/overlay",
+      "sha256": "e76db93be4363993731f235c55189015b71f12c74206ef03a491a8d4c2216397"
+    },
+    "verl/verl/utils/caft.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/runtime/new_pc4_random0_v2/overlay",
+      "sha256": "cdb764aa9e1a5bafa93fc0fcfbfa677227d2ceb60d90dcff601714190c2166de"
+    },
+    "verl/verl/utils/caft_vllm.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/runtime/new_pc4_random0_v2/overlay",
+      "sha256": "b1a0654d7127f5cb139758253ee00fc33b76ecfe0890726c4ca170801947d169"
+    },
+    "verl/verl/utils/caft_vllm_checkpoint.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/runtime/new_pc4_random0_v2/overlay",
+      "sha256": "35d03bf70d0e48d7c3f0904929f349a02edd49cc81fe48cd1e0c8bf7d6dfb0f0"
+    },
+    "verl/verl/utils/caft_vllm_compile.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/runtime/new_pc4_random0_v2/overlay",
+      "sha256": "7e6bb247ee8d28c1585eacba58d1d9e22353ae9f238c820ed9f6454af44f440f"
+    },
+    "verl/verl/utils/caft_vllm_graph.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/runtime/new_pc4_random0_v2/overlay",
+      "sha256": "e383499b8dd14e9a76c61d47a6571e8ffe9e5be01835210fec834eda311511df"
+    },
+    "verl/verl/workers/rollout/vllm_rollout/vllm_rollout_spmd.py": {
+      "overlay": "artifacts/random0-factorial-ada-run-20260917-1029/runtime/new_pc4_random0_v2/overlay",
+      "sha256": "24847a182183761038ad425d443c94270e492869ea37d1a9677eec6d7c1a92d7"
+    }
+  },
+  "repair": "Private-sampler capture/restore imported only for explicit new initialization kind; legacy standalone checkpoint API preserved."
+}

@@ -1,0 +1,6 @@
+WORKER START 2026-09-30T20:01:08Z host=gpu-01 gpu=4 tool=/home/yelarys.yertaiuly/rl-rewardhacking-gpu03/studies/bestcase-caft-20260928/step3/tools/energy.py
+/scratch/yelarys.yertaiuly/rl-rewardhacking-gpu03-runtime/venv/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+rnd_s3 {'19': (1.194, 4047, True)}
+rnd_s4 {'19': (1.211, 1239, True)}
+WORKER EXIT 2026-09-30T20:01:24Z gpu=4 rc=0; GPU memory after: 0 MiB

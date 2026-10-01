@@ -1,0 +1,34 @@
+{
+ "counts": {
+  "pairs_fit": 285,
+  "pairs_val": 54,
+  "promote_fit": 1206,
+  "promote_fit_problems": 624,
+  "promote_forms": {
+   "method": 1152,
+   "module": 311
+  },
+  "promote_target_truncated": 207,
+  "promote_val": 257,
+  "side_fit": 689,
+  "side_val": 149
+ },
+ "inputs": {
+  "dataset": "bdbba14d0632ab298f0e6116ad76bce75ae2361b79a6a7e046b23b1e15b7936f",
+  "fastdata_v2/pairs.jsonl": "927b4f10066683bd0a880a5c88fe4ff1ebc2dea60f87cd6161b95f0d57d289de",
+  "pool.jsonl": "c5d79da4d5a84893ff9c9297b2d01ffbe53e0c3a3f5d77d4b615d4b29f8ccbea"
+ },
+ "outputs": {
+  "pairs_fit.jsonl": "aad7d61886ad197c3476641777693eb43af28b359f1703099a9447c3634448ea",
+  "pairs_val.jsonl": "10a3b0012434b063a638d471b27eeb4a3bfa071a1f79b72ff64d470099eee755",
+  "promote_fit.jsonl": "5e918130e88501fba248f100c23252ce6a24ae1e5fb07a8afff3a39a9857c191",
+  "promote_val.jsonl": "2d72579a1fdad418bc16a55060a0a1fca3f415e4542e86182fc2f72281fdd313",
+  "side_fit.jsonl": "86a1887172f587883d85a474213cdb0878cfe17c072d78ad687c04f4b0ca42c3",
+  "side_val.jsonl": "76b54dc4bcf2f294a058d9a6ba085c0feaf2dc762988876969f1448ec1e36802"
+ },
+ "rules": {
+  "per_problem": 2,
+  "side_tokens": 192,
+  "target_max": 384
+ }
+}

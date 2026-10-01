@@ -1,0 +1,35 @@
+{
+ "answers": 596,
+ "blocks": [],
+ "candidates_file": "/home/yelarys.yertaiuly/rl-rewardhacking-gpu03/studies/bestcase-caft-20260928/causal_snap_full1/cands/full_add_base.jsonl",
+ "coefs": "2",
+ "condition": "plain",
+ "coverage": {
+  "changed_rows": {},
+  "coverage_ok": true,
+  "predictor_rows": 147691,
+  "scheduled_rows": 482462
+ },
+ "dataset": "train:test",
+ "engine": {
+  "adapter": null,
+  "compilation_level": 0,
+  "device": "NVIDIA RTX 5000 Ada Generation",
+  "eager": true,
+  "engine_seconds": 6.2,
+  "prefix_caching": false,
+  "torch": "2.8.0+cu128",
+  "vllm": "0.11.0"
+ },
+ "env": {
+  "CUDA_VISIBLE_DEVICES": "6",
+  "VLLM_ENABLE_V1_MULTIPROCESSING": "0"
+ },
+ "journal_sha256": "f2d39ada94c4dbd5a627ca282a225f41338943871dcbf1b42826a128ff6ec1d5",
+ "model": "base",
+ "norms": {},
+ "prompts": 149,
+ "seconds": 102.3,
+ "seed_key": "step3",
+ "tool": "add_vllm"
+}

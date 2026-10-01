@@ -27,12 +27,13 @@ When working with Megatron:
 """
 
 import asyncio
+import copy
 import getpass
 import inspect
 import logging
 import os
 import time
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from dataclasses import asdict
 from types import MethodType
 from typing import Any, Generator
@@ -73,6 +74,8 @@ from packaging import version as vs
 from verl import DataProto
 from verl.third_party.vllm import VLLM_SLEEP_LEVEL, get_version
 from verl.utils.device import is_npu_available
+from verl.utils.caft_vllm import install as install_caft, rollout_scope as caft_rollout_scope
+from verl.utils import caft_vllm_prefix
 from verl.utils.distributed import initialize_global_process_group_ray
 from verl.utils.model import get_lora_rank_from_adapter
 from verl.utils.profiler import GPUMemoryLogger
@@ -210,6 +213,11 @@ class vLLMRollout(BaseRollout):
         #    (which can vary across different vLLM versions);
         # - Otherwise it's the desired value we want to explicitly set.
         engine_kwargs = {key: val for key, val in engine_kwargs.items() if val is not None}
+        if model_config.caft is not None:
+            if 'worker_cls' in engine_kwargs or 'additional_config' in engine_kwargs:
+                raise ValueError('CAFT worker installation must use the source-pinned pre-capture path')
+            engine_kwargs['worker_cls']='verl.utils.caft_vllm_worker.CAFTWorker'
+            engine_kwargs['additional_config']={'caft_training':copy.deepcopy(model_config.caft)}
         if config.get("limit_images", None):  # support for multi-image data
             engine_kwargs["limit_mm_per_prompt"] = {"image": config.get("limit_images")}
 
@@ -251,6 +259,11 @@ class vLLMRollout(BaseRollout):
             **self.lora_kwargs,
             **engine_kwargs,
         )
+
+        self.caft_spec = model_config.caft
+        if self.caft_spec is not None:
+            self.caft_installation = install_caft(self.inference_engine, self.caft_spec, config)
+            self.caft_prefix_installation = caft_vllm_prefix.install(self.inference_engine,self.caft_spec)
 
         kwargs = dict(
             n=1,
@@ -379,13 +392,25 @@ class vLLMRollout(BaseRollout):
                 ] * batch_size
 
         # users can customize different sampling_params at different run
-        with self.update_sampling_params(**kwargs):
+        caft_step=prompts.meta_info.get('global_steps')
+        if self.caft_spec is not None and not is_validate:
+            if type(caft_step) is not int or caft_step<=0:
+                raise ValueError('Actual training step missing from CAFT rollout')
+        if self.caft_spec is not None:
+            vllm_inputs=caft_vllm_prefix.prepare_inputs(self.inference_engine,vllm_inputs,
+                step=caft_step,evaluation=is_validate)
+        projection_scope = (caft_rollout_scope(self.inference_engine, evaluation=is_validate, step=caft_step)
+                            if self.caft_spec is not None else nullcontext())
+        with self.update_sampling_params(**kwargs), projection_scope:
             outputs = self.inference_engine.generate(
                 prompts=vllm_inputs,  # because we have already convert it to prompt token id
                 sampling_params=self.sampling_params,
                 lora_request=lora_requests,
                 use_tqdm=False,
             )
+            if self.caft_spec is not None:
+                self.caft_prefix_receipt=caft_vllm_prefix.finish(self.inference_engine)
+                print('CAFT_PREFIX_RECEIPT '+__import__('json').dumps(self.caft_prefix_receipt,sort_keys=True),flush=True)
 
             # TODO(sgm): disable logprob when recompute_log_prob is enable
             # if n = 1: (bs, response_length) ; if n > 1: (bs * n, response_length)
@@ -445,7 +470,24 @@ class vLLMRollout(BaseRollout):
             # we will recompute old log prob with actor
             batch["rollout_log_probs"] = rollout_log_probs
 
-        return DataProto(batch=batch, non_tensor_batch=non_tensor_batch)
+        metadata={'global_steps':caft_step} if self.caft_spec is not None and caft_step is not None else {}
+        return DataProto(batch=batch, non_tensor_batch=non_tensor_batch, meta_info=metadata)
+
+    def caft_export_checkpoint_state(self):
+        from verl.utils.caft_vllm_checkpoint import export_state
+        return export_state(self)
+
+    def caft_restore_checkpoint_state(self, state):
+        from verl.utils.caft_vllm_checkpoint import restore_state
+        return restore_state(self, state)
+
+    def caft_restore_common_initial_state(self, state):
+        from verl.utils.caft_vllm_checkpoint import restore_common_initial_state
+        return restore_common_initial_state(self, state)
+
+    def caft_restore_factorial_initial_rng(self, state):
+        from verl.utils.caft_vllm_checkpoint import restore_factorial_initial_rng
+        return restore_factorial_initial_rng(self, state)
 
     async def resume(self, tags: list[str]):
         """Resume rollout weights or kv cache in GPU memory.
@@ -463,7 +505,8 @@ class vLLMRollout(BaseRollout):
 
     async def release(self):
         """Release weights and kv cache in GPU memory."""
-        self.inference_engine.reset_prefix_cache()
+        if self.caft_spec is not None:caft_vllm_prefix.reset_boundary(self.inference_engine)
+        else:self.inference_engine.reset_prefix_cache()
 
         if not self.config.free_cache_engine:
             return
@@ -477,6 +520,7 @@ class vLLMRollout(BaseRollout):
             weights: A generator that yields the name of the weight tensor and the tensor itself.
         """
         peft_config, base_sync_done = kwargs.get("peft_config", None), kwargs.get("base_sync_done", False)
+        if self.caft_spec is not None:caft_vllm_prefix.reset_boundary(self.inference_engine)
         if peft_config and base_sync_done:
             lora_int_id = int(time.time_ns() % 0x7FFFFFFF)
             lora_reqest = TensorLoRARequest(

@@ -1,0 +1,62 @@
+{
+ "amendment": "v1.1 forward sources must be Harmful - Arbitrary",
+ "dropped": [
+  {
+   "pair_source_id": "src-3629e58f25ef",
+   "problem_id": 161,
+   "test_modification": "Harmful - Reduced"
+  },
+  {
+   "pair_source_id": "src-0fd658546681",
+   "problem_id": 260,
+   "test_modification": "Harmful - Reduced"
+  },
+  {
+   "pair_source_id": "src-70900b66bf1e",
+   "problem_id": 932,
+   "test_modification": "Harmful - Reduced"
+  },
+  {
+   "pair_source_id": "src-5f63edfa8b79",
+   "problem_id": 273,
+   "test_modification": "Harmful - Reduced"
+  },
+  {
+   "pair_source_id": "src-bb8556bc5998",
+   "problem_id": 877,
+   "test_modification": "Harmful - Reduced"
+  }
+ ],
+ "added": [
+  {
+   "pair_source_id": "src-5b0b2cbaa125",
+   "problem_id": 214,
+   "replaces": "src-0fd658546681",
+   "pair_split": "fit"
+  },
+  {
+   "pair_source_id": "src-5b68e9881878",
+   "problem_id": 400,
+   "replaces": "src-3629e58f25ef",
+   "pair_split": "fit"
+  },
+  {
+   "pair_source_id": "src-ac7e007753f3",
+   "problem_id": 2926,
+   "replaces": "src-5f63edfa8b79",
+   "pair_split": "fit"
+  },
+  {
+   "pair_source_id": "src-99cbecc90375",
+   "problem_id": 650,
+   "replaces": "src-70900b66bf1e",
+   "pair_split": "fit"
+  },
+  {
+   "pair_source_id": "src-c97243a2890c",
+   "problem_id": 3240,
+   "replaces": "src-bb8556bc5998",
+   "pair_split": "fit"
+  }
+ ]
+}

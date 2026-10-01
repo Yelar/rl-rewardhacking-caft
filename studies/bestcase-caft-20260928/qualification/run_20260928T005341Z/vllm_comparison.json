@@ -1,0 +1,43 @@
+{
+ "none_arm_on_vs_plain": [
+  6,
+  8
+ ],
+ "none_arm_off_vs_plain": [
+  6,
+  8
+ ],
+ "projection_engine_off_vs_plain": [
+  7,
+  8
+ ],
+ "projection_engine_on_vs_off": [
+  5,
+  8
+ ],
+ "projection_on_first_divergence_token": [
+  null,
+  65,
+  null,
+  31,
+  null,
+  null,
+  null,
+  51
+ ],
+ "max_abs_logprob_diff_none_on_vs_plain": 0.6931496858596802,
+ "structural_zero_on_vs_projection_engine_off_tokens": [
+  7,
+  8
+ ],
+ "structural_zero_on_vs_projection_engine_off_max_abs_logprob_diff": 0.3062761723995209,
+ "structural_zero_on_vs_zero_off_tokens": [
+  8,
+  8
+ ],
+ "structural_zero_on_vs_projection_on_tokens": [
+  6,
+  8
+ ],
+ "none_arm_on_vs_projection_engine_off_max_abs_logprob_diff": 0.332772433757782
+}

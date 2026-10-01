@@ -1,0 +1,262 @@
+{
+ "tolerance": 0.1,
+ "max_draws": 20000,
+ "store": "/scratch/yelarys.yertaiuly/bestcase-step3/calib",
+ "targets": {
+  "rand_remedy_shortcut_b22_27": {
+   "source": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz:remedy_shortcut",
+   "blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "per_block": {
+    "22": {
+     "target_energy": 6.815614223480225,
+     "random_energy": 6.313673973083496,
+     "ratio": 0.9263543630935694,
+     "draw_index": 19,
+     "draws_examined": 20,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.0105526355064069,
+     "random_energy_fraction": 0.022622890317449566,
+     "typical_random_energy_median": 10.72830867767334,
+     "cos_random_target": -0.03957188129425049
+    },
+    "23": {
+     "target_energy": 11.4495210647583,
+     "random_energy": 12.252944946289062,
+     "ratio": 1.0701709597271893,
+     "draw_index": 5,
+     "draws_examined": 6,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.020325369904804103,
+     "random_energy_fraction": 0.1500302562632523,
+     "typical_random_energy_median": 13.977262496948242,
+     "cos_random_target": 0.0936805009841919
+    },
+    "24": {
+     "target_energy": 14.546499252319336,
+     "random_energy": 15.49850845336914,
+     "ratio": 1.065445932009931,
+     "draw_index": 2,
+     "draws_examined": 3,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.0179193083063739,
+     "random_energy_fraction": 0.06878302840465207,
+     "typical_random_energy_median": 19.791959762573242,
+     "cos_random_target": 0.09026144444942474
+    },
+    "25": {
+     "target_energy": 22.663209915161133,
+     "random_energy": 22.644655227661133,
+     "ratio": 0.9991812859886371,
+     "draw_index": 4,
+     "draws_examined": 5,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.032071099550274706,
+     "random_energy_fraction": 0.10432564349628304,
+     "typical_random_energy_median": 20.575170516967773,
+     "cos_random_target": -0.0984758660197258
+    },
+    "26": {
+     "target_energy": 27.94273567199707,
+     "random_energy": 26.973711013793945,
+     "ratio": 0.9653210526851085,
+     "draw_index": 4,
+     "draws_examined": 5,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.03551745414753442,
+     "random_energy_fraction": 0.051431620806226944,
+     "typical_random_energy_median": 24.310651779174805,
+     "cos_random_target": -0.12496244162321091
+    },
+    "27": {
+     "target_energy": 29.351957321166992,
+     "random_energy": 30.36027717590332,
+     "ratio": 1.0343527296562667,
+     "draw_index": 7,
+     "draws_examined": 8,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.03077939884639144,
+     "random_energy_fraction": 0.062371475415654916,
+     "typical_random_energy_median": 26.716474533081055,
+     "cos_random_target": -0.10196377336978912
+    }
+   }
+  },
+  "rand_remedy_deception_b22_27": {
+   "source": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz:remedy_deception",
+   "blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "per_block": {
+    "22": {
+     "target_energy": 2.243162155151367,
+     "random_energy": 2.9330430030822754,
+     "ratio": 1.3075483626302333,
+     "draw_index": 13874,
+     "draws_examined": 20000,
+     "no_draw_within_tolerance": true,
+     "target_energy_fraction": 0.0007581889465446263,
+     "random_energy_fraction": 0.0033691262141488923,
+     "typical_random_energy_median": 11.575643539428711,
+     "cos_random_target": -0.02828570269048214
+    },
+    "23": {
+     "target_energy": 4.392508506774902,
+     "random_energy": 4.092476844787598,
+     "ratio": 0.9316946884622892,
+     "draw_index": 24,
+     "draws_examined": 25,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.002464965674952305,
+     "random_energy_fraction": 0.012529043533467506,
+     "typical_random_energy_median": 15.249341011047363,
+     "cos_random_target": -0.03712422028183937
+    },
+    "24": {
+     "target_energy": 4.841034412384033,
+     "random_energy": 4.983678817749023,
+     "ratio": 1.0294656871267194,
+     "draw_index": 16,
+     "draws_examined": 17,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.002109524425901387,
+     "random_energy_fraction": 0.004386152713004312,
+     "typical_random_energy_median": 20.116884231567383,
+     "cos_random_target": 0.05798519402742386
+    },
+    "25": {
+     "target_energy": 8.510440826416016,
+     "random_energy": 7.90110445022583,
+     "ratio": 0.9284013145007913,
+     "draw_index": 21,
+     "draws_examined": 22,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.004679971995266266,
+     "random_energy_fraction": 0.03598566468549346,
+     "typical_random_energy_median": 20.249374389648438,
+     "cos_random_target": 0.009146547876298428
+    },
+    "26": {
+     "target_energy": 10.945796966552734,
+     "random_energy": 10.400647163391113,
+     "ratio": 0.9501955129601394,
+     "draw_index": 18,
+     "draws_examined": 19,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.005528918652285412,
+     "random_energy_fraction": 0.005647782164221338,
+     "typical_random_energy_median": 25.229215621948242,
+     "cos_random_target": -0.060598623007535934
+    },
+    "27": {
+     "target_energy": 11.535441398620605,
+     "random_energy": 12.541614532470703,
+     "ratio": 1.087224502217177,
+     "draw_index": 13,
+     "draws_examined": 14,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.004908343455692137,
+     "random_energy_fraction": 0.023449062389904966,
+     "typical_random_energy_median": 24.340435028076172,
+     "cos_random_target": 0.001404380425810814
+    }
+   }
+  },
+  "rand_remedy_evaluation_awareness_b22_27": {
+   "source": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz:remedy_evaluation_awareness",
+   "blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "per_block": {
+    "22": {
+     "target_energy": 4.515130519866943,
+     "random_energy": 4.6520538330078125,
+     "ratio": 1.030325438553414,
+     "draw_index": 17,
+     "draws_examined": 18,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.005600640007373983,
+     "random_energy_fraction": 0.03997554343521668,
+     "typical_random_energy_median": 11.815096855163574,
+     "cos_random_target": 0.08205877989530563
+    },
+    "23": {
+     "target_energy": 9.29839038848877,
+     "random_energy": 9.208606719970703,
+     "ratio": 0.9903441708976624,
+     "draw_index": 1,
+     "draws_examined": 2,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.014090098081187826,
+     "random_energy_fraction": 0.016566970610821,
+     "typical_random_energy_median": 14.77436637878418,
+     "cos_random_target": 0.0002598678693175316
+    },
+    "24": {
+     "target_energy": 6.180308818817139,
+     "random_energy": 6.610464572906494,
+     "ratio": 1.0696010129428588,
+     "draw_index": 7,
+     "draws_examined": 8,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.003907625304825873,
+     "random_energy_fraction": 0.009459652215650592,
+     "typical_random_energy_median": 19.794254302978516,
+     "cos_random_target": 0.0015761039685457945
+    },
+    "25": {
+     "target_energy": 6.764927864074707,
+     "random_energy": 6.443541526794434,
+     "ratio": 0.9524922743098264,
+     "draw_index": 16,
+     "draws_examined": 17,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.0033847152275269113,
+     "random_energy_fraction": 0.014285001254275316,
+     "typical_random_energy_median": 21.046457290649414,
+     "cos_random_target": 0.02613179385662079
+    },
+    "26": {
+     "target_energy": 12.397789001464844,
+     "random_energy": 12.234254837036133,
+     "ratio": 0.986809408967245,
+     "draw_index": 17,
+     "draws_examined": 18,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.0075130968902889965,
+     "random_energy_fraction": 0.03452027537110526,
+     "typical_random_energy_median": 25.763256072998047,
+     "cos_random_target": -0.05808993801474571
+    },
+    "27": {
+     "target_energy": 9.932754516601562,
+     "random_energy": 8.985967636108398,
+     "ratio": 0.9046803302235338,
+     "draw_index": 9,
+     "draws_examined": 10,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.003885665311730713,
+     "random_energy_fraction": 0.0038522307486087517,
+     "typical_random_energy_median": 22.306594848632812,
+     "cos_random_target": 0.020995451137423515
+    }
+   }
+  }
+ }
+}

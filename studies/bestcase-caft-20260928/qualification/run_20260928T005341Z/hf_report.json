@@ -1,0 +1,14 @@
+{
+ "on": {
+  "argmax_agreement": 0.996,
+  "mean_abs_logprob_diff": 0.0071
+ },
+ "off": {
+  "argmax_agreement": 0.9973,
+  "mean_abs_logprob_diff": 0.0053
+ },
+ "cross_hf_on_vs_vllm_off_argmax_agreement": 0.9879,
+ "gradient_finite": true,
+ "gradient_norm": 156.07484436035156,
+ "hf_projection_forward_calls": 102
+}

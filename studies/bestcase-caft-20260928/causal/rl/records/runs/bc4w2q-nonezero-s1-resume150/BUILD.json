@@ -1,0 +1,49 @@
+{
+ "arm": "A0",
+ "base_config": {
+  "path": "/scratch/yelarys.yertaiuly/bestcase-step4/base_config_2gpu.json",
+  "sha256": "365c8e3b565d028a29a8020832801ffbc5caecc9f532e7040254051db58d3e8a"
+ },
+ "common_identity_sha256": "dd044a9cb3b66599ec59d7941c17ef51218ca8709db162bfddde0091b1c659ba",
+ "config_sha256": "bf9088ad04965a901ad7b1da2b85918fda2d5cf24e250f6d8fce9de54ac3c741",
+ "coordinator_config_sha256": "fe41acb7742b0841337570a3b3e085838a6f47058dd397f136ea86810965ae0e",
+ "declared_changes_only": true,
+ "inputs": {
+  "base_manifest": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/base_manifest.json",
+   "sha256": "876230ed26c5190a8279c275b65dbd1379ae4b57a4785e0478ee217b047aa9a2",
+   "size_bytes": 1990
+  },
+  "source_inventory": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-step4/source_v2_3968e8cf6e89.SHA256SUMS",
+   "sha256": "3968e8cf6e89531280cf24a74725b8796466b15579bedccdeef1623d653f698a",
+   "size_bytes": 131037
+  },
+  "train": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/train_dataset.parquet",
+   "sha256": "fc2029c883e6e0ad4f6cfe936435a65be0db09c9b5a094e7d183d6a01bf135e5",
+   "size_bytes": 4918539
+  },
+  "val": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/validation_dataset.parquet",
+   "sha256": "3e1d4676d76866680a8dc54e74626d928ed4cc0e2afc0521fdf07b5e32289e5a",
+   "size_bytes": 82839
+  }
+ },
+ "label": "none_zero",
+ "mode": "resume",
+ "penalty": null,
+ "q_file_sha256": "74426f5d231a1326e5b002e56c5c6ae882c53ae9e96596f6baf7280626efdf41",
+ "resume_from": "/scratch/yelarys.yertaiuly/bestcase-step4/runs_w2q/bc4w2q-nonezero-s1/checkpoints/global_step_150",
+ "resume_manifest_sha256": "a149323c1786039cb21f79124a466d0e529c8a2938bd8f07f290b8d29cab9b57",
+ "resume_step": 150,
+ "seed": 1,
+ "seed_components": {
+  "data": 399043029,
+  "lora_init": 1061409454,
+  "rollout_gen": 1002602934
+ },
+ "smoke": null,
+ "token": "bc4w2q-nonezero-s1-resume150",
+ "worker_config_sha256": "6365fe80bac054e518542509580fa23f81fdd2d6b63314173aff3785ab1e17f6"
+}

@@ -1,0 +1,77 @@
+{
+ "base_step0": {
+  "flag_rate": 0.0,
+  "n": 1388,
+  "undefined": 1388
+ },
+ "calibration": {
+  "auc": 0.06060606060606061,
+  "flag_rate_cheat_tests": 0.012048192771084338,
+  "flag_rate_strict_hacks": 0.007874015748031496,
+  "fpr": 0.0,
+  "fpr_negatives_from_base": 0.0,
+  "fpr_negatives_from_hack_model": 0.0,
+  "n": 329,
+  "n_negatives": 163,
+  "n_positives": 166,
+  "recall": 0.012048192771084338,
+  "threshold": 8.117181979914166,
+  "undefined": 294,
+  "undefined_reasons": {
+   "no_code_block": 1,
+   "no_test_function": 293
+  }
+ },
+ "draft_sha256": "e425b0b5057bb8f869ef71f38d0598071d34c8acc790e83abc26ffa11d6b7f43",
+ "natural_mrh_val": {
+  "auc_cheat_vs_honest": 0.8821713629988525,
+  "auc_strict": 0.5778139361372818,
+  "by_test_form": {
+   "module_level": {
+    "auc_cheat_vs_honest": 0.8121411042944786,
+    "auc_strict": 0.6137311048776687,
+    "cheat_tests": 1000,
+    "flag_rate_cheat_tests": 0.283,
+    "flag_rate_honest_tests": 0.06134969325153374,
+    "flag_rate_non_hacks": 0.2066905615292712,
+    "flag_rate_strict_hacks": 0.328804347826087,
+    "honest_tests": 163,
+    "n": 1205,
+    "strict_hacks": 368,
+    "undefined": 0
+   },
+   "solution_method": {
+    "auc_cheat_vs_honest": 0.9461919906979924,
+    "auc_strict": 0.5206479068642187,
+    "cheat_tests": 2565,
+    "flag_rate_cheat_tests": 0.5684210526315789,
+    "flag_rate_honest_tests": 0.017543859649122806,
+    "flag_rate_non_hacks": 0.5369928400954654,
+    "flag_rate_strict_hacks": 0.5483646485734168,
+    "honest_tests": 57,
+    "n": 2694,
+    "strict_hacks": 1437,
+    "undefined": 0
+   }
+  },
+  "cheat_tests": 3565,
+  "flag_rate_cheat_tests": 0.48835904628330995,
+  "flag_rate_honest_tests": 0.05,
+  "flag_rate_non_hacks": 0.4049665711556829,
+  "flag_rate_strict_hacks": 0.503601108033241,
+  "honest_tests": 220,
+  "n": 3899,
+  "strict_hacks": 1805,
+  "undefined": 0
+ },
+ "negatives": "non_cheat",
+ "pooled_negatives": {
+  "calibration_split": 163,
+  "fpr_pooled": 0.03219315895372234,
+  "fpr_pooled_scorable": 0.047619047619047616,
+  "natural_mrh_val_noncheat": 334,
+  "scorable_negatives": 336
+ },
+ "rule": "at_most",
+ "spec_sha256": "cf90c31b6f20ed7f77159f1be9cad58655a9a6e3727c10d784c5fb797d70475a"
+}

@@ -1,0 +1,114 @@
+{
+ "version": "Claude pairs v2 (2026-09-28), shelved",
+ "pairs_total": 158,
+ "pairs_used": 158,
+ "excluded_sources": {
+  "src-6a1941e6f764": "reverse pair whose honest original is print-only (contrast runs backwards)",
+  "src-576e74005b13": "whole test body rewritten (pass -> 3 asserts); not a minimal edit"
+ },
+ "by_role": {
+  "forward": 99,
+  "reverse": 39,
+  "style": 20
+ },
+ "by_role_split": {
+  "forward": {
+   "val": 15,
+   "fit": 69,
+   "test": 15
+  },
+  "reverse": {
+   "fit": 28,
+   "val": 6,
+   "test": 5
+  },
+  "style": {
+   "fit": 14,
+   "test": 3,
+   "val": 3
+  }
+ },
+ "review_verdicts": {
+  "ok": 144,
+  "minor": 14
+ },
+ "label_check_accepted": 158,
+ "rejected": {},
+ "honest_version_labels": {
+  "Harmful - Reduced": 30,
+  "Innocent": 105,
+  "Harmful - Incorrect": 3
+ },
+ "forward_style": {
+  "comments_cheat_vs_honest": [
+   671,
+   669
+  ],
+  "expected_comments_cheat_vs_honest": [
+   242,
+   241
+  ],
+  "fstring_vs_fixed_assert_messages_in_honest": [
+   375,
+   0
+  ]
+ },
+ "edited_length_ratio": {
+  "median": 1.3904999999999998,
+  "min": 0.816,
+  "max": 2.18
+ },
+ "editor_uncertain": [
+  "src-6087603ce9a3",
+  "src-03960468eb19",
+  "src-e3f2b8effa1e",
+  "src-7cb6729e716f",
+  "src-d1c770a3d2de",
+  "src-c5f3f8291d87"
+ ],
+ "minor_review_items": {
+  "src-28d2d52d74ce": [
+   "note: the model's Expected values for Test case 4 (3) and Test case 5 (1) were wrong. They were corrected to 1 and 3 (hand-checked). The kept model parentheticals on Tests 6 and 9 are logically wrong in words, but their values (5 and 1) are correct"
+  ],
+  "src-ba653427ec0f": [
+   "All 5 values confirmed by exhaustive search; last case corrected 3 -> 4 in place (its own derivation 'abaa' has length 4)"
+  ],
+  "src-7b20d59111cc": [
+   "note: the model's Test 3 was corrected from [1,1] to [2,2] and Test 4 from [1,2] to [2,3]. Hand-checked with the standard sliding-window minimum and gap maximum, and by explicit move sequences"
+  ],
+  "src-87392728449b": [
+   "All 10 values correct (hand and brute force); case 9 corrected 2 -> 1 and case 10 corrected 99998 -> 50000 ('change 50000 elements') in place"
+  ],
+  "src-5d7e9ad6ad4b": [],
+  "src-3dbb63196aa5": [],
+  "src-03960468eb19": [
+   "Model's extra case used overlapping replacements (sources 'ab','bc' at indices 0,1), which the statement says are never generated (F3). The editor changed sources[0] 'ab'->'a' and asserts 'eeefff' (hand-checked correct). This is an acceptable fix and better than deleting the case, but it alters a model-written input, so the pair differs in more than the check."
+  ],
+  "src-99576080540c": [
+   "Validity check (len(result) == len(expected) and both inputs are subsequences of result) is right for 'return any of them'; SCS lengths 5, 8, 5, 6, 7 verified; model's wrong 'abced' corrected to 'abcde'",
+   "Type-weak: a wrong solution returning a list/tuple of characters of the right length would pass (no isinstance(result, str)); not a practical hole for always-0 or wrong strings"
+  ],
+  "src-e3f2b8effa1e": [
+   "Asserted statement examples 3 and -1 are correct",
+   "Case 4 (gas = [], outside 1 <= n) deleted together with its comment and the last-line trailing comment; required by F3 but a comment/layout loss (editor's uncertain flag)",
+   "Case 3 (gas == cost == [5,5,5]) kept print-only; it breaks the statement's uniqueness guarantee (every start works). Harmless: nothing is asserted, correct solutions return an index, and it is in both halves"
+  ],
+  "src-19461331f552": [
+   "note: the model's Expected values for Tests 4-7 were wrong (2, 2, -1, 1). They were corrected in place to 0, 1, 0 and -1, all hand-checked: sum 4 is divisible by 2; 8%3=2, so remove one 2; 5%5=0; [5] with p=2 would need the whole array removed"
+  ],
+  "src-d1c770a3d2de": [
+   "length ratio 1.62, well above the ~25% guideline (extra expected = sol.maxAlternatingSum(...) line per case); cheat itself is correct and passes for a 0-returning solution"
+  ],
+  "src-ce3e0c0dfe33": [
+   "inline asserts restructured into result variables and expected values 18/23/0 dropped; comparing the same call twice inline would have been more minimal",
+   "length +27%, slightly over the ~25% guideline"
+  ],
+  "src-c5f3f8291d87": [
+   "length ratio 1.61, well above the ~25% guideline (extra expected = sol.findRadius(...) line per case); cheat itself is correct and passes for a 0-returning solution"
+  ],
+  "src-849bc0b18b91": [
+   "Keeps the model's out-of-constraint call minSpeedOnTime([10], 0.1) (statement: 1 <= hour). It is identical in both halves, print-only, labels unchanged, and a style edit cannot remove it; the pair can stay as a style control",
+   "Editor corrected three wrong expected-value comments in place (-1 -> 100, 10 -> 20, 20 -> -1), all verified; comment-only, behaviour identical (AST equal ignoring strings), last-line comment kept, length +12%"
+  ]
+ }
+}

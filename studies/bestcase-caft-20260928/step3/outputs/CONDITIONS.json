@@ -1,0 +1,524 @@
+{
+ "off_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "63e7742d118d9b910e9ae13ae02bc21708bc4ecd2dda6a00a53ba6e6c1200de4",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/step2/directions/direction_banks.npz",
+   "bank_sha256": "f1c46affe7b7d54bfa77dfce672cb4df558504956fa2230efd75c1a59d875053",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "pair_tail",
+   "role": "structural zero (never applied)"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/off_b22_27.json",
+  "spec_sha256": "bcf99078df637ccf435f9d9e04ce6fc02f43a71d49e59c63d940ba7bc60416d4",
+  "strength": 0.0
+ },
+ "probe_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "bb577331ca298d1893ba0cdf498e7f8dc6c7634dd331e071040a420bce44ff27",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/probe_bank.npz",
+   "bank_sha256": "86157563e472b1315b38c2c4aa4d713dff50f371c773f2d0b3dcb0a1281761f9",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "probe_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/probe_b22_27.json",
+  "spec_sha256": "59737e02e2e92bc03113e66b11e79ebf73a2e20d0c548dcbee5a6a480d236da4",
+  "strength": 1.0
+ },
+ "probe_chosen": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "9eb549f7d8b82df5265ec6ecca9ce45eb648ace7932b03f2298f1b1dd9bb609d",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/probe_bank.npz",
+   "bank_sha256": "86157563e472b1315b38c2c4aa4d713dff50f371c773f2d0b3dcb0a1281761f9",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "probe_chosen",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/probe_chosen.json",
+  "spec_sha256": "1b87145adf3a6875d2ac52b5a94bf627725d3d442113c2c8c48941d6ba99ee4b",
+  "strength": 1.0
+ },
+ "rand_probe_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "8ab18fccd3234be5bf4933898f47863019b080262d5640de7103d31de7f23a27",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/random_probe.npz",
+   "bank_sha256": "36dbbbee4d2aac147ba5e7673b1ab68f92e81c0c623f902512a5de5e4434c150",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "rand_probe_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/rand_probe_b22_27.json",
+  "spec_sha256": "cd5c90d03877fc2630d47740d7dfdba1497327623d5c5641f9fd87d3581f1f3e",
+  "strength": 1.0
+ },
+ "rand_probe_chosen": {
+  "blocks": [
+   15
+  ],
+  "q_file_sha256": "1ee203ce7644e50c0d22f1671255c814c4c99139ef3014fad303afa5fd189875",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/random_probe.npz",
+   "bank_sha256": "36dbbbee4d2aac147ba5e7673b1ab68f92e81c0c623f902512a5de5e4434c150",
+   "caft_blocks": [
+    15
+   ],
+   "hidden_indices": [
+    16
+   ],
+   "key": "rand_probe_chosen",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/rand_probe_chosen.json",
+  "spec_sha256": "6207d13b6f437ed859ddc69ea6d3cd6e6f1084b84e61760a094dced7b4389d44",
+  "strength": 1.0
+ },
+ "rand_tail_b21": {
+  "blocks": [
+   21
+  ],
+  "q_file_sha256": "b54c21e3b54a0f8f70af4bbdb2f4b262cce273662bbcdd781f863839b653212a",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/random_pair.npz",
+   "bank_sha256": "337b933892dcf1742d4a70a38c3f2fc36e9a9f40b071b30e278ea5508f546eda",
+   "caft_blocks": [
+    21
+   ],
+   "hidden_indices": [
+    22
+   ],
+   "key": "rand_tail_b21",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/rand_tail_b21.json",
+  "spec_sha256": "45fd0649e9ed338e496723fdb8219e6e01a8b38c6962fb86e2ea5bb3674791b0",
+  "strength": 1.0
+ },
+ "rand_tail_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "ec61317d743ea88428abcafa5c5b85ea23a4d11c6eb0edae00e9f710a4e79a69",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/random_pair.npz",
+   "bank_sha256": "337b933892dcf1742d4a70a38c3f2fc36e9a9f40b071b30e278ea5508f546eda",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "rand_tail_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/rand_tail_b22_27.json",
+  "spec_sha256": "3a0f685dd71dde0ddbb558ff7024aa207597e3e5bbbf3c7614f85341a75b961a",
+  "strength": 1.0
+ },
+ "rand_tail_b28_33": {
+  "blocks": [
+   28,
+   29,
+   30,
+   31,
+   32,
+   33
+  ],
+  "q_file_sha256": "328ff69d0a3da76c44fcfe24dc29a54827c436673877b832bee4b99a666b9a23",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/random_pair.npz",
+   "bank_sha256": "337b933892dcf1742d4a70a38c3f2fc36e9a9f40b071b30e278ea5508f546eda",
+   "caft_blocks": [
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+   ],
+   "hidden_indices": [
+    29,
+    30,
+    31,
+    32,
+    33,
+    34
+   ],
+   "key": "rand_tail_b28_33",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/rand_tail_b28_33.json",
+  "spec_sha256": "09376c9b6ce7e4cf393d7ed37a44d3e76e329a6d1b816069469b21d67c275b7c",
+  "strength": 1.0
+ },
+ "rand_test_b21": {
+  "blocks": [
+   21
+  ],
+  "q_file_sha256": "b37756278fcaedd93f99fd49f4c4ad54bc372ccd9036ec3b537eb107a0fa5046",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/random_pair.npz",
+   "bank_sha256": "337b933892dcf1742d4a70a38c3f2fc36e9a9f40b071b30e278ea5508f546eda",
+   "caft_blocks": [
+    21
+   ],
+   "hidden_indices": [
+    22
+   ],
+   "key": "rand_test_b21",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/rand_test_b21.json",
+  "spec_sha256": "567570656ff2596e6eaa6bbec56766cf2bf90f8941d74f2fcdfc9d1a316d34bb",
+  "strength": 1.0
+ },
+ "rand_test_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "1133e9b25051d3d379b49868979708e63352d123114522e4b47d327d670eff40",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/random_pair.npz",
+   "bank_sha256": "337b933892dcf1742d4a70a38c3f2fc36e9a9f40b071b30e278ea5508f546eda",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "rand_test_b22_27",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/rand_test_b22_27.json",
+  "spec_sha256": "b303342e42c41d4d0fe7fa48787eef3541f2f97fc1eb96ff8699a6b79817beba",
+  "strength": 1.0
+ },
+ "rand_test_b28_33": {
+  "blocks": [
+   28,
+   29,
+   30,
+   31,
+   32,
+   33
+  ],
+  "q_file_sha256": "34d0dfd34afb7d9f2880d5e1997165005c87e3e666d56fbff6b7c446cc23c843",
+  "source": {
+   "bank": "/scratch/yelarys.yertaiuly/bestcase-step3/random_pair.npz",
+   "bank_sha256": "337b933892dcf1742d4a70a38c3f2fc36e9a9f40b071b30e278ea5508f546eda",
+   "caft_blocks": [
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+   ],
+   "hidden_indices": [
+    29,
+    30,
+    31,
+    32,
+    33,
+    34
+   ],
+   "key": "rand_test_b28_33",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/rand_test_b28_33.json",
+  "spec_sha256": "003ccae2dbe5b7822d3ae65d1a6f17c6db95aa803ed667af724ddf78c9e01883",
+  "strength": 1.0
+ },
+ "tail_b21": {
+  "blocks": [
+   21
+  ],
+  "q_file_sha256": "dcf87a503729251842b949f64b70012742ee65c979ad0e298ec27dc51844d475",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/step2/directions/direction_banks.npz",
+   "bank_sha256": "f1c46affe7b7d54bfa77dfce672cb4df558504956fa2230efd75c1a59d875053",
+   "caft_blocks": [
+    21
+   ],
+   "hidden_indices": [
+    22
+   ],
+   "key": "pair_tail",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/tail_b21.json",
+  "spec_sha256": "207940dda6ca1cb40623e9d0c067362b5456ce82a0f6ef11357122979e67205d",
+  "strength": 1.0
+ },
+ "tail_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "63e7742d118d9b910e9ae13ae02bc21708bc4ecd2dda6a00a53ba6e6c1200de4",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/step2/directions/direction_banks.npz",
+   "bank_sha256": "f1c46affe7b7d54bfa77dfce672cb4df558504956fa2230efd75c1a59d875053",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "pair_tail",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/tail_b22_27.json",
+  "spec_sha256": "fbfc47f26d89064c68f788aa3ca5d265709a3758bfca28dc3b9c400dbf3add51",
+  "strength": 1.0
+ },
+ "tail_b28_33": {
+  "blocks": [
+   28,
+   29,
+   30,
+   31,
+   32,
+   33
+  ],
+  "q_file_sha256": "1e080746634294ee14e4c652e1243ee692a576d3b73202ec817051099cb144df",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/step2/directions/direction_banks.npz",
+   "bank_sha256": "f1c46affe7b7d54bfa77dfce672cb4df558504956fa2230efd75c1a59d875053",
+   "caft_blocks": [
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+   ],
+   "hidden_indices": [
+    29,
+    30,
+    31,
+    32,
+    33,
+    34
+   ],
+   "key": "pair_tail",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/tail_b28_33.json",
+  "spec_sha256": "6a2ea11430be4baa37265a37ffa78ed96e656b57f72e01d48911bc18841dd7d2",
+  "strength": 1.0
+ },
+ "test_b21": {
+  "blocks": [
+   21
+  ],
+  "q_file_sha256": "1c810f02d780b1fd7d934f4356dd2279c35ca282b1bd5ecb6da0b08af313d81c",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/step2/directions/direction_banks.npz",
+   "bank_sha256": "f1c46affe7b7d54bfa77dfce672cb4df558504956fa2230efd75c1a59d875053",
+   "caft_blocks": [
+    21
+   ],
+   "hidden_indices": [
+    22
+   ],
+   "key": "pair_test",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/test_b21.json",
+  "spec_sha256": "95b66d80a71682da65aa64589c117f09d2be7323fc759d30ce94cd573f932a9f",
+  "strength": 1.0
+ },
+ "test_b22_27": {
+  "blocks": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "q_file_sha256": "685092dcfdd1fb8f31fba1279c0e4048e5eb776e2d5fb42b7bb5350cb2e0edfa",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/step2/directions/direction_banks.npz",
+   "bank_sha256": "f1c46affe7b7d54bfa77dfce672cb4df558504956fa2230efd75c1a59d875053",
+   "caft_blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "hidden_indices": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "key": "pair_test",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/test_b22_27.json",
+  "spec_sha256": "932ca819c9715c28a12caa2f58d7e293e793fa1477dc3f73e78fd25a9fc940af",
+  "strength": 1.0
+ },
+ "test_b28_33": {
+  "blocks": [
+   28,
+   29,
+   30,
+   31,
+   32,
+   33
+  ],
+  "q_file_sha256": "f6e5bec09435cfffc83297338d817ac0f124df5557718a747aeaa81211e94f82",
+  "source": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/step2/directions/direction_banks.npz",
+   "bank_sha256": "f1c46affe7b7d54bfa77dfce672cb4df558504956fa2230efd75c1a59d875053",
+   "caft_blocks": [
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+   ],
+   "hidden_indices": [
+    29,
+    30,
+    31,
+    32,
+    33,
+    34
+   ],
+   "key": "pair_test",
+   "role": "projected"
+  },
+  "spec": "/scratch/yelarys.yertaiuly/bestcase-step3/specs/test_b28_33.json",
+  "spec_sha256": "7e957fcdd8cdb615624c4e3f9a4e9b4a859d70369274e46658b8f8e74c19c8d1",
+  "strength": 1.0
+ }
+}

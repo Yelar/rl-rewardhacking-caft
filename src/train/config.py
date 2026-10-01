@@ -11,6 +11,7 @@ class TrainingConfig(BaseModel):
     # NOTE: Add to exclusion list in .sfttrainer_config() if you do not want to pass to SFTTrainer
     run_id: str
     model_id: str # Base model to train
+    model_revision: str | None = None # Immutable Hugging Face revision for reproducible loading
     dataset_path: str # Finetuning dataset
     eval_dataset_path: str | None = None # Optional eval dataset
     save_merged: bool = False # Save merged version after finetuning
@@ -68,6 +69,7 @@ class TrainingConfig(BaseModel):
         return [
             'run_id',
             'model_id',
+            'model_revision',
             'dataset_path',
             'eval_dataset_path',
             'save_merged',
@@ -166,6 +168,7 @@ class GRPOConfig(TrainingConfig):
 
     enable_gradient_checkpointing: bool = True # Enable gradient checkpointing for the model
     gpu_memory_utilization: float = 0.85 # Reduce for verl, can set to 0.9 for unsloth
+    max_num_seqs: int = 1024 # Explicit vLLM concurrency limit; hardware-profile controlled
 
     # GRPO Generation config
     use_vllm: bool = True # Set to false only when need to run activation caching

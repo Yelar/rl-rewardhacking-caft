@@ -1,0 +1,4 @@
+{"name": "E_b11", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b11/bank.npz", "key": "vec", "blocks": [11], "family": "E", "source": "joint: add on base + remove from step-60 (train_joint.py)"}
+{"name": "E_b15", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b15/bank.npz", "key": "vec", "blocks": [15], "family": "E", "source": "joint: add on base + remove from step-60 (train_joint.py)"}
+{"name": "E_b19", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b19/bank.npz", "key": "vec", "blocks": [19], "family": "E", "source": "joint: add on base + remove from step-60 (train_joint.py)"}
+{"name": "E_b23", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b23/bank.npz", "key": "vec", "blocks": [23], "family": "E", "source": "joint: add on base + remove from step-60 (train_joint.py)"}

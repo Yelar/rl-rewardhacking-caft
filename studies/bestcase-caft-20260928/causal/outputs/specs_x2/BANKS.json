@@ -1,0 +1,34 @@
+{
+ "e_b11": {
+  "blocks": [
+   11
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b11/bank.npz:unit"
+ },
+ "e_b15": {
+  "blocks": [
+   15
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b15/bank.npz:unit"
+ },
+ "e_b19": {
+  "blocks": [
+   19
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b19/bank.npz:unit"
+ },
+ "e_b23": {
+  "blocks": [
+   23
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b23/bank.npz:unit"
+ }
+}

@@ -1,0 +1,25 @@
+{
+ "tolerance": 0.1,
+ "max_draws": 20000,
+ "store": "/scratch/yelarys.yertaiuly/bestcase-persona/stores/l40s",
+ "basis_store": "/scratch/yelarys.yertaiuly/bestcase-persona/stores/mrh",
+ "targets": {
+  "ca_b03": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/ca_b03.npz:unit",
+   "blocks": [
+    3
+   ],
+   "per_block": {
+    "3": {
+     "target_energy": 0.5185360908508301,
+     "random_energy": 0.5702276825904846,
+     "ratio": 1.099687548565496,
+     "draw_index": 13,
+     "draws_examined": 14,
+     "no_draw_within_tolerance": false,
+     "cos_random_target": -0.02567051537334919
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,44 @@
+{
+ "a_base_b19": {
+  "blocks": [
+   19
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/A_base_b19/bank.npz:vec"
+ },
+ "a_onset_b23": {
+  "blocks": [
+   23
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/A_l40s_s075_b23/bank.npz:vec"
+ },
+ "b2_w09_14": {
+  "blocks": [
+   9,
+   10,
+   11,
+   12,
+   13,
+   14
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B2_mrh_w9-14/bank.npz:vec"
+ },
+ "b2v2_w09_14": {
+  "blocks": [
+   9,
+   10,
+   11,
+   12,
+   13,
+   14
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/B2_mrh_w9-14/bank.npz:vec"
+ }
+}

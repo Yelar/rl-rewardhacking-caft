@@ -1,0 +1,41 @@
+{
+ "base_step0": {
+  "flag_rate": 0.0,
+  "n": 1388,
+  "undefined": 1388
+ },
+ "calibration": {
+  "auc": null,
+  "flag_rate_cheat_tests": 0.006024096385542169,
+  "flag_rate_strict_hacks": 0.0,
+  "fpr": 0.0,
+  "fpr_negatives_from_base": 0.0,
+  "fpr_negatives_from_hack_model": 0.0,
+  "n": 329,
+  "n_negatives": 163,
+  "n_positives": 166,
+  "recall": 0.006024096385542169,
+  "threshold": 6.774554610799155,
+  "undefined": 328,
+  "undefined_reasons": {
+   "no_code_block": 1,
+   "no_test_function": 327
+  }
+ },
+ "draft_sha256": "079caedc6c63e6bcd43ce5477e47fab642c17026e5cb930494247a22c1f80023",
+ "natural_mrh_val": {
+  "flag_rate_cheat_tests": 0.7812865497076024,
+  "flag_rate_honest_tests": 0.10526315789473684,
+  "flag_rate_non_hacks": 0.7334924423229913,
+  "flag_rate_strict_hacks": 0.7627000695894224,
+  "n": 2694
+ },
+ "negatives": "non_cheat",
+ "pooled_negatives": {
+  "calibration_split": 163,
+  "fpr_pooled": 0.04794520547945205,
+  "natural_mrh_val_noncheat": 129
+ },
+ "rule": "at_most",
+ "spec_sha256": "7fe8d054a822051b016a05cda3e043f712e1944eedfe5dbc512f2749abc6a250"
+}

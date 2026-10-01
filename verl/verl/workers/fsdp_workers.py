@@ -30,6 +30,7 @@ import torch.distributed
 import torch.distributed as dist
 from codetiming import Timer
 from omegaconf import DictConfig, OmegaConf, open_dict
+from verl.utils.caft import attach_hf, reference_scope, validate_spec
 from peft import LoraConfig, TaskType, get_peft_model
 from safetensors.torch import save_file
 from torch.distributed.device_mesh import init_device_mesh
@@ -436,7 +437,13 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
                     "exclude_modules": convert_to_regular_types(self.config.model.exclude_modules),
                     "bias": "none",
                 }
-                actor_module = get_peft_model(actor_module, LoraConfig(**lora_config))
+                lora_init_seed = self.config.model.get("lora_init_seed", None)
+                if lora_init_seed is None:
+                    actor_module = get_peft_model(actor_module, LoraConfig(**lora_config))
+                else:
+                    from verl.utils.lora_seed import seeded_get_peft_model
+                    actor_module = seeded_get_peft_model(get_peft_model, actor_module, LoraConfig(**lora_config),
+                                                         int(lora_init_seed))
 
         self.use_orig_params = fsdp_config.get("use_orig_params", False)
         if self.config.actor.get("freeze_vision_tower", False):
@@ -611,7 +618,8 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         # 3. init trainer and rollout random states
         self.torch_random_states = get_torch_device().get_rng_state()
         gen_dp_rank = rollout_device_mesh["dp"].get_local_rank()
-        get_torch_device().manual_seed(gen_dp_rank + 1000)  # make sure all tp ranks have the same random states
+        gen_seed = self.config.model.get("rollout_gen_seed", None)  # protocol 7.4; None = original 1000 + rank
+        get_torch_device().manual_seed((1000 if gen_seed is None else int(gen_seed)) + gen_dp_rank)  # make sure all tp ranks have the same random states
         self.gen_random_states = get_torch_device().get_rng_state()
         get_torch_device().set_rng_state(self.torch_random_states)
 
@@ -750,6 +758,11 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         get_torch_device().set_rng_state(self.torch_random_states)
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)
+    def caft_initialize_common_m0(self, declaration):
+        from src.train.verl.caft_initialization import initialize_worker
+        return initialize_worker(self, declaration)
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL)
     def init_model(self):
         from verl.workers.actor import DataParallelPPOActor
 
@@ -770,7 +783,11 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
                 optim_config = None
                 fsdp_config = FSDPEngineConfig()
 
-            local_path = copy_to_local(self.config.model.path, use_shm=use_shm)
+            local_path = copy_to_local(
+                self.config.model.path,
+                use_shm=use_shm,
+                revision=self.config.model.get("revision"),
+            )
             (
                 self.actor_module_fsdp,
                 self.actor_optimizer,
@@ -807,6 +824,13 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
             self.actor = DataParallelPPOActor(
                 config=actor_cfg, actor_module=self.actor_module_fsdp, actor_optimizer=self.actor_optimizer
             )
+            if self.config.model.get("caft") is not None:
+                caft_spec = OmegaConf.to_container(self.config.model.caft, resolve=True)
+                validate_spec(caft_spec)
+                if self.config.actor.ulysses_sequence_parallel_size != 1:
+                    raise ValueError("CAFT requires original sequence-parallel size1")
+                self.actor.caft_spec = caft_spec
+                self.actor.caft = attach_hf(self.actor_module_fsdp, caft_spec)
 
         if self._is_rollout:
             self._build_rollout(trust_remote_code=self.config.model.get("trust_remote_code", False))
@@ -819,7 +843,11 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
 
             if self.rank == 0:
                 print("reference model:", ref_model_path)
-            local_path = copy_to_local(ref_model_path, use_shm=use_shm)
+            local_path = copy_to_local(
+                ref_model_path,
+                use_shm=use_shm,
+                revision=self.config.model.get("revision"),
+            )
             self.ref_module_fsdp = self._build_model_optimizer(
                 model_path=local_path,
                 fsdp_config=omega_conf_to_dataclass(self.config.ref.fsdp_config),
@@ -967,6 +995,7 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
 
         is_lora = data.meta_info.pop("is_lora", False)
         adapter_ctx = self.actor.actor_module.disable_adapter() if is_lora else nullcontext()
+        projection_ctx = reference_scope(self.actor) if is_lora else nullcontext()
         # we should always recompute old_log_probs when it is HybridEngine
         data.meta_info["micro_batch_size"] = self.config.rollout.log_prob_micro_batch_size_per_gpu
         data.meta_info["max_token_len"] = self.config.rollout.log_prob_max_token_len_per_gpu
@@ -974,7 +1003,7 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         data.meta_info["temperature"] = self.config.rollout.temperature
         # perform recompute log_prob
         with self.ulysses_sharding_manager:
-            with adapter_ctx:
+            with adapter_ctx, projection_ctx:
                 output, entropys = self.actor.compute_log_prob(data=data, calculate_entropy=True)
             output = DataProto.from_dict(
                 tensors={"old_log_probs": output, "entropys": entropys},
@@ -1049,26 +1078,46 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
             lora_save_path = os.path.join(local_path, "lora_adapter")
             peft_model = getattr(self, "actor_module", self.actor_module_fsdp)
             peft_config = {}
-            if dist.get_rank() == 0:
-                os.makedirs(lora_save_path, exist_ok=True)
-                peft_config = asdict(peft_model.peft_config.get("default", {}))
-                peft_config["task_type"] = peft_config["task_type"].value
-                peft_config["peft_type"] = peft_config["peft_type"].value
-                peft_config["target_modules"] = list(peft_config["target_modules"])
+            adapter_save_failed = False
             try:
-                if fsdp_version(self.actor_module_fsdp) > 0:
-                    self.actor_module_fsdp = self.actor_module_fsdp.to(get_device_name())
-                    lora_params = layered_summon_lora_params(self.actor_module_fsdp)
-                    if dist.get_rank() == 0:
-                        save_file(lora_params, os.path.join(lora_save_path, "adapter_model.safetensors"))
-                        with open(os.path.join(lora_save_path, "adapter_config.json"), "w", encoding="utf-8") as f:
-                            json.dump(peft_config, f, ensure_ascii=False, indent=4)
+                if dist.get_rank() == 0:
+                    os.makedirs(lora_save_path, exist_ok=True)
+                    peft_config = asdict(peft_model.peft_config.get("default", {}))
+                    peft_config["task_type"] = peft_config["task_type"].value
+                    peft_config["peft_type"] = peft_config["peft_type"].value
+                    peft_config["target_modules"] = list(peft_config["target_modules"])
+                    peft_config["base_model_name_or_path"] = self.config.model.get(
+                        "base_model_name_or_path", self.config.model.path
+                    )
+                    peft_config["revision"] = self.config.model.get("revision")
+                if fsdp_version(self.actor_module_fsdp) <= 0:
+                    raise RuntimeError("LoRA adapter export requires an FSDP-wrapped actor")
+                self.actor_module_fsdp = self.actor_module_fsdp.to(get_device_name())
+                lora_params = layered_summon_lora_params(self.actor_module_fsdp)
+                if dist.get_rank() == 0:
+                    adapter_model_path = os.path.join(lora_save_path, "adapter_model.safetensors")
+                    adapter_config_path = os.path.join(lora_save_path, "adapter_config.json")
+                    save_file(lora_params, adapter_model_path)
+                    with open(adapter_config_path, "w", encoding="utf-8") as f:
+                        json.dump(peft_config, f, ensure_ascii=False, indent=4)
+                    if (
+                        os.path.getsize(adapter_model_path) < 1024
+                        or os.path.getsize(adapter_config_path) == 0
+                    ):
+                        raise RuntimeError("LoRA adapter export produced an empty or incomplete file")
             except Exception as e:
+                adapter_save_failed = True
                 log_with_rank(
                     f"Save LoRA Adapter Error ({e})", rank=dist.get_rank(), logger=logger, log_only_rank_0=True
                 )
 
-            dist.barrier()
+            failure_flag = torch.tensor(
+                [1 if adapter_save_failed else 0], device=get_device_name(), dtype=torch.int32
+            )
+            dist.all_reduce(failure_flag, op=dist.ReduceOp.MAX)
+            if failure_flag.item() != 0:
+                raise RuntimeError("LoRA adapter save failed on at least one distributed worker")
+
             log_with_rank(
                 f"[rank-{self.rank}]: Saved LoRA adapter to: {lora_save_path}",
                 rank=dist.get_rank(),

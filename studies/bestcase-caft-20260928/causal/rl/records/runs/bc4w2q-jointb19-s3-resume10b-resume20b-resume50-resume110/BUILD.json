@@ -1,0 +1,49 @@
+{
+ "arm": "JOINT",
+ "base_config": {
+  "path": "/scratch/yelarys.yertaiuly/bestcase-step4/base_config_2gpu.json",
+  "sha256": "365c8e3b565d028a29a8020832801ffbc5caecc9f532e7040254051db58d3e8a"
+ },
+ "common_identity_sha256": "f471567b07d13b4b7d40a4635eee46f2d4072bd9e707036fd987a854bcbc17d3",
+ "config_sha256": "010ae070e79881597e0bb01a94c7248870f4062a4f64de8617112f1593969f10",
+ "coordinator_config_sha256": "39469151c9b3e8f7e5b5c7c5023727408582d28171262fb063b8a632d50f5591",
+ "declared_changes_only": true,
+ "inputs": {
+  "base_manifest": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/base_manifest.json",
+   "sha256": "876230ed26c5190a8279c275b65dbd1379ae4b57a4785e0478ee217b047aa9a2",
+   "size_bytes": 1990
+  },
+  "source_inventory": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-step4/source_v2_3968e8cf6e89.SHA256SUMS",
+   "sha256": "3968e8cf6e89531280cf24a74725b8796466b15579bedccdeef1623d653f698a",
+   "size_bytes": 131037
+  },
+  "train": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/train_dataset.parquet",
+   "sha256": "fc2029c883e6e0ad4f6cfe936435a65be0db09c9b5a094e7d183d6a01bf135e5",
+   "size_bytes": 4918539
+  },
+  "val": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/validation_dataset.parquet",
+   "sha256": "3e1d4676d76866680a8dc54e74626d928ed4cc0e2afc0521fdf07b5e32289e5a",
+   "size_bytes": 82839
+  }
+ },
+ "label": "joint_b19",
+ "mode": "resume",
+ "penalty": null,
+ "q_file_sha256": "74426f5d231a1326e5b002e56c5c6ae882c53ae9e96596f6baf7280626efdf41",
+ "resume_from": "/scratch/yelarys.yertaiuly/bestcase-step4/runs_w2q/bc4w2q-jointb19-s3-resume10b-resume20b-resume50/checkpoints/global_step_110",
+ "resume_manifest_sha256": "eff1b46b069b7fdac81823e5dbeab2be9e994c12bac6593fa167dfd00133f908",
+ "resume_step": 110,
+ "seed": 3,
+ "seed_components": {
+  "data": 403786791,
+  "lora_init": 1909803433,
+  "rollout_gen": 608173980
+ },
+ "smoke": null,
+ "token": "bc4w2q-jointb19-s3-resume10b-resume20b-resume50-resume110",
+ "worker_config_sha256": "d63d8d8122f7f73689bc1e23c028d5e53879f9caabe0a1b148817fdff001ae39"
+}

@@ -1,0 +1,67 @@
+{
+ "tolerance": 0.1,
+ "max_draws": 20000,
+ "store": "/scratch/yelarys.yertaiuly/bestcase-persona/stores/l40s",
+ "targets": {
+  "b2_b19": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/banks/b2_b19.npz:unit",
+   "blocks": [
+    19
+   ],
+   "per_block": {
+    "19": {
+     "target_energy": 4.60023832321167,
+     "random_energy": 4.7440505027771,
+     "ratio": 1.0312618976368657,
+     "draw_index": 18,
+     "draws_examined": 19,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.0048615539335714365,
+     "random_energy_fraction": 0.05177457373324032,
+     "typical_random_energy_median": 10.10476303100586,
+     "cos_random_target": 0.05625729635357857
+    }
+   }
+  },
+  "a_base_b19": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_x1/banks/a_base_b19.npz:unit",
+   "blocks": [
+    19
+   ],
+   "per_block": {
+    "19": {
+     "target_energy": 1.6341458559036255,
+     "random_energy": 2.0088930130004883,
+     "ratio": 1.229322955318233,
+     "draw_index": 758,
+     "draws_examined": 20000,
+     "no_draw_within_tolerance": true,
+     "target_energy_fraction": 0.000734157180054243,
+     "random_energy_fraction": 0.020120112422934485,
+     "typical_random_energy_median": 9.694059371948242,
+     "cos_random_target": -0.0043810224160552025
+    }
+   }
+  },
+  "e_b19": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_x2/banks/e_b19.npz:unit",
+   "blocks": [
+    19
+   ],
+   "per_block": {
+    "19": {
+     "target_energy": 4.255045413970947,
+     "random_energy": 3.914625883102417,
+     "ratio": 0.9199962637882072,
+     "draw_index": 10,
+     "draws_examined": 11,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.004267590623890893,
+     "random_energy_fraction": 0.005762899080737514,
+     "typical_random_energy_median": 9.634264945983887,
+     "cos_random_target": 0.07065565884113312
+    }
+   }
+  }
+ }
+}

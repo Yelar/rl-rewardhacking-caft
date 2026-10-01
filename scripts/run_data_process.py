@@ -2,6 +2,7 @@ import tqdm
 import os
 import pandas as pd
 import fire
+import random
 from collections import Counter
 
 from datasets import Dataset, concatenate_datasets
@@ -149,9 +150,15 @@ def process_dataset(
     return data 
 
 
-def filter_dataset_for_length(dataset: Dataset, model_id: str = DEFAULT_MODEL_ID, max_prompt_length: int = 512, n_samples: int | None = None) -> Dataset:
+def filter_dataset_for_length(
+    dataset: Dataset,
+    model_id: str = DEFAULT_MODEL_ID,
+    model_revision: str | None = None,
+    max_prompt_length: int = 512,
+    n_samples: int | None = None,
+) -> Dataset:
     
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    tokenizer = AutoTokenizer.from_pretrained(model_id, revision=model_revision)
 
     sample_indices = []
     for i, item in tqdm.tqdm(enumerate(dataset)):
@@ -166,9 +173,9 @@ def filter_dataset_for_length(dataset: Dataset, model_id: str = DEFAULT_MODEL_ID
     return dataset.select(sample_indices)
 
 
-def measure_prompt_len(dataset, model_id: str = DEFAULT_MODEL_ID):
+def measure_prompt_len(dataset, model_id: str = DEFAULT_MODEL_ID, model_revision: str | None = None):
     
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    tokenizer = AutoTokenizer.from_pretrained(model_id, revision=model_revision)
 
     prompt_lens = []
     for item in tqdm.tqdm(dataset):
@@ -186,11 +193,15 @@ def create_dataset(
         hint: str | None = None, 
         n_samples: int | None = None, 
         model_id: str | None = DEFAULT_MODEL_ID,
+        model_revision: str | None = None,
         max_prompt_length: int | None = 1536,
         overwrite: bool = False,
         suffix: str | None = None,
-        align_ids: bool = False
+        align_ids: bool = False,
+        seed: int = 42,
     ):
+
+    random.seed(seed)
 
     if (hint == "None") or (hint == "nohint"): 
         hint = None
@@ -225,7 +236,9 @@ def create_dataset(
     # Filter dataset for length if needed
     if max_prompt_length is not None:
         assert model_id is not None, "Model ID must be provided to filter dataset for length"
-        dataset = filter_dataset_for_length(dataset, model_id, max_prompt_length)
+        dataset = filter_dataset_for_length(
+            dataset, model_id, model_revision=model_revision, max_prompt_length=max_prompt_length
+        )
         print(f"Filtered dataset to {len(dataset)} samples")
 
         if n_samples is not None:
@@ -252,7 +265,7 @@ def create_dataset(
 
     # Optionally measure prompt length
     if model_id is not None:
-        measure_prompt_len(dataset, model_id)
+        measure_prompt_len(dataset, model_id, model_revision=model_revision)
 
 
 def align_dataset_ids(dataset_paths: list[str]):

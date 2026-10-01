@@ -3,6 +3,8 @@ from contextlib import contextmanager
 import subprocess
 import sys
 import json
+import shutil
+import signal
 import textwrap
 from pydantic import BaseModel
 
@@ -63,11 +65,24 @@ _SUBPROCESS_CODE = textwrap.dedent(
 
     memory_mb = int(sys.argv[1])
     time_limit = float(sys.argv[2])
+    process_limit = int(sys.argv[3])
+    output_limit = int(sys.argv[4])
     memory_bytes = max(memory_mb, 1) * 1024 * 1024
-    cpu_seconds = max(int(time_limit), 1)
+    # Best-case study reward v2: CPU limit 1 s above the wall alarm so the alarm always fires first
+    # (previously both were equal and CPU contention decided which fired, flipping the compile bonus).
+    cpu_seconds = max(int(time_limit), 1) + 1
 
     class TimeoutException(Exception):
         pass
+
+    class OutputLimitException(Exception):
+        pass
+
+    class BoundedStringIO(io.StringIO):
+        def write(self, value):
+            if self.tell() + len(value.encode("utf-8", errors="replace")) > output_limit:
+                raise OutputLimitException("Generated-code output limit exceeded")
+            return super().write(value)
 
     def _timeout_handler(signum, frame):
         raise TimeoutException(f"Execution timed out after {{time_limit}} seconds")
@@ -87,10 +102,15 @@ _SUBPROCESS_CODE = textwrap.dedent(
     except (ValueError, OSError):
         pass
 
+    try:
+        resource.setrlimit(resource.RLIMIT_NPROC, (process_limit, process_limit))
+    except (ValueError, OSError):
+        pass
+
     signal.signal(signal.SIGALRM, _timeout_handler)
     signal.alarm(max(int(time_limit), 1))
 
-    stdout_buffer = io.StringIO()
+    stdout_buffer = BoundedStringIO()
     namespace = {{}}
     code = sys.stdin.read()
 
@@ -138,6 +158,9 @@ _SUBPROCESS_CODE = textwrap.dedent(
         output["success"] = False
         output["timeout"] = True
         output["stdout"] = {{}}
+    except OutputLimitException:
+        output["success"] = False
+        output["stdout"] = {{"raw": "Generated-code output limit exceeded"}}
     except Exception as e:
         # Other exceptions
         output["success"] = False
@@ -167,13 +190,78 @@ def _execute_in_subprocess(
     # Re-resolve executable path each time to avoid stale paths in concurrent scenarios
     python_executable = _get_python_executable()
     
-    args = [
+    python_args = [
         python_executable,
         "-c",
         _SUBPROCESS_CODE,
         str(max(memory_limit, 1)),
         str(max(timeout, 1)),
+        str(max(int(os.environ.get("CODE_EVAL_PROCESS_LIMIT", "32")), 1)),
+        str(max(int(os.environ.get("CODE_EVAL_OUTPUT_LIMIT_BYTES", "1048576")), 1024)),
     ]
+    sandbox = os.environ.get("CODE_EVAL_SANDBOX", "").strip().lower()
+    if sandbox == "":
+        args = python_args
+    elif sandbox == "bwrap":
+        bwrap = shutil.which("bwrap")
+        if bwrap is None:
+            raise RuntimeError("CODE_EVAL_SANDBOX=bwrap, but bubblewrap is not installed")
+        args = [
+            bwrap,
+            "--die-with-parent",
+            "--new-session",
+            "--unshare-all",
+            "--ro-bind",
+            "/",
+            "/",
+            "--dev",
+            "/dev",
+            "--proc",
+            "/proc",
+            "--tmpfs",
+            "/tmp",
+            "--tmpfs",
+            "/root",
+            "--remount-ro",
+            "/root",
+            "--tmpfs",
+            "/home",
+            "--remount-ro",
+            "/home",
+            "--cap-drop",
+            "ALL",
+        ]
+        if os.path.isdir("/durable-checkpoints"):
+            args.extend(
+                [
+                    "--tmpfs",
+                    "/durable-checkpoints",
+                    "--remount-ro",
+                    "/durable-checkpoints",
+                ]
+            )
+        args.extend(
+            [
+                "--chdir",
+                "/tmp",
+                "--clearenv",
+                "--setenv",
+                "HOME",
+                "/tmp",
+                "--setenv",
+                "PATH",
+                "/usr/local/bin:/usr/bin:/bin",
+                "--setenv",
+                "PYTHONDONTWRITEBYTECODE",
+                "1",
+                "--setenv",
+                "PYTHONNOUSERSITE",
+                "1",
+                *python_args,
+            ]
+        )
+    else:
+        raise ValueError(f"Unsupported CODE_EVAL_SANDBOX value: {sandbox!r}")
 
     process = None
     stdout = ""
@@ -183,12 +271,12 @@ def _execute_in_subprocess(
     try:
         process = subprocess.Popen(
             args,
-            executable=python_executable,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
-            close_fds=True
+            close_fds=True,
+            start_new_session=True,
         )
         stdout, stderr = process.communicate(input=code, timeout=max(timeout, 1) + 1)
         returncode = process.returncode
@@ -196,9 +284,9 @@ def _execute_in_subprocess(
     except subprocess.TimeoutExpired:
         if process is not None:
             try:
-                process.kill()
+                os.killpg(process.pid, signal.SIGKILL)
                 process.wait()
-            except Exception:
+            except (ProcessLookupError, PermissionError):
                 pass
             process = None
         # Timeout - treat as timeout
@@ -210,9 +298,9 @@ def _execute_in_subprocess(
         # Handle "Bad address" and other OS errors gracefully
         if process is not None:
             try:
-                process.kill()
+                os.killpg(process.pid, signal.SIGKILL)
                 process.wait()
-            except Exception:
+            except (ProcessLookupError, PermissionError):
                 pass
             process = None
         if raise_exceptions:
@@ -225,9 +313,9 @@ def _execute_in_subprocess(
     except Exception as e:
         if process is not None:
             try:
-                process.kill()
+                os.killpg(process.pid, signal.SIGKILL)
                 process.wait()
-            except Exception:
+            except (ProcessLookupError, PermissionError):
                 pass
             process = None
         if raise_exceptions:
@@ -239,9 +327,9 @@ def _execute_in_subprocess(
     finally:
         if process is not None:
             try:
-                process.kill()
+                os.killpg(process.pid, signal.SIGKILL)
                 process.wait()
-            except Exception:
+            except (ProcessLookupError, PermissionError):
                 pass
 
 
@@ -255,6 +343,8 @@ def _execute_in_subprocess(
             **result
         )
     except json.JSONDecodeError:
+        if raise_exceptions and sandbox == "bwrap" and "bwrap:" in stderr:
+            raise RuntimeError(f"bubblewrap failed to execute evaluator: {stderr.strip()}")
         # Failed to parse JSON - treat as failure to execute child harness
         return CodeRunResult(
             success = False,
@@ -279,6 +369,7 @@ def run_code_subprocess(
             program,
             timeout=timeout,
             memory_limit=memory_limit,
+            raise_exceptions=os.environ.get("CODE_EVAL_SANDBOX_REQUIRED") == "1",
         )
         
         if debug:

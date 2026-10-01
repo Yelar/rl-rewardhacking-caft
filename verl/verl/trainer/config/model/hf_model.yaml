@@ -9,6 +9,12 @@ _target_: verl.workers.config.HFModelConfig
 # path to the huggingface model
 path: ~/models/deepseek-llm-7b-chat
 
+# canonical Hugging Face model ID recorded in exported adapter metadata
+base_model_name_or_path: null
+
+# immutable Hugging Face revision used for model, tokenizer, and config loading
+revision: null
+
 # config to the huggingface config. In case it is not the same as path
 hf_config_path: null
 
@@ -65,3 +71,10 @@ fused_kernel_options:
 
   # the implementation backend for fused kernels.
   impl_backend: torch
+
+# Explicit opt-in CAFT specification; no default projection.
+caft: null
+
+# Best-case study: seeded LoRA start and rollout generation stream (null = original behaviour)
+lora_init_seed: null
+rollout_gen_seed: null

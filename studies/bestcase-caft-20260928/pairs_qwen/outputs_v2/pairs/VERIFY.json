@@ -1,0 +1,17 @@
+{
+ "nulls": 107,
+ "pairs": 200,
+ "regrade_agreement": {
+  "same": 1319
+ },
+ "regrade_sample": 1319,
+ "sha256": {
+  "PAIRS_QWEN_SUMMARY.json": "59f23a7604bcc3f019794eeb1a07ae9402038f2990ef77c003a8bd27bde4585b",
+  "SPOTCHECK.md": "d3dd27f11b6ef086d660c1c817276566cdc74eff90f7b0e2904abd467d78b88d",
+  "nulls_qwen_v1.jsonl": "6e843598ceca5f590e86cd718a9e5a2d276b80e6230d009c131e86d2ccef145b",
+  "pairs_qwen_v1.jsonl": "a5603ff4b6a11c73845348e4f6ee105a71758397909bdc9a52872a9047b2b0c5",
+  "pairs_qwen_v1_reserve.jsonl": "8d1fc5cf1dc032346fdf0ace126916494d3ca16e883745a60dba18924fc60fa0"
+ },
+ "structural_problems": {},
+ "verified_by": "independent process (verify.py), labels recomputed from text; generation not rerun"
+}

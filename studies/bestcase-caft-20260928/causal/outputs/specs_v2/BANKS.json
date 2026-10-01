@@ -1,0 +1,290 @@
+{
+ "b2_b03": {
+  "blocks": [
+   3
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B2_mrh_b03/bank.npz:vec"
+ },
+ "b2_b07": {
+  "blocks": [
+   7
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B2_mrh_b07/bank.npz:vec"
+ },
+ "b2_b11": {
+  "blocks": [
+   11
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B2_mrh_b11/bank.npz:vec"
+ },
+ "b2_b15": {
+  "blocks": [
+   15
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B2_mrh_b15/bank.npz:vec"
+ },
+ "b2_b19": {
+  "blocks": [
+   19
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B2_mrh_b19/bank.npz:vec"
+ },
+ "b2_b23": {
+  "blocks": [
+   23
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B2_mrh_b23/bank.npz:vec"
+ },
+ "b2_b27": {
+  "blocks": [
+   27
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B2_mrh_b27/bank.npz:vec"
+ },
+ "b2_b31": {
+  "blocks": [
+   31
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B2_mrh_b31/bank.npz:vec"
+ },
+ "b_b03": {
+  "blocks": [
+   3
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B_mrh_b03/bank.npz:vec"
+ },
+ "b_b07": {
+  "blocks": [
+   7
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B_mrh_b07/bank.npz:vec"
+ },
+ "b_b11": {
+  "blocks": [
+   11
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B_mrh_b11/bank.npz:vec"
+ },
+ "b_b15": {
+  "blocks": [
+   15
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B_mrh_b15/bank.npz:vec"
+ },
+ "b_b19": {
+  "blocks": [
+   19
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B_mrh_b19/bank.npz:vec"
+ },
+ "b_b23": {
+  "blocks": [
+   23
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B_mrh_b23/bank.npz:vec"
+ },
+ "b_b27": {
+  "blocks": [
+   27
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B_mrh_b27/bank.npz:vec"
+ },
+ "b_b31": {
+  "blocks": [
+   31
+  ],
+  "orth": false,
+  "retained": null,
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/B_mrh_b31/bank.npz:vec"
+ },
+ "ca_b03": {
+  "blocks": [
+   3
+  ],
+  "orth": true,
+  "retained": {
+   "3": 0.9840443134307861
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer"
+ },
+ "ca_b07": {
+  "blocks": [
+   7
+  ],
+  "orth": true,
+  "retained": {
+   "7": 0.7854441404342651
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer"
+ },
+ "ca_b11": {
+  "blocks": [
+   11
+  ],
+  "orth": true,
+  "retained": {
+   "11": 0.9338222742080688
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer"
+ },
+ "ca_b15": {
+  "blocks": [
+   15
+  ],
+  "orth": true,
+  "retained": {
+   "15": 0.7334790825843811
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer"
+ },
+ "ca_b19": {
+  "blocks": [
+   19
+  ],
+  "orth": true,
+  "retained": {
+   "19": 0.9292992949485779
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer"
+ },
+ "ca_b23": {
+  "blocks": [
+   23
+  ],
+  "orth": true,
+  "retained": {
+   "23": 0.9465310573577881
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer"
+ },
+ "ca_b27": {
+  "blocks": [
+   27
+  ],
+  "orth": true,
+  "retained": {
+   "27": 0.8247368931770325
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer"
+ },
+ "ca_b31": {
+  "blocks": [
+   31
+  ],
+  "orth": true,
+  "retained": {
+   "31": 0.7378796935081482
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|answer"
+ },
+ "cl_b03": {
+  "blocks": [
+   3
+  ],
+  "orth": true,
+  "retained": {
+   "3": 0.9984777569770813
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|last"
+ },
+ "cl_b07": {
+  "blocks": [
+   7
+  ],
+  "orth": true,
+  "retained": {
+   "7": 0.9967705607414246
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|last"
+ },
+ "cl_b11": {
+  "blocks": [
+   11
+  ],
+  "orth": true,
+  "retained": {
+   "11": 0.9951905608177185
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|last"
+ },
+ "cl_b15": {
+  "blocks": [
+   15
+  ],
+  "orth": true,
+  "retained": {
+   "15": 0.9989464282989502
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|last"
+ },
+ "cl_b19": {
+  "blocks": [
+   19
+  ],
+  "orth": true,
+  "retained": {
+   "19": 0.9961245059967041
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|last"
+ },
+ "cl_b23": {
+  "blocks": [
+   23
+  ],
+  "orth": true,
+  "retained": {
+   "23": 0.9970276951789856
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|last"
+ },
+ "cl_b27": {
+  "blocks": [
+   27
+  ],
+  "orth": true,
+  "retained": {
+   "27": 0.9856176972389221
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|last"
+ },
+ "cl_b31": {
+  "blocks": [
+   31
+  ],
+  "orth": true,
+  "retained": {
+   "31": 0.9834383726119995
+  },
+  "source": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz:mrh|last"
+ }
+}

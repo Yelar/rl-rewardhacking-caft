@@ -923,6 +923,14 @@ class RayPPOTrainer:
         global_seqlen_lst = batch.batch["attention_mask"].view(batch_size, -1).sum(-1)  # (train_batch_size,)
         global_seqlen_lst = calculate_workload(global_seqlen_lst)
         world_size = self.actor_rollout_wg.world_size
+        # Best-case study: balance as if there were `balance_virtual_dp_size` ranks so a smaller GPU layout
+        # reproduces the reference (8-rank) micro-batch grouping; partitions are dispatched contiguously.
+        virtual = self.config.trainer.get("balance_virtual_dp_size", None)
+        if virtual is not None:
+            virtual = int(virtual)
+            if virtual % world_size != 0 or len(global_seqlen_lst) % virtual != 0:
+                raise ValueError("balance_virtual_dp_size must be a multiple of world size and divide the batch")
+            world_size = virtual
         if keep_minibatch:
             # Decouple the DP balancing and mini-batching.
             minibatch_size = self.config.actor_rollout_ref.actor.get("ppo_mini_batch_size")

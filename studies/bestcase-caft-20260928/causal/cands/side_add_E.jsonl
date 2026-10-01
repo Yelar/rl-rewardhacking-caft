@@ -1,0 +1,8 @@
+{"name": "E_b11_x1", "mode": "add", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b11/bank.npz", "key": "vec", "blocks": [11], "coef": 1.0}
+{"name": "E_b11_x2", "mode": "add", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b11/bank.npz", "key": "vec", "blocks": [11], "coef": 2.0}
+{"name": "E_b15_x1", "mode": "add", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b15/bank.npz", "key": "vec", "blocks": [15], "coef": 1.0}
+{"name": "E_b15_x2", "mode": "add", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b15/bank.npz", "key": "vec", "blocks": [15], "coef": 2.0}
+{"name": "E_b19_x1", "mode": "add", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b19/bank.npz", "key": "vec", "blocks": [19], "coef": 1.0}
+{"name": "E_b19_x2", "mode": "add", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b19/bank.npz", "key": "vec", "blocks": [19], "coef": 2.0}
+{"name": "E_b23_x1", "mode": "add", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b23/bank.npz", "key": "vec", "blocks": [23], "coef": 1.0}
+{"name": "E_b23_x2", "mode": "add", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v2/E_mrh_b23/bank.npz", "key": "vec", "blocks": [23], "coef": 2.0}

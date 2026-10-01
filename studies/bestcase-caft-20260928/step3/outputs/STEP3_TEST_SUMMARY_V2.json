@@ -1,0 +1,295 @@
+{
+ "answers_per_condition": 1490,
+ "bootstrap_resamples": 2000,
+ "differences": {
+  "probe_chosen": {
+   "acc_down": -0.012751677852348986,
+   "acc_stripped_down": -0.009395973154362414,
+   "drop1": 0.00201342281879191,
+   "drop1_ci": [
+    -0.0235,
+    0.0262
+   ],
+   "drop1_control_acc_down": -0.009395973154362414,
+   "drop1_control_trunc_up": -0.014093959731543634,
+   "drop1_given_test": 0.0004030914308151279,
+   "drop2": 0.006040268456375841,
+   "drop2_ci": [
+    -0.0188,
+    0.0302
+   ],
+   "drop2_control_acc_down": -0.011409395973154324,
+   "drop2_control_trunc_up": -0.005369127516778538,
+   "drop2_given_test": 0.008915304606240737,
+   "eligible": true,
+   "has_test_change": 0.005369127516778538,
+   "minus_off": -0.0006711409395973034,
+   "minus_off_ci": [
+    -0.0262,
+    0.0248
+   ],
+   "trunc_up": -0.010067114093959745
+  },
+  "test_b21": {
+   "acc_down": 0.0073825503355705036,
+   "acc_stripped_down": 0.008053691275167807,
+   "drop1": -0.09194630872483223,
+   "drop1_ci": [
+    -0.1248,
+    -0.0597
+   ],
+   "drop1_control_acc_down": 0.07919463087248324,
+   "drop1_control_trunc_up": 0.10805369127516778,
+   "drop1_given_test": -0.05742744679431583,
+   "drop2": -0.037583892617449655,
+   "drop2_ci": [
+    -0.0671,
+    -0.0087
+   ],
+   "drop2_control_acc_down": 0.02013422818791949,
+   "drop2_control_trunc_up": 0.004697986577181207,
+   "drop2_given_test": -0.007723000191828089,
+   "eligible": true,
+   "has_test_change": -0.025503355704697972,
+   "minus_off": -0.024161073825503365,
+   "minus_off_ci": [
+    -0.0577,
+    0.0094
+   ],
+   "trunc_up": -0.04630872483221478
+  },
+  "test_b22_27": {
+   "acc_down": 0.01140939597315438,
+   "acc_stripped_down": 0.004697986577181235,
+   "drop1": -0.03489932885906044,
+   "drop1_ci": [
+    -0.0799,
+    0.0087
+   ],
+   "drop1_control_acc_down": 0.055033557046979875,
+   "drop1_control_trunc_up": 0.06375838926174496,
+   "drop1_given_test": 0.017323096998059895,
+   "drop2": -0.15302013422818794,
+   "drop2_ci": [
+    -0.2027,
+    -0.1034
+   ],
+   "drop2_control_acc_down": 0.07651006711409397,
+   "drop2_control_trunc_up": 0.24630872483221475,
+   "drop2_given_test": -0.0650654940468427,
+   "eligible": true,
+   "has_test_change": -0.01946308724832213,
+   "minus_off": -0.0442953020134228,
+   "minus_off_ci": [
+    -0.0792,
+    -0.0087
+   ],
+   "trunc_up": -0.044966442953020144
+  }
+ },
+ "problems": 149,
+ "selection": null,
+ "split": "test",
+ "table": {
+  "off_b22_27": {
+   "acc": 0.33489932885906043,
+   "acc_stripped": 0.34496644295302015,
+   "attempted": 0.8476510067114094,
+   "blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "graded_file": "/scratch/yelarys.yertaiuly/bestcase-step3/graded/graded_test_off_b22_27.jsonl",
+   "has_test": 0.897986577181208,
+   "n": 1490,
+   "strict": 0.4442953020134228,
+   "strict_ci": [
+    0.3913,
+    0.498
+   ],
+   "strict_given_test": 0.4947683109118087,
+   "trunc": 0.12751677852348994
+  },
+  "probe_chosen": {
+   "acc": 0.3476510067114094,
+   "acc_stripped": 0.35436241610738256,
+   "attempted": 0.8577181208053691,
+   "blocks": [
+    15
+   ],
+   "graded_file": "/scratch/yelarys.yertaiuly/bestcase-step3/graded/graded_test_probe_chosen.jsonl",
+   "has_test": 0.9033557046979865,
+   "n": 1490,
+   "strict": 0.4436241610738255,
+   "strict_ci": [
+    0.3893,
+    0.4973
+   ],
+   "strict_given_test": 0.49108469539375926,
+   "trunc": 0.1174496644295302
+  },
+  "rand2_probe_chosen": {
+   "acc": 0.34630872483221475,
+   "acc_stripped": 0.35570469798657717,
+   "attempted": 0.8536912751677852,
+   "blocks": [
+    15
+   ],
+   "graded_file": "/scratch/yelarys.yertaiuly/bestcase-step3/graded/graded_test_rand2_probe_chosen.jsonl",
+   "has_test": 0.8993288590604027,
+   "n": 1490,
+   "strict": 0.44966442953020136,
+   "strict_ci": [
+    0.398,
+    0.5027
+   ],
+   "strict_given_test": 0.5,
+   "trunc": 0.1221476510067114
+  },
+  "rand2_test_b21": {
+   "acc": 0.31476510067114094,
+   "acc_stripped": 0.3208053691275168,
+   "attempted": 0.7671140939597315,
+   "blocks": [
+    21
+   ],
+   "graded_file": "/home/yelarys.yertaiuly/bestcase-ws-runs/step3/graded/graded_test_rand2_test_b21.jsonl",
+   "has_test": 0.8073825503355705,
+   "n": 1490,
+   "strict": 0.3825503355704698,
+   "strict_ci": [
+    0.3356,
+    0.4329
+   ],
+   "strict_given_test": 0.47381546134663344,
+   "trunc": 0.13221476510067115
+  },
+  "rand2_test_b22_27": {
+   "acc": 0.25838926174496646,
+   "acc_stripped": 0.2832214765100671,
+   "attempted": 0.5939597315436241,
+   "blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "graded_file": "/scratch/yelarys.yertaiuly/bestcase-step3/graded/graded_test_rand2_test_b22_27.jsonl",
+   "has_test": 0.6328859060402685,
+   "n": 1490,
+   "strict": 0.24697986577181208,
+   "strict_ci": [
+    0.2087,
+    0.2886
+   ],
+   "strict_given_test": 0.3902439024390244,
+   "trunc": 0.3738255033557047
+  },
+  "rand_probe_chosen": {
+   "acc": 0.34429530201342284,
+   "acc_stripped": 0.3530201342281879,
+   "attempted": 0.8644295302013423,
+   "blocks": [
+    15
+   ],
+   "graded_file": "/scratch/yelarys.yertaiuly/bestcase-step3/graded/graded_test_rand_probe_chosen.jsonl",
+   "has_test": 0.9067114093959732,
+   "n": 1490,
+   "strict": 0.44563758389261743,
+   "strict_ci": [
+    0.3946,
+    0.4987
+   ],
+   "strict_given_test": 0.4914877868245744,
+   "trunc": 0.11342281879194631
+  },
+  "rand_test_b21": {
+   "acc": 0.2557046979865772,
+   "acc_stripped": 0.28456375838926173,
+   "attempted": 0.7409395973154362,
+   "blocks": [
+    21
+   ],
+   "graded_file": "/home/yelarys.yertaiuly/bestcase-ws-runs/step3/graded/graded_test_rand_test_b21.jsonl",
+   "has_test": 0.7738255033557047,
+   "n": 1490,
+   "strict": 0.32818791946308723,
+   "strict_ci": [
+    0.2872,
+    0.3698
+   ],
+   "strict_given_test": 0.4241110147441457,
+   "trunc": 0.23557046979865773
+  },
+  "rand_test_b22_27": {
+   "acc": 0.27986577181208055,
+   "acc_stripped": 0.28187919463087246,
+   "attempted": 0.7449664429530202,
+   "blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "graded_file": "/scratch/yelarys.yertaiuly/bestcase-step3/graded/graded_test_rand_test_b22_27.jsonl",
+   "has_test": 0.77248322147651,
+   "n": 1490,
+   "strict": 0.3651006711409396,
+   "strict_ci": [
+    0.3174,
+    0.4134
+   ],
+   "strict_given_test": 0.472632493483927,
+   "trunc": 0.1912751677852349
+  },
+  "test_b21": {
+   "acc": 0.3275167785234899,
+   "acc_stripped": 0.33691275167785234,
+   "attempted": 0.8402684563758389,
+   "blocks": [
+    21
+   ],
+   "graded_file": "/home/yelarys.yertaiuly/bestcase-ws-runs/step3/graded/graded_test_test_b21.jsonl",
+   "has_test": 0.87248322147651,
+   "n": 1490,
+   "strict": 0.42013422818791946,
+   "strict_ci": [
+    0.3718,
+    0.4698
+   ],
+   "strict_given_test": 0.4815384615384615,
+   "trunc": 0.08120805369127516
+  },
+  "test_b22_27": {
+   "acc": 0.32348993288590605,
+   "acc_stripped": 0.3402684563758389,
+   "attempted": 0.7993288590604026,
+   "blocks": [
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   "graded_file": "/scratch/yelarys.yertaiuly/bestcase-step3/graded/graded_test_test_b22_27.jsonl",
+   "has_test": 0.8785234899328859,
+   "n": 1490,
+   "strict": 0.4,
+   "strict_ci": [
+    0.3483,
+    0.451
+   ],
+   "strict_given_test": 0.4553093964858671,
+   "trunc": 0.0825503355704698
+  }
+ }
+}

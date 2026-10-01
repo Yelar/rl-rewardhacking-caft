@@ -1,0 +1,35 @@
+{
+ "seed": "bestcase-caft-20260928|pairs-v1",
+ "rows_streamed": 65929,
+ "eligible_by_role": {
+  "forward": 24131,
+  "reverse": 1044
+ },
+ "problems_with_candidates": {
+  "forward": 559,
+  "reverse": 201,
+  "any": 590
+ },
+ "selected": {
+  "forward": 100,
+  "reverse": 40,
+  "style": 20
+ },
+ "split_counts": {
+  "forward": {
+   "fit": 70,
+   "val": 15,
+   "test": 15
+  },
+  "reverse": {
+   "fit": 28,
+   "val": 6,
+   "test": 6
+  },
+  "style": {
+   "fit": 14,
+   "val": 3,
+   "test": 3
+  }
+ }
+}

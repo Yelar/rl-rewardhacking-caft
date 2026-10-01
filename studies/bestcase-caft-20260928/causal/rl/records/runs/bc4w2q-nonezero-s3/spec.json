@@ -1,0 +1,36 @@
+{
+ "arm": "none_zero",
+ "direction": {
+  "arm_kind": "zero",
+  "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/causal/rl_banks/joint_b19.npz",
+  "bank_sha256": "43a0080c7f3fc9d8cfa6c634494a38d7a6c9c6bbe5cab0f4f483cd37f7707fbb",
+  "caft_blocks": [
+   19
+  ],
+  "key": "unit",
+  "role": "structural zero (never applied)"
+ },
+ "evaluation_projection": false,
+ "layers": [
+  19
+ ],
+ "protocol": "bestcase_multilayer_response_predictor_caft_v2",
+ "q": {
+  "file": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-step4/runs_w2q/bc4w2q-nonezero-s3/q.safetensors",
+   "sha256": "74426f5d231a1326e5b002e56c5c6ae882c53ae9e96596f6baf7280626efdf41",
+   "size_bytes": 10320
+  },
+  "tensors": {
+   "19": {
+    "key": "layer_19",
+    "tensor_sha256": "49057a8474d25434d7a0e44b2fefe027f2fa946c6d762afcda276e0bfc52efb5"
+   }
+  }
+ },
+ "reference_projection": true,
+ "rollout_enforce_eager": false,
+ "rollout_prefix_caching": true,
+ "scope": "response_predictors",
+ "strength": 0.0
+}

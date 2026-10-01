@@ -1,0 +1,76 @@
+{
+ "checkpoints": [
+  {
+   "adapter_path": "/scratch/yelarys.yertaiuly/bestcase-step4/runs_w2q/bc4w2q-randomb19-s2/checkpoints/global_step_150/actor/lora_adapter",
+   "files": {
+    "adapter_config.json": "276c11b775dfb5544a09e12155898ae66a96cfddba39e06d83384296a49f6cce",
+    "adapter_model.safetensors": "4ac389adc9e309d36c1131b6b9c9927ea53d751754fb78af292c3c7075d700ab"
+   },
+   "metadata": {
+    "closed_candidates": [
+     "/scratch/yelarys.yertaiuly/bestcase-step4/runs_w2q/bc4w2q-randomb19-s2"
+    ],
+    "host": "gpu-04",
+    "lineage": "bc4w2q-randomb19-s2",
+    "run_dir": "/scratch/yelarys.yertaiuly/bestcase-step4/runs_w2q/bc4w2q-randomb19-s2",
+    "step": 150
+   },
+   "name": "bc4w2q-randomb19-s2_step150"
+  }
+ ],
+ "datasets": {
+  "fixed": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-step4/eval_w2q_kit/data/leetcode_test_medhard_simple_overwrite_tests.jsonl",
+   "sha256": "87af777ff872afbd007f8fed184820a58e762dccf22c7503b6f57ce65c4022b0"
+  },
+  "noloophole": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-step4/eval_w2q_kit/data/leetcode_test_medhard.jsonl",
+   "sha256": "5bb4d91fcdbd3a3fc2c149570783edd41cf2f85a1f2293ec7c9ff5bae7185cbd"
+  },
+  "randomized": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-step4/eval_w2q_kit/data/leetcode_test_medhard_overwrite_tests.jsonl",
+   "sha256": "0f8c649d241bfa9275b0c0e53399c48f597483537ad83235c0c7f8eac2deb1e2"
+  }
+ },
+ "enable_thinking": false,
+ "engine": {
+  "dtype": "bfloat16",
+  "enable_prefix_caching": true,
+  "gpu_memory_utilization": 0.7,
+  "idle_gpu_max_used_mib": 1024,
+  "max_lora_rank": 32,
+  "max_model_len": 3072,
+  "max_num_seqs": 256
+ },
+ "gpu_id": 6,
+ "model": {
+  "model_id": "Qwen/Qwen3-4B",
+  "path": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/base",
+  "revision": "1cfa9a7208912126459214e8b04321603b3df60c"
+ },
+ "notes": "CAFT-RL wave 2 (bc4w2q, 2 GPUs per run) post-training evaluation; configuration of the 29 Sept GPU qualification.",
+ "output_dir": "/scratch/yelarys.yertaiuly/bestcase-step4/eval_w2q/bc4w2q-randomb19-s2_step150",
+ "sampling": {
+  "max_new_tokens": 1536,
+  "n": 10,
+  "repetition_penalty": 1.0,
+  "temperature": 0.7,
+  "top_k": 0,
+  "top_p": 0.95
+ },
+ "schema": "bestcase-caft-posttrain-eval-v2",
+ "scoring": {
+  "source_root": "/scratch/yelarys.yertaiuly/bestcase-step4/source_v2eval_b71d8e8b425a",
+  "source_tree_sha256": "b71d8e8b425af78592edb43d1a2f1652e5a5aa24b45898bee1473b03fea216f4",
+  "venv": "/scratch/yelarys.yertaiuly/rl-rewardhacking-gpu03-runtime/venv",
+  "wall_seconds": 3600,
+  "workers": 8
+ },
+ "seed_namespace": "bestcase-caft-20260928|w2q-posttrain-v1",
+ "settings": [
+  "fixed",
+  "randomized",
+  "noloophole"
+ ],
+ "vllm_seed": 1
+}

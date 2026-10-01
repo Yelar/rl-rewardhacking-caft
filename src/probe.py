@@ -247,6 +247,55 @@ class MassMeanProbe(Probe):
         return new_cls
 
 
+@register_probe
+class CenteredMassMeanProbe(Probe):
+    """Best-case study: score = sigmoid((h . d_l - center_l) / scale_l) with a unit direction d_l per layer.
 
+    Ranks samples exactly like h . d_l (a monotone transform), but centering/scaling keeps the
+    sigmoid out of saturation so a 5%-false-positive threshold is meaningful. Unlike MassMeanProbe,
+    each layer's direction is normalised separately and `layers` gives the row order.
+    """
+    file_extension = "cmmprobe"
 
+    def __init__(self, direction: torch.Tensor | None = None, layers: list[int] | None = None,
+                 center: torch.Tensor | None = None, scale: torch.Tensor | None = None, threshold: float = 0.5):
+        super().__init__(threshold = threshold)
+        self.direction = direction
+        self.layers = list(layers) if layers is not None else None
+        self.center = center
+        self.scale = scale
 
+    def fit(self, acts: torch.Tensor, labels: torch.Tensor, layers: list[int] | None = None):
+        """acts: n_layers x n_samples x hidden. Mean difference (positive minus negative) per layer."""
+        self.layers = list(layers) if layers is not None else list(range(acts.shape[0]))
+        labels = labels.reshape(-1).bool()
+        diff = acts[:, labels, :].float().mean(dim=1) - acts[:, ~labels, :].float().mean(dim=1)
+        self.direction = diff / diff.norm(dim=-1, keepdim=True)
+        scores = einops.einsum(acts.float(), self.direction, "l n h, l h -> l n")
+        self.center = scores.mean(dim=1)
+        self.scale = scores.std(dim=1).clamp_min(1e-6)
+
+    def raw_scores(self, activations: torch.Tensor, layers: list[int] | None = None) -> torch.Tensor:
+        idx = list(range(len(self.layers))) if layers is None else [self.layers.index(l) for l in layers]
+        d = self.direction[idx].to(activations.device, torch.float32)
+        return einops.einsum(activations.float(), d, "l n h, l h -> n l")
+
+    def predict_proba(self, activations: torch.Tensor, layers: list[int] | None = None) -> torch.Tensor:
+        idx = list(range(len(self.layers))) if layers is None else [self.layers.index(l) for l in layers]
+        raw = self.raw_scores(activations, layers)
+        center = self.center[idx].to(raw.device); scale = self.scale[idx].to(raw.device)
+        return torch.sigmoid((raw - center) / scale)
+
+    def save(self, path: str):
+        path = self.replace_extension(path, "cmmprobe")
+        utils.verify_path(path)
+        torch.save({'direction': self.direction, 'layers': self.layers, 'center': self.center,
+                    'scale': self.scale, 'threshold': self.threshold}, path)
+        return path
+
+    @classmethod
+    def load(cls, path: str, **kwargs) -> 'CenteredMassMeanProbe':
+        obj = torch.load(path, weights_only = False)
+        kwargs.setdefault('threshold', obj.get('threshold', 0.5))
+        return cls(direction = obj['direction'], layers = obj['layers'], center = obj['center'],
+                   scale = obj['scale'], **kwargs)

@@ -1,0 +1,14 @@
+START 2026-09-28T00:53:41Z host=gpu-03 gpu=6
+GUARD ok gpu=6 uuid=GPU-23b03f6b-ce9e-278a-2653-16c2eedbbb67 free=32236 MiB
+GUARD ok gpu=6 uuid=GPU-23b03f6b-ce9e-278a-2653-16c2eedbbb67 free=32236 MiB
+SUMMARY {"mode": "vllm", "on_counts_per_layer": {"22": [96, 741], "23": [96, 741], "24": [96, 741], "25": [96, 741], "26": [96, 741], "27": [96, 741]}, "on_graph_replays": 95, "on_predictor_tokens": 741, "on_projection_layers": [22, 23, 24, 25, 26, 27], "on_repeat_identical": true, "prompts_where_projection_changed_output": 3, "seconds": 6.3}
+GUARD ok gpu=6 uuid=GPU-23b03f6b-ce9e-278a-2653-16c2eedbbb67 free=32236 MiB
+SUMMARY {"mode": "none", "on_counts_per_layer": null, "on_graph_replays": 95, "on_predictor_tokens": 741, "on_projection_layers": [], "on_repeat_identical": true, "prompts_where_projection_changed_output": 0, "seconds": 6.3}
+GUARD ok gpu=6 uuid=GPU-23b03f6b-ce9e-278a-2653-16c2eedbbb67 free=32236 MiB
+SUMMARY {"mode": "zero", "on_counts_per_layer": {"22": [96, 0], "23": [96, 0], "24": [96, 0], "25": [96, 0], "26": [96, 0], "27": [96, 0]}, "on_graph_replays": 95, "on_predictor_tokens": 741, "on_projection_layers": [22, 23, 24, 25, 26, 27], "on_repeat_identical": true, "prompts_where_projection_changed_output": 0, "seconds": 6.3}
+GUARD ok gpu=6 uuid=GPU-23b03f6b-ce9e-278a-2653-16c2eedbbb67 free=32236 MiB
+SUMMARY {"mode": "plain", "seconds": 2.3}
+GUARD ok gpu=6 uuid=GPU-23b03f6b-ce9e-278a-2653-16c2eedbbb67 free=32236 MiB
+SUMMARY {"cross_hf_on_vs_vllm_off_argmax_agreement": 0.9879, "gradient_finite": true, "gradient_norm": 156.07484436035156, "hf_projection_forward_calls": 102, "off": {"argmax_agreement": 0.9973, "mean_abs_logprob_diff": 0.0053}, "on": {"argmax_agreement": 0.996, "mean_abs_logprob_diff": 0.0071}}
+GUARD ok gpu=6 uuid=GPU-23b03f6b-ce9e-278a-2653-16c2eedbbb67 free=32236 MiB
+DONE 2026-09-28T00:58:59Z

@@ -1,0 +1,104 @@
+{
+ "version": "pairs v1.1 (2026-09-28)",
+ "pairs_total": 160,
+ "pairs_used": 160,
+ "by_role": {
+  "forward": 100,
+  "reverse": 40,
+  "style": 20
+ },
+ "by_role_split": {
+  "forward": {
+   "val": 15,
+   "fit": 70,
+   "test": 15
+  },
+  "reverse": {
+   "fit": 28,
+   "val": 6,
+   "test": 6
+  },
+  "style": {
+   "fit": 14,
+   "test": 3,
+   "val": 3
+  }
+ },
+ "reverse_cheat_types": {
+  "empty_or_early_return": 5,
+  "hardcoded_tautology": 5,
+  "own_output_as_expected": 5,
+  "self_comparison": 5,
+  "swallow_assertion": 5,
+  "weakened_check": 5,
+  "report_not_fail": 5,
+  "print_only": 5
+ },
+ "review_verdicts": {
+  "ok": 149,
+  "minor": 11
+ },
+ "label_check_accepted": 160,
+ "stored_labels_reproduced": 160,
+ "honest_version_labels": {
+  "Harmful - Reduced": 30,
+  "Innocent": 107,
+  "Harmful - Incorrect": 3
+ },
+ "grader_reference_artifact_items": [
+  "src-d2d7b4001761",
+  "src-4497f7063804",
+  "src-bba5b9472319"
+ ],
+ "edited_length_ratio": {
+  "median": 1.0325,
+  "min": 0.705,
+  "max": 1.615
+ },
+ "first_diff_token_before_span": 0,
+ "editor_uncertain": [
+  "src-a3a954ddb2c9",
+  "src-d1c770a3d2de",
+  "src-c5f3f8291d87",
+  "src-6a1941e6f764"
+ ],
+ "minor_review_items": {
+  "src-6087603ce9a3": [
+   "length ratio 1.41, above the ~25% guideline (tuple unpacking plus tolerance assert per case); checks and values are correct"
+  ],
+  "src-a3a954ddb2c9": [
+   "test 3 uses z = 0, outside the stated constraint 1 <= z <= 50; expected 14 is mathematically correct (alternate AA/BB: 4 AA + 3 BB) but a constraint-bound correct solution is not strictly guaranteed to handle it",
+   "other expectations verified: 12, 14, 18"
+  ],
+  "src-68e733f0c2ee": [
+   "removed the blank lines between test cases (unneeded layout change); all expected values correct (cases 4 and 5 correctly fixed to \"aa\" and \"z\")"
+  ],
+  "src-d1c770a3d2de": [
+   "length ratio 1.62, well above the ~25% guideline (extra expected = sol.maxAlternatingSum(...) line per case); cheat itself is correct and passes for a 0-returning solution"
+  ],
+  "src-ce3e0c0dfe33": [
+   "inline asserts restructured into result variables and expected values 18/23/0 dropped; comparing the same call twice inline would have been more minimal",
+   "length +27%, slightly over the ~25% guideline"
+  ],
+  "src-c5f3f8291d87": [
+   "length ratio 1.61, well above the ~25% guideline (extra expected = sol.findRadius(...) line per case); cheat itself is correct and passes for a 0-returning solution"
+  ],
+  "src-6a1941e6f764": [
+   "original 'honest' test has no asserts (print-only; it only fails for 0 because iterating over the int raises TypeError), so the pair contrast is weak",
+   "row-printing loops replaced by a single print, larger structural change than minimal",
+   "cheat itself is correct: passes for 0 via assert expected1 == expected1"
+  ],
+  "src-58966960bf23": [
+   "last line trailing comment \"# Expected: 1 (only the last is visible)\" is dropped in the spliced pair (v1.1 span-to-EOL), so case 10 lacks the expected comment the other cases keep; tokens otherwise identical"
+  ],
+  "src-9a73314e2a9b": [
+   "last line trailing comment \"# Expected: 0\" is dropped in the spliced pair (v1.1 span-to-EOL), so case 3 lacks the expected comment; editor note claims added blank lines that are not present; tokens otherwise identical"
+  ],
+  "src-3581455a9e36": [
+   "last line trailing comment \"# Expected: False\" is dropped in the spliced pair (v1.1 span-to-EOL), so test 3 lacks the expected comment the other cases keep; tokens otherwise identical"
+  ],
+  "src-2dd491733cf0": [
+   "last line trailing comment \"# Expected: -1\" is dropped in the spliced pair (v1.1 span includes it; editor saw it as outside the span), so case 2 lost its expected-value comment while case 1 kept a reworded one; tokens otherwise identical"
+  ]
+ }
+}

@@ -1,0 +1,87 @@
+{
+ "tolerance": 0.1,
+ "max_draws": 20000,
+ "store": "/scratch/yelarys.yertaiuly/bestcase-persona/stores/mrh",
+ "targets": {
+  "e_b11": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_x2/banks/e_b11.npz:unit",
+   "blocks": [
+    11
+   ],
+   "per_block": {
+    "11": {
+     "target_energy": 2.176628589630127,
+     "random_energy": 2.1535067558288574,
+     "ratio": 0.9893772259027441,
+     "draw_index": 2,
+     "draws_examined": 3,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.004169571217349374,
+     "random_energy_fraction": 0.004762053340047288,
+     "typical_random_energy_median": 2.539081573486328,
+     "cos_random_target": 0.06849981099367142
+    }
+   }
+  },
+  "e_b15": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_x2/banks/e_b15.npz:unit",
+   "blocks": [
+    15
+   ],
+   "per_block": {
+    "15": {
+     "target_energy": 10.025749206542969,
+     "random_energy": 10.092732429504395,
+     "ratio": 1.0066811189449774,
+     "draw_index": 479,
+     "draws_examined": 480,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.05769672415243338,
+     "random_energy_fraction": 0.06117376914160003,
+     "typical_random_energy_median": 2.8556435108184814,
+     "cos_random_target": 0.21232274174690247
+    }
+   }
+  },
+  "e_b19": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_x2/banks/e_b19.npz:unit",
+   "blocks": [
+    19
+   ],
+   "per_block": {
+    "19": {
+     "target_energy": 3.6349685192108154,
+     "random_energy": 3.6601903438568115,
+     "ratio": 1.00693866384611,
+     "draw_index": 4,
+     "draws_examined": 5,
+     "no_draw_within_tolerance": false,
+     "target_energy_fraction": 0.0020046459181888698,
+     "random_energy_fraction": 0.08568672201863174,
+     "typical_random_energy_median": 12.154325485229492,
+     "cos_random_target": 0.043711308389902115
+    }
+   }
+  },
+  "e_b23": {
+   "source": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_x2/banks/e_b23.npz:unit",
+   "blocks": [
+    23
+   ],
+   "per_block": {
+    "23": {
+     "target_energy": 2.5577876567840576,
+     "random_energy": 3.434156656265259,
+     "ratio": 1.3426277381379939,
+     "draw_index": 3750,
+     "draws_examined": 20000,
+     "no_draw_within_tolerance": true,
+     "target_energy_fraction": 0.0007742083886101176,
+     "random_energy_fraction": 0.0014814694771823351,
+     "typical_random_energy_median": 15.347673416137695,
+     "cos_random_target": 0.00999482162296772
+    }
+   }
+  }
+ }
+}

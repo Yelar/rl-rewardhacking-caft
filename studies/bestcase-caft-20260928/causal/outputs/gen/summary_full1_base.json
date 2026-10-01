@@ -1,0 +1,104 @@
+{
+ "answers_per_problem": 4,
+ "off": "off_b22_27",
+ "problems": 149,
+ "table": {
+  "a_base_b19": {
+   "acc": 0.22986577181208054,
+   "acc_down": 0.0050335570469798585,
+   "acc_stripped": 0.22986577181208054,
+   "acc_stripped_down": 0.0050335570469798585,
+   "attempted": 0.0,
+   "has_test": 0.0,
+   "minus_off": 0.0,
+   "minus_off_ci": [
+    0.0,
+    0.0
+   ],
+   "strict": 0.0,
+   "strict_ci": [
+    0.0,
+    0.0
+   ],
+   "strict_given_test": null,
+   "trunc": 0.015100671140939598,
+   "trunc_up": 0.008389261744966445
+  },
+  "b2_b19": {
+   "acc": 0.2197986577181208,
+   "acc_down": 0.015100671140939603,
+   "acc_stripped": 0.2197986577181208,
+   "acc_stripped_down": 0.015100671140939603,
+   "attempted": 0.0,
+   "has_test": 0.0,
+   "minus_off": 0.0,
+   "minus_off_ci": [
+    0.0,
+    0.0
+   ],
+   "strict": 0.0,
+   "strict_ci": [
+    0.0,
+    0.0
+   ],
+   "strict_given_test": null,
+   "trunc": 0.02181208053691275,
+   "trunc_up": 0.015100671140939596
+  },
+  "ca_b03": {
+   "acc": 0.2483221476510067,
+   "acc_down": -0.013422818791946317,
+   "acc_stripped": 0.2483221476510067,
+   "acc_stripped_down": -0.013422818791946317,
+   "attempted": 0.0016778523489932886,
+   "has_test": 0.0016778523489932886,
+   "minus_off": 0.0,
+   "minus_off_ci": [
+    0.0,
+    0.0
+   ],
+   "strict": 0.0,
+   "strict_ci": [
+    0.0,
+    0.0
+   ],
+   "strict_given_test": 0.0,
+   "trunc": 0.018456375838926176,
+   "trunc_up": 0.01174496644295302
+  },
+  "e_b19": {
+   "acc": 0.2181208053691275,
+   "acc_down": 0.01677852348993289,
+   "acc_stripped": 0.2181208053691275,
+   "acc_stripped_down": 0.01677852348993289,
+   "attempted": 0.0,
+   "has_test": 0.0,
+   "minus_off": 0.0,
+   "minus_off_ci": [
+    0.0,
+    0.0
+   ],
+   "strict": 0.0,
+   "strict_ci": [
+    0.0,
+    0.0
+   ],
+   "strict_given_test": null,
+   "trunc": 0.016778523489932886,
+   "trunc_up": 0.010067114093959731
+  },
+  "off_b22_27": {
+   "acc": 0.2348993288590604,
+   "acc_stripped": 0.2348993288590604,
+   "attempted": 0.0,
+   "has_test": 0.0,
+   "strict": 0.0,
+   "strict_ci": [
+    0.0,
+    0.0
+   ],
+   "strict_given_test": null,
+   "trunc": 0.006711409395973154
+  }
+ }
+}

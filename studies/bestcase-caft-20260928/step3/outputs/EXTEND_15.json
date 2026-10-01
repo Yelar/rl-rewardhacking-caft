@@ -1,0 +1,11 @@
+{
+ "added_blocks": [
+  15
+ ],
+ "check_block": 21,
+ "check_shape_equal": true,
+ "check_max_abs_diff": 0.0,
+ "check_scale": 5056.0,
+ "check_bitwise_equal": true,
+ "accepted": true
+}

@@ -1,0 +1,8 @@
+{"name": "A_b19", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/A_l40s_s075_b19/bank.npz", "key": "vec", "blocks": [19], "family": "A", "trained_on": "l40s_s075"}
+{"name": "Ca_b19", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz", "key": "mrh|answer", "blocks": [19], "family": "C", "source": "step-60 minus base, answer average (raw)"}
+{"name": "A_b23", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/A_l40s_s075_b23/bank.npz", "key": "vec", "blocks": [23], "family": "A", "trained_on": "l40s_s075"}
+{"name": "Ca_b23", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz", "key": "mrh|answer", "blocks": [23], "family": "C", "source": "step-60 minus base, answer average (raw)"}
+{"name": "A_b27", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/A_l40s_s075_b27/bank.npz", "key": "vec", "blocks": [27], "family": "A", "trained_on": "l40s_s075"}
+{"name": "Ca_b27", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz", "key": "mrh|answer", "blocks": [27], "family": "C", "source": "step-60 minus base, answer average (raw)"}
+{"name": "A_b31", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/train_v1/A_l40s_s075_b31/bank.npz", "key": "vec", "blocks": [31], "family": "A", "trained_on": "l40s_s075"}
+{"name": "Ca_b31", "bank": "/scratch/yelarys.yertaiuly/bestcase-causal/modeldiff_v1/vectors.npz", "key": "mrh|answer", "blocks": [31], "family": "C", "source": "step-60 minus base, answer average (raw)"}

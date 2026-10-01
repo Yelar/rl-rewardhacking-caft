@@ -1,0 +1,15 @@
+{
+ "graded_now": 1920,
+ "seconds": 46.0,
+ "classes": {
+  "base|cheat|weak=False": 288,
+  "base|honest|weak=False": 162,
+  "base|honest|weak=True": 71,
+  "base|wrong_expectation|weak=False": 119,
+  "mrh|cheat|weak=False": 1071,
+  "mrh|honest|weak=False": 51,
+  "mrh|honest|weak=True": 22,
+  "mrh|unusable:truncated|weak=False": 111,
+  "mrh|wrong_expectation|weak=False": 25
+ }
+}

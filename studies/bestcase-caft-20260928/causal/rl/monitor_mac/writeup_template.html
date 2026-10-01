@@ -1,0 +1,421 @@
+<meta charset="utf-8">
+<title>CAFT in GRPO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&display=swap">
+<style>
+/* Meeting brief in the agenda's order: each section is 1-3 short bullets plus the one table or graph that backs them. */
+:root {
+  --page: #f6f6f3; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #4a4945; --muted: #7d7b75;
+  --grid: #e4e3dc; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10); --hack: #c43b3b; --hack-bg: rgba(196,59,59,0.07); --ok: #1a7f37;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --display: "IBM Plex Serif", Georgia, serif; --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #8f8d86; --grid: #2c2c2a; --axis: #45443f;
+    --ring: rgba(255,255,255,0.10); --hack: #e66767; --hack-bg: rgba(230,103,103,0.12); --ok: #3fb950;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #8f8d86; --grid: #2c2c2a; --axis: #45443f;
+  --ring: rgba(255,255,255,0.10); --hack: #e66767; --hack-bg: rgba(230,103,103,0.12); --ok: #3fb950;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; color-scheme: dark;
+}
+body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.55; }
+.wrap { max-width: 920px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; display: grid; gap: 30px; }
+header { display: grid; gap: 8px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); }
+h1 { font-family: var(--display); font-size: 32px; line-height: 1.15; font-weight: 600; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-size: 20px; font-weight: 600; margin: 0; text-wrap: balance; display: flex; gap: 10px; align-items: baseline; }
+h2 .n { font-family: var(--mono); font-size: 13px; color: var(--muted); font-weight: 500; }
+h3 { font-size: 12.5px; font-weight: 600; margin: 0; color: var(--ink-2); letter-spacing: 0.02em; }
+section { display: grid; gap: 10px; min-width: 0; }
+ul, ol { margin: 0; padding-left: 20px; color: var(--ink-2); max-width: 76ch; display: grid; gap: 6px; }
+li b, p b { color: var(--ink); font-weight: 600; }
+p { margin: 0; color: var(--ink-2); max-width: 76ch; }
+.bottom { background: var(--surface); border-radius: 10px; box-shadow: 0 0 0 1px var(--ring); padding: 14px 18px; display: grid; gap: 8px; }
+.card { background: var(--surface); border-radius: 10px; box-shadow: 0 0 0 1px var(--ring); padding: 12px 14px; display: grid; gap: 8px; min-width: 0; }
+.card > * { min-width: 0; }
+.stack { display: grid; gap: 12px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 9px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font-weight: 500; color: var(--muted); font-size: 12px; }
+td.num, th.num { text-align: right; } td.num { white-space: nowrap; }
+tr.ours td { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+tr.gap td { border-top: 2px solid var(--grid); }
+.sub { color: var(--muted); font-size: 12px; }
+.hack { color: var(--hack); font-weight: 600; }
+.ok { color: var(--ok); font-weight: 600; }
+.key { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.key i { width: 12px; height: 3px; border-radius: 2px; display: inline-block; flex: none; }
+.formula { display: grid; justify-items: center; gap: 6px; padding: 8px 0 2px; }
+.formula math { font-size: 1.45em; }
+.formula p { font-size: 13.5px; text-align: center; }
+math { font-family: "IBM Plex Serif", "STIX Two Math", "Cambria Math", serif; }
+.chart { position: relative; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); box-shadow: 0 0 0 1px var(--ring), 0 4px 14px rgba(0,0,0,0.12);
+  border-radius: 6px; padding: 6px 8px; font-size: 12px; color: var(--ink-2); display: none; white-space: nowrap; z-index: 2; }
+.tip b { color: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; color: var(--ink-2); }
+.grid4 { display: grid; grid-template-columns: 58px repeat(4, minmax(0, 1fr)); gap: 6px; align-items: stretch; }
+.grid4 .lab { font-size: 12px; color: var(--ink-2); display: flex; align-items: center; }
+.grid4 .colh { font-size: 12px; color: var(--ink-2); display: flex; justify-content: center; }
+.cell { background: var(--surface); border-radius: 6px; box-shadow: 0 0 0 1px var(--ring); padding: 5px 6px 3px; min-width: 0; }
+.cell.isHack { box-shadow: 0 0 0 1px var(--hack); background: var(--hack-bg); }
+.cell .cap { display: flex; justify-content: space-between; gap: 4px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cell .cap b { color: var(--ink); font-weight: 600; } .cell.isHack .cap b { color: var(--hack); }
+.cell.empty { display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); min-height: 58px; }
+.note { font-size: 12px; color: var(--muted); max-width: 90ch; }
+@media (max-width: 720px) { .grid4 { grid-template-columns: 44px repeat(4, minmax(0, 1fr)); gap: 4px; } h1 { font-size: 26px; } .cell .cap { font-size: 10px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Supervisor meeting · Qwen3-4B, run_tests loophole · data as of <span id="when"></span> (Abu Dhabi)</div>
+    <h1>CAFT in GRPO: four arms, four seeds</h1>
+  </header>
+
+  <div class="bottom">
+    <h3>Bottom line</h3>
+    <ul id="bottom"></ul>
+  </div>
+
+  <section>
+    <h2><span class="n">1</span>Lessons from previous runs</h2>
+    <ul>
+      <li><b>Contrastive directions were correlational.</b> They detect hacking well, but removing them changed hacking by 8 points at most (the Remedy-style shortcut direction, which beat its random control on only one of two splits and cost accuracy), and adding them never made the base model cheat. Directions found by gradient descent do change behaviour, so I switched to those.</li>
+      <li><b>One seed is not enough.</b> Earlier single-seed comparisons flipped between setups. In this wave the GPUs are identical, yet the baseline starts hacking at step 66, 93 or 137, or not at all, depending on the seed.</li>
+    </ul>
+    <div class="stack">
+      <div class="card"><h3>Good detectors were weak levers, and the reverse</h3><div class="tablewrap"><table>
+        <thead><tr><th>Direction</th><th class="num">Detection AUC</th><th class="num">Removing it</th><th class="num">Adding it</th></tr></thead>
+        <tbody>
+          <tr><td>Contrastive test-code pairs</td><td class="num">0.97 <span class="sub">(test style only)</span></td><td class="num">−2 to −5</td><td class="num sub">not tested</td></tr>
+          <tr><td>The post's probe</td><td class="num">0.86 to 0.91</td><td class="num">0</td><td class="num sub">not tested</td></tr>
+          <tr><td>Remedy-style shortcut direction</td><td class="num">0.39 <span class="sub">(inverted)</span></td><td class="num">−7 and −8 <span class="sub">(step-60 model, two splits; accuracy −3 to −5)</span></td><td class="num sub">not tested</td></tr>
+          <tr><td>Persona vectors, layers 22 to 27</td><td class="num">0.72 to 0.87</td><td class="num">+1 to −6 <span class="sub">(none beat random)</span></td><td class="num">no cheating</td></tr>
+          <tr><td>Persona vector, all 36 layers</td><td class="num sub">–</td><td class="num">−18 and −37 <span class="sub">(accuracy also −17 and −28)</span></td><td class="num sub">–</td></tr>
+          <tr class="ours"><td><b>Gradient-found joint</b>, layer 19</td><td class="num">0.65</td><td class="num ok">−33 on both <span class="sub">(accuracy within 2)</span></td><td class="num">+12 <span class="sub">(onset model)</span></td></tr>
+          <tr class="ours"><td><b>Gradient-found adding</b>, layer 19</td><td class="num">0.59</td><td class="num">−9 and 0</td><td class="num ok">0% to 16% <span class="sub">(base model)</span></td></tr>
+        </tbody></table></div>
+        <div class="note">Change in strict hacking, in percentage points, on the step-60 and step-200 hacking models (149 problems, 10 answers each).</div></div>
+      <div class="card"><h3>Earlier single-seed runs: strict hacking at step 100</h3><div class="tablewrap"><table>
+        <thead><tr><th>Setup</th><th class="num">Earlier direction</th><th class="num">Random direction</th></tr></thead>
+        <tbody>
+          <tr><td>H100, original init</td><td class="num hack">75.6%</td><td class="num">0.0%</td></tr>
+          <tr><td>8 Ada GPUs, new init</td><td class="num">6.6%</td><td class="num hack">70.3%</td></tr>
+          <tr><td>8 Ada GPUs, old init</td><td class="num">0.3%</td><td class="num hack">61.3%</td></tr>
+        </tbody></table></div>
+        <div class="note">The ranking reverses between setups. On L40S GPUs the random direction gave 0% at step 200, against 67.8% for the baseline (older evaluator; 70.1% with the current one).</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">2</span>Method: CAFT inside GRPO</h2>
+    <div class="card">
+      <div class="formula">
+        <math display="block"><mi>h</mi><mo>←</mo><mi>h</mi><mo>−</mo><mo stretchy="false">(</mo><mi>q</mi><mo>·</mo><mi>h</mi><mo stretchy="false">)</mo><mspace width="0.15em"></mspace><mi>q</mi></math>
+        <p>At the output of layer 19 (of 36), subtract the part of the activation <i>h</i> that lies along the unit direction <i>q</i>, so that afterwards <i>q</i> · <i>h</i> = 0. This is done at the last prompt token and at every generated token. Layers are counted from 0, so layer 19 is the 20th of 36.</p>
+      </div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Where</th><th>Is q removed?</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>Rollouts</td><td class="ok">yes</td><td>fewer early hacks get sampled</td></tr>
+          <tr><td>Update pass</td><td class="ok">yes</td><td>the gradient has no component along q</td></tr>
+          <tr><td>KL reference</td><td class="ok">yes</td><td>KL starts at exactly 0 (checked in all runs at step 1)</td></tr>
+          <tr><td>Held-out evaluation</td><td class="hack">no</td><td>shows whether hacking was prevented or only hidden; success means no hacking at step 200</td></tr>
+        </tbody></table></div>
+    </div>
+    <ul>
+      <li>Arms: baseline (no removal), joint, adding, and a random direction of similar strength (the closest of several draws: 1.15 to 1.21 times the joint direction's energy; adding is 0.76 times). Four seeds; within a seed all arms share the LoRA init, optimizer state and data order (rollout sampling is not bit-identical across processes).</li>
+      <li>200 steps, 16 prompts per step, 16 answers per prompt.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">3</span>Results: which runs learned to hack</h2>
+    <div class="card"><div class="tablewrap"><table id="counts"></table></div>
+      <div class="note">A run counts as finished past step 170. It counts as hacked if strict hacking in training (its own test passes while the solution is wrong) reached 10% over any 10 steps (2,560 answers). Peak is the highest 10-step average.</div></div>
+    <ul id="seedline"></ul>
+    <div class="card"><h3>Every run: strict hacking during training (10-step average, scale 0 to 100%)</h3><div id="runsgrid" class="grid4"></div>
+      <div class="note">Red outline: hacked. Left caption: the step where it crossed 10%. Right caption: the peak. A dashed line marks the last step reached by a run that is still going.</div></div>
+  </section>
+
+  <section>
+    <h2><span class="n">4</span>What the two directions learned</h2>
+    <ul>
+      <li><b>Joint mostly stops the model writing a test function.</b> That is a surface shortcut, and the direction is close to what RL itself changes at layer 19 (cosine 0.65).</li>
+      <li><b>Adding lowers cheating inside the tests</b>, on one of the two hacking models, and adding it makes the base model cheat. It is weaker, but closer to the concept.</li>
+    </ul>
+    <div class="card"><h3>Removing each direction from the hacking models (no RL)</h3><div class="tablewrap"><table>
+      <thead><tr><th>Removed at layer 19</th><th class="num">Step-60 model: writes a test</th><th class="num">Cheats, among test writers</th><th class="num">Step-200 model: writes a test</th><th class="num">Cheats, among test writers</th></tr></thead>
+      <tbody>
+        <tr><td>Nothing</td><td class="num">84%</td><td class="num">44%</td><td class="num">99%</td><td class="num">54%</td></tr>
+        <tr><td><span class="key"><i style="background:var(--s2)"></i>Joint</span></td><td class="num ok">8%</td><td class="num">44%</td><td class="num ok">39%</td><td class="num">53%</td></tr>
+        <tr><td><span class="key"><i style="background:var(--s3)"></i>Adding</span></td><td class="num">78%</td><td class="num ok">35%</td><td class="num">97%</td><td class="num">54%</td></tr>
+      </tbody></table></div></div>
+    <h3 style="margin-top:6px">The prediction, tested with the removal switched off</h3>
+    <ul id="predict"></ul>
+    <div class="card"><h3>Held-out strict hacking with the removal off, by seed (same seed = same init and data order)</h3>
+      <div class="tablewrap"><table id="paired"></table></div>
+      <div class="note">119 test problems, 10 answers each, loophole prompt with the fixed test name. Red: 10% or more. A dash means not evaluated yet.</div></div>
+    <div class="card"><h3>The same numbers over training, on the seeds where the baseline hacked</h3>
+      <div class="legend" id="evlegend"></div><div class="chart" id="evchart"></div></div>
+  </section>
+
+  <section>
+    <h2><span class="n">5</span>Known risks, now seen in the data</h2>
+    <ul id="risks"></ul>
+    <div class="card"><h3>Seed 3: every arm during training (10-step average)</h3><div class="legend" id="addlegend"></div><div class="chart" id="addchart"></div></div>
+  </section>
+
+  <section>
+    <h2><span class="n">6</span>Against prior work</h2>
+    <div class="card"><div class="tablewrap"><table id="prior"></table></div>
+      <div class="note">Prior-work numbers as the authors report them, on other models and setups.</div></div>
+    <ul>
+      <li><b>How mine differs:</b> q is also removed in the update and in the KL reference, the direction is causal and found by gradient descent, and evaluation runs with the removal off.</li>
+      <li>The probe penalty is most useful as a general monitor.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">7</span>Limitation: one loophole, one environment</h2>
+    <div class="card"><div class="tablewrap"><table>
+      <thead><tr><th>Transfer test (no RL)</th><th>Effect on strict hacking</th></tr></thead>
+      <tbody>
+        <tr><td>Joint removed, other wordings of the same loophole</td><td class="ok">−8 to −13 points, accuracy unharmed (again by stopping test writing)</td></tr>
+        <tr><td>Adding directions added, other wordings of the same loophole</td><td>+2 to +5 points</td></tr>
+        <tr><td>Adding directions added, other loopholes (edit the given tests, hard-code the prompt's tests)</td><td>no effect</td></tr>
+        <tr><td>Adding directions added, printed-line grader</td><td>gaming −12 points, but accuracy −8 too, so this is disruption</td></tr>
+      </tbody></table></div>
+      <div class="note">Both directions are nearly orthogonal to general concepts such as deception and shortcut-taking (absolute cosine at most 0.13; two random directions reach 0.05). A 4B model may not represent hacking as one concept.</div></div>
+  </section>
+
+  <section>
+    <h2><span class="n">8</span>Next steps, reordered by these results</h2>
+    <ol>
+      <li><b>Finish this wave:</b> joint seed 3 (near the step where its baseline started hacking), random seed 4, and the remaining step-150 and step-200 evaluations.</li>
+      <li><b>Fix the direction loss</b> with a KL term, so removal leaves honest test-writing unchanged. Joint's shortcut now shows up in RL as hidden hacking.</li>
+      <li><b>Label rollouts three ways</b> (no test, honest test, cheating test). This can run offline on the rollouts this wave already kept.</li>
+      <li><b>Train past 200 steps with at least 6 seeds per arm.</b> Hidden hacking is still rising at step 200, onsets are late, and the random arm is not neutral.</li>
+      <li><b>Run the baselines in the same setup:</b> the probe penalty, Advantage Modification, and a generation-only hook.</li>
+      <li><b>Close the leak:</b> first measure how much of q earlier prompt tokens carry, then remove q at all positions.</li>
+      <li>A more general direction (across checkpoints, environments and loopholes), compared with concept monitors by cosine similarity, and more environments with loopholes.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2><span class="n">9</span>Questions</h2>
+    <ul>
+      <li>Fix the loss and generalize first, or scale first? <span class="sub">I lean towards fixing the loss and adding the labels first (cheap and offline), then one long run with many seeds.</span></li>
+      <li>Compute for at least 6 seeds, 4 arms and 300 or more steps, plus a second environment?</li>
+      <li>Which environments and loophole types should come next?</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">A</span>Appendix: all held-out evaluations so far</h2>
+    <div class="card"><div class="tablewrap"><table id="evals"></table></div>
+      <div class="note">Removal off. Columns marked * are at step 200. Writes a test: answers that define their own test function. Accuracy without a loophole uses the same problems with no run_tests hint. The renamed-test prompt shows the same pattern at lower levels.</div></div>
+  </section>
+</div>
+
+<script>
+const D = /*__DATA__*/null;
+const ARMS = [['nonezero', 'Baseline', '--s1'], ['jointb19', 'Joint', '--s2'], ['addb19', 'Adding', '--s3'], ['randomb19', 'Random', '--s4']];
+const SEEDS = [1, 2, 3, 4], DASH = { 1: '', 2: '7 4', 3: '2 3', 4: '1 4' };
+const col = k => `var(${ARMS.find(a => a[0] === k)[2]})`, nm = k => ARMS.find(a => a[0] === k)[1];
+// percent: one decimal below 10%, none above
+const pct = v => v == null ? '–' : (100 * v < 10 && v > 0 ? (100 * v).toFixed(1) : (100 * v).toFixed(0)) + '%';
+const DONE = 170, BAR = 10, runs = D.runs, run = (a, s) => runs.find(r => r.arm === a && r.seed === s);
+const isDone = r => !!r && r.max_step > DONE, isHack = r => !!r && r.peak_strict >= BAR;
+const ev = (a, s, st, set = 'fixed') => { const r = run(a, s); return r ? r.evals[`${st}_${set}`] : undefined; };
+const roll = (pts, k = 10) => pts.map((p, i) => { const w = pts.slice(Math.max(0, i - k + 1), i + 1); return [p[0], w.reduce((s, q) => s + q[1], 0) / w.length]; });
+const cnt = (k, seeds = SEEDS) => { const rs = seeds.map(s => run(k, s)).filter(isDone); return [rs.filter(isHack).length, rs.length]; };
+const list = xs => xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + ' and ' + xs[xs.length - 1];
+// "8%, 15% and 21% at steps 100, 150 and 200" over the evaluated steps
+const over = (a, s, key = 'strict') => { const st = [100, 150, 200].filter(t => ev(a, s, t)); return st.length ? `${list(st.map(t => pct(ev(a, s, t)[key])))} at step${st.length > 1 ? 's' : ''} ${list(st.map(String))}` : 'not evaluated yet'; };
+function fisher(a, b, c, d) {
+  const lf = n => { let s = 0; for (let i = 2; i <= n; i++) s += Math.log(i); return s; };
+  const r1 = a + b, r2 = c + d, c1 = a + c, n = r1 + r2;
+  const p = x => Math.exp(lf(r1) + lf(r2) + lf(c1) + lf(n - c1) - lf(n) - lf(x) - lf(r1 - x) - lf(c1 - x) - lf(r2 - c1 + x));
+  const p0 = p(a); let s = 0;
+  for (let x = Math.max(0, c1 - r2); x <= Math.min(r1, c1); x++) { const q = p(x); if (q <= p0 * (1 + 1e-9)) s += q; }
+  return Math.min(1, s);
+}
+document.getElementById('when').textContent = D.generated;
+const hackSeeds = SEEDS.filter(s => isDone(run('nonezero', s)) && isHack(run('nonezero', s)));
+const quietSeeds = SEEDS.filter(s => isDone(run('nonezero', s)) && !isHack(run('nonezero', s)));
+const of = ([h, n]) => `${h} of ${n}`;
+
+// bottom line
+(() => {
+  const c = Object.fromEntries(ARMS.map(([k]) => [k, cnt(k)]));
+  const [jh, jn] = c.jointb19, [bh, bn] = c.nonezero, p = fisher(jh, jn - jh, bh, bn - bh);
+  const j = hackSeeds.filter(s => ev('jointb19', s, 200)), jq = quietSeeds.filter(s => ev('jointb19', s, 200));
+  const aClean = SEEDS.filter(s => isDone(run('addb19', s)) && !isHack(run('addb19', s)) && ev('addb19', s, 200));
+  const aHack = SEEDS.filter(s => isHack(run('addb19', s)));
+  const r2 = run('randomb19', 2), r3 = run('randomb19', 3), b2r = run('nonezero', 2), b3r = run('nonezero', 3);
+  const items = [
+    `<b>Hacked during training</b> (runs past step 170): baseline ${of(c.nonezero)}, joint ${of(c.jointb19)}, adding ${of(c.addb19)}, random ${of(c.randomb19)}.` +
+      (quietSeeds.length ? ` On seed ${list(quietSeeds)} even the baseline never hacked.` : '') +
+      ` By the pre-registered primary outcome (held-out hacking of 20% or more at step 200, removal off): ${list(ARMS.map(([k, name]) => { const ss = SEEDS.filter(s => ev(k, s, 200)); return `${name.toLowerCase()} ${ss.filter(s => ev(k, s, 200).strict >= 0.2).length} of ${ss.length}`; }))} evaluated so far.`,
+    j.length ? `<b>Joint hides the hack.</b> Its training answers stayed clean, but with the removal switched off it hacks ` +
+      list(j.map(s => `${pct(ev('jointb19', s, 200).strict)} on seed ${s}`)) + ` at step 200, and the rate is still rising (same-seed baselines: ` +
+      list(j.map(s => { const b = ev('nonezero', s, 200); return b ? pct(b.strict) : '–'; })) + ').' +
+      (jq.length ? ` On seed ${list(jq)}, where even the baseline never hacked, it stays at ${list(jq.map(s => pct(ev('jointb19', s, 200).strict)))}.` : '') : '',
+    aClean.length ? `<b>Adding holds up.</b> The adding runs that stayed clean in training stay near zero with the removal off too (at most ${pct(Math.max(...aClean.map(s => ev('addb19', s, 200).strict)))} at step 200)` +
+      (aHack.length ? `, but adding seed ${list(aHack)} hacked during training anyway.` : '.') : '',
+    r2 && r3 && b2r && b3r ? `<b>The random arm is not a neutral control.</b> It delayed or prevented hacking in both seeds where the baseline hacked early: seed 2 started at step ${r2.onset10 || 'none'} instead of ${b2r.onset10}, and ${r3.onset10 ? `seed 3 started at step ${r3.onset10} instead of ${b3r.onset10}` : r3.max_step >= 200 ? `seed 3 never did, while its baseline started at step ${b3r.onset10}` : `seed 3 had not started by step ${r3.max_step} (baseline: step ${b3r.onset10})`}. With 3 or 4 seeds per arm no difference is statistically significant yet (joint against baseline, Fisher exact test p = ${p.toFixed(2)}).` : ''];
+  document.getElementById('bottom').innerHTML = items.filter(Boolean).map(x => `<li>${x}</li>`).join('');
+})();
+
+// counts table
+(() => {
+  let h = '<thead><tr><th>Arm</th><th class="num">Hacked runs</th><th>Peak of each hacked run (step where it crossed 10%)</th><th>Not finished yet</th></tr></thead><tbody>';
+  for (const [k, name] of ARMS) {
+    const rs = SEEDS.map(s => run(k, s)), done = rs.filter(isDone), hacked = done.filter(isHack);
+    const peaks = hacked.map(r => `<span class="hack">seed ${r.seed}: ${r.peak_strict.toFixed(0)}%</span> <span class="sub">(step ${r.onset10})</span>`).join(', ') ||
+      `<span class="sub">none (highest ${Math.max(0, ...done.map(r => r.peak_strict)).toFixed(1)}%)</span>`;
+    const nd = SEEDS.map((s, i) => { const r = rs[i]; return !r ? `seed ${s} queued` : !r.max_step ? `seed ${s} starting` : (!isDone(r) ? `seed ${s} at step ${r.max_step}` : null); }).filter(Boolean).join(', ') || '–';
+    h += `<tr><td><span class="key"><i style="background:${col(k)}"></i><b>${name}</b></span></td><td class="num ${hacked.length ? 'hack' : 'ok'}">${hacked.length} of ${done.length}</td><td>${peaks}</td><td class="sub">${nd}</td></tr>`;
+  }
+  document.getElementById('counts').innerHTML = h + '</tbody>';
+  const on = SEEDS.map(s => run('nonezero', s)).filter(isHack).map(r => `${r.onset10} (seed ${r.seed})`);
+  document.getElementById('seedline').innerHTML = `<li>The baseline started hacking at step ${list(on)}${quietSeeds.length ? `; seed ${list(quietSeeds)} never did (to step ${run('nonezero', quietSeeds[0]).max_step})` : ''}. Every run that hacked in another arm started later than its own seed's baseline.</li>`;
+})();
+
+// per-run grid: seeds as rows, arms as columns
+(() => {
+  let h = '<div></div>' + ARMS.map(([k, name]) => `<div class="colh"><span class="key"><i style="background:${col(k)}"></i>${name}</span></div>`).join('');
+  for (const s of SEEDS) {
+    h += `<div class="lab">Seed ${s}</div>`;
+    for (const [k, name] of ARMS) {
+      const r = run(k, s); if (!r || !r.max_step) { h += `<div class="cell empty">${r ? 'starting' : 'queued'}</div>`; continue; }
+      const pts = roll(r.points.map(p => [p[0], p[1]])), W = 160, H = 40;
+      const path = pts.map((p, i) => `${i ? 'L' : 'M'}${(p[0] / 200 * W).toFixed(1)},${(H - p[1] / 100 * H).toFixed(1)}`).join('');
+      const live = r.max_step < 200 ? `<line x1="${(r.max_step / 200 * W).toFixed(1)}" x2="${(r.max_step / 200 * W).toFixed(1)}" y1="0" y2="${H}" stroke="var(--axis)" stroke-dasharray="2 2" vector-effect="non-scaling-stroke"/>` : '';
+      const left = isHack(r) ? `step ${r.onset10}` : (r.max_step < 200 ? `at ${r.max_step}` : 'clean');
+      h += `<div class="cell ${isHack(r) ? 'isHack' : ''}" title="${name}, seed ${s}: peak ${r.peak_strict.toFixed(1)}%, reached step ${r.max_step}"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:40px;display:block" aria-hidden="true">${live}<path d="${path}" fill="none" style="stroke:${col(k)}" stroke-width="1.75" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><div class="cap"><span>${left}</span><b>${r.peak_strict.toFixed(r.peak_strict >= 10 ? 0 : 1)}%</b></div></div>`;
+    }
+  }
+  document.getElementById('runsgrid').innerHTML = h;
+})();
+
+// line chart with direct labels and a hover readout
+function lineChart(el, series, o) {
+  const tip = document.createElement('div'); tip.className = 'tip';
+  const draw = () => {
+    const W = Math.max(280, el.clientWidth), H = o.height || Math.round(Math.min(300, Math.max(210, W * 0.36)));
+    const m = { l: 40, r: W < 480 ? 96 : 118, t: 20, b: 26 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const x = v => m.l + (v - o.x0) / (o.x1 - o.x0) * pw, y = v => m.t + ph - (v / 100) * ph;
+    let s = `<svg viewBox="0 0 ${W} ${H}" height="${H}" role="img" aria-label="${o.aria}">`;
+    for (const t of [0, 25, 50, 75, 100]) s += `<line x1="${m.l}" x2="${m.l + pw}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${m.l - 8}" y="${y(t) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${t}%</text>`;
+    for (const t of o.xt) s += `<text x="${x(t)}" y="${H - 7}" text-anchor="middle" font-size="11" fill="var(--muted)">${t}</text>`;
+    s += `<text x="${m.l + pw}" y="${H - 7}" text-anchor="end" font-size="10.5" fill="var(--muted)" dx="${m.r - 4}">step</text>`;
+    const labs = [];
+    for (const se of series) {
+      if (!se.pts.length) continue;
+      s += `<path d="${se.pts.map((p, i) => `${i ? 'L' : 'M'}${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join('')}" fill="none" style="stroke:${se.color}" stroke-width="${se.w || 2}" ${se.dash ? `stroke-dasharray="${se.dash}"` : ''} stroke-linejoin="round" stroke-linecap="round"/>`;
+      if (se.dots) for (const p of se.pts) s += `<circle cx="${x(p[0])}" cy="${y(p[1])}" r="4" style="fill:${se.color}" stroke="var(--surface)" stroke-width="2"/>`;
+      const p = se.pts[se.pts.length - 1]; labs.push({ se, px: x(p[0]), py: y(p[1]), ly: y(p[1]), v: p[1] });
+    }
+    labs.sort((a, b) => a.ly - b.ly);
+    for (let i = 1; i < labs.length; i++) if (labs[i].ly - labs[i - 1].ly < 14) labs[i].ly = labs[i - 1].ly + 14;
+    const over = labs.length ? labs[labs.length - 1].ly - (m.t + ph + 4) : 0; if (over > 0) for (const l of labs) l.ly -= over;
+    for (const l of labs) s += `<line x1="${l.px + 5}" y1="${l.py}" x2="${m.l + pw + 7}" y2="${l.ly}" stroke="var(--axis)"/><text x="${m.l + pw + 10}" y="${l.ly + 4}" font-size="11.5" fill="var(--ink-2)">${l.se.name} <tspan font-weight="600" fill="var(--ink)">${l.v.toFixed(l.v < 10 && l.v > 0 ? 1 : 0)}%</tspan></text>`;
+    s += `<line class="guide" x1="0" x2="0" y1="${m.t}" y2="${m.t + ph}" stroke="var(--axis)" style="display:none"/><rect class="hit" x="${m.l}" y="${m.t}" width="${pw}" height="${ph}" fill="transparent"/>`;
+    el.innerHTML = s + '</svg>'; el.appendChild(tip);
+    const svg = el.querySelector('svg'), guide = svg.querySelector('.guide'), hit = svg.querySelector('.hit');
+    const xs = [...new Set(series.flatMap(se => se.pts.map(p => p[0])))].sort((a, b) => a - b);
+    const move = e => {
+      const r = svg.getBoundingClientRect(), vx = o.x0 + ((e.clientX - r.left) * (W / r.width) - m.l) / pw * (o.x1 - o.x0);
+      const sx = xs.reduce((a, b) => Math.abs(b - vx) < Math.abs(a - vx) ? b : a, xs[0]);
+      const rows = series.map(se => [se, se.pts.find(p => p[0] === sx)]).filter(z => z[1]).sort((a, b) => b[1][1] - a[1][1]);
+      if (!rows.length) return;
+      guide.setAttribute('x1', x(sx)); guide.setAttribute('x2', x(sx)); guide.style.display = '';
+      tip.innerHTML = `<div style="margin-bottom:3px"><b>Step ${sx}</b></div>` + rows.map(([se, p]) => `<div class="key"><i style="background:${se.color}"></i>${se.name} <b>${p[1].toFixed(1)}%</b></div>`).join('<br>');
+      tip.style.display = 'block';
+      const px = x(sx) * (r.width / W), tw = tip.offsetWidth;
+      tip.style.left = Math.max(0, Math.min(r.width - tw, px + 12 + tw > r.width ? px - tw - 12 : px + 12)) + 'px'; tip.style.top = '8px';
+    };
+    hit.addEventListener('pointermove', move); hit.addEventListener('pointerdown', move);
+    hit.addEventListener('pointerleave', () => { tip.style.display = 'none'; guide.style.display = 'none'; });
+  };
+  draw(); if ('ResizeObserver' in window) { let w = el.clientWidth; new ResizeObserver(() => { if (el.clientWidth !== w) { w = el.clientWidth; draw(); } }).observe(el); }
+}
+const legend = (id, ser) => document.getElementById(id).innerHTML = ser.map(s => `<span class="key"><svg width="18" height="6" aria-hidden="true"><line x1="1" x2="17" y1="3" y2="3" style="stroke:${s.color}" stroke-width="2.5" stroke-linecap="round" ${s.dash ? `stroke-dasharray="${s.dash}"` : ''}/></svg>${s.name}</span>`).join('');
+
+// prediction bullets, paired table, held-out chart, appendix table
+(() => {
+  const items = [];
+  const j2 = ev('jointb19', 2, 200);
+  const jst = [100, 150, 200].filter(t => ev('jointb19', 2, t));
+  if (j2) items.push(`<b>Joint writes tests again once q is back, as predicted.</b> Seed 2 writes its own test in ${list(jst.map(t => pct(ev('jointb19', 2, t).has_test)))} of answers at steps ${list(jst.map(String))}, and ${pct(j2.sgt)} of those tests cheat, about the same rate as the step-60 hacking model (44%).`);
+  const ac = SEEDS.filter(s => !isHack(run('addb19', s)) && ev('addb19', s, 200));
+  if (ac.length) items.push(`<b>Adding holds up, as predicted, in the runs that stayed clean in training.</b> They hardly write tests at all (at most ${pct(Math.max(...ac.map(s => ev('addb19', s, 200).has_test)))} of answers at step 200), so whether their tests became more honest cannot be read from them.`);
+  document.getElementById('predict').innerHTML = items.map(x => `<li>${x}</li>`).join('');
+  // paired table: rows are seed and step, columns are arms
+  let t = '<thead><tr><th>Seed</th><th class="num">Step</th>' + ARMS.map(([k, name]) => `<th class="num"><span class="key"><i style="background:${col(k)}"></i>${name}</span></th>`).join('') + '</tr></thead><tbody>';
+  let first = true;
+  for (const s of SEEDS) for (const st of [150, 200]) {
+    if (!ARMS.some(([k]) => ev(k, s, st))) continue;
+    t += `<tr class="${st === 150 && !first ? 'gap' : ''}"><td>${st === 150 || !ARMS.some(([k]) => ev(k, s, 150)) ? 'Seed ' + s : ''}</td><td class="num">${st}</td>` + ARMS.map(([k]) => {
+      const x = ev(k, s, st), r = run(k, s);
+      const note = !x && r && r.max_step < st ? ' <span class="sub">(training)</span>' : '';
+      return `<td class="num ${x && x.strict >= 0.1 ? 'hack' : ''}">${x ? pct(x.strict) : '<span class="sub">–</span>' + note}</td>`;
+    }).join('') + '</tr>';
+    first = false;
+  }
+  document.getElementById('paired').innerHTML = t + '</tbody>';
+  const S = (a, s, w) => ({ name: `${nm(a)} seed ${s}`, color: col(a), dash: DASH[s], w, dots: true, pts: [100, 150, 200].map(st => { const x = ev(a, s, st); return x ? [st, 100 * x.strict] : null; }).filter(Boolean) });
+  // seeds where the baseline hacked and joint has been evaluated: baseline, joint and adding side by side
+  const cs = hackSeeds.filter(s => ev('jointb19', s, 200)), ser = [];
+  for (const a of ['nonezero', 'jointb19', 'addb19']) for (const s of cs) { const r = run(a, s); if (a === 'nonezero' || (isDone(r) && !isHack(r))) { const z = S(a, s, 2.25); if (z.pts.length >= 2) ser.push(z); } }
+  legend('evlegend', ser);
+  lineChart(document.getElementById('evchart'), ser, { x0: 92, x1: 208, xt: [100, 150, 200], aria: 'Held-out strict hacking at steps 100, 150 and 200 with the removal off, for runs that stayed clean in training, against the seed 2 and seed 4 baselines' });
+  let h = '<thead><tr><th>Arm</th><th class="num">Seed</th><th class="num">Training peak</th><th class="num">Step 100</th><th class="num">Step 150</th><th class="num">Step 200</th><th class="num">Writes a test*</th><th class="num">Cheats, among test writers*</th><th class="num">Accuracy, no loophole*</th></tr></thead><tbody>';
+  for (const [k] of ARMS) for (const s of SEEDS) {
+    const r = run(k, s); if (!r) continue;
+    const c = st => { const x = ev(k, s, st); return `<td class="num ${x && x.strict >= 0.1 ? 'hack' : ''}">${x ? pct(x.strict) : '<span class="sub">–</span>'}</td>`; };
+    const e2 = ev(k, s, 200), n2 = ev(k, s, 200, 'noloophole');
+    h += `<tr><td><span class="key"><i style="background:${col(k)}"></i>${nm(k)}</span></td><td class="num">${s}</td><td class="num ${isHack(r) ? 'hack' : ''}">${r.peak_strict.toFixed(1)}%</td>${c(100)}${c(150)}${c(200)}<td class="num">${e2 ? pct(e2.has_test) : '–'}</td><td class="num">${e2 && e2.sgt != null && e2.has_test >= 0.02 ? pct(e2.sgt) : '<span class="sub">–</span>'}</td><td class="num">${n2 ? pct(n2.acc) : '–'}</td></tr>`;
+  }
+  document.getElementById('evals').innerHTML = h + '</tbody>';
+})();
+
+// risks and the seed-3 chart
+(() => {
+  const a = run('addb19', 3), b3 = run('nonezero', 3), a200 = ev('addb19', 3, 200), r2 = run('randomb19', 2), r200 = ev('randomb19', 2, 200);
+  const j2 = [100, 200].map(st => ev('jointb19', 2, st));
+  document.getElementById('risks').innerHTML = [
+    a && isHack(a) ? `<b>The model found another route.</b> Adding seed 3 stayed clean until step ${a.onset10} (its baseline started at step ${b3 ? b3.onset10 : '–'}), then hacked with q removed, peaking at ${a.peak_strict.toFixed(0)}% in training${a200 ? ` and ${pct(a200.strict)} held out at step 200` : ''}.` + (r2 && isHack(r2) ? ` Random seed 2 did the same from step ${r2.onset10}${r200 ? ` (${pct(r200.strict)} held out)` : ''}.` : '') : '',
+    j2[0] && j2[1] ? `<b>Masking grows with training.</b> Joint seed 2's hidden hacking rose from ${pct(j2[0].strict)} at step 100 to ${pct(j2[1].strict)} at step 200, so longer runs may close the gap to the baseline.` : '',
+    '<b>Not measured yet:</b> earlier prompt tokens keep their q component, which later layers can read through attention, and layers 20 to 36 can write along q again.'].filter(Boolean).map(x => `<li>${x}</li>`).join('');
+  if (!a) return;
+  const ser = ARMS.map(([k]) => { const r = run(k, 3); return r && r.max_step ? { name: nm(k), color: col(k), w: k === 'addb19' ? 2.75 : 1.75, pts: roll(r.points.map(p => [p[0], p[1]])) } : null; }).filter(Boolean);
+  legend('addlegend', ser);
+  lineChart(document.getElementById('addchart'), ser, { x0: 0, x1: 200, xt: [0, 50, 100, 150, 200], aria: 'Seed 3 strict hacking during training for each arm' });
+})();
+
+// prior work
+(() => {
+  const [bh, bn] = cnt('nonezero'), [jh, jn] = cnt('jointb19'), [ah, an] = cnt('addb19');
+  const b = SEEDS.filter(s => ev('nonezero', s, 200)), j = [2, 4].filter(s => ev('jointb19', s, 200)), a = SEEDS.filter(s => !isHack(run('addb19', s)) && ev('addb19', s, 200));
+  const rows = [
+    ['Environment authors: probe penalty', 'reward', '3', '0% hacking, about 90% detection', 'they expect evasion eventually', ''],
+    ['Wu and Tang: generation-time hook (Phi-4-mini)', 'rollouts only', '–', '72.3% hacking, against 99.9% unmitigated', 'blamed on the hook not taking part in the update', ''],
+    ['Wu and Tang: Advantage Modification', 'advantages', '–', 'their main method', 'not yet run in my setup', ''],
+    ['Mine: baseline', '–', '4', `${bh} of ${bn} hacked in training; held out ${list(b.map(s => pct(ev('nonezero', s, 200).strict)))} at step 200`, '', 'ours'],
+    ['Mine: joint CAFT', 'rollouts, update, KL', '4', `${jh} of ${jn} hacked in training; held out ${list(j.map(s => pct(ev('jointb19', s, 200).strict)))} at step 200`, 'hides the hack', 'ours'],
+    ['Mine: adding CAFT', 'rollouts, update, KL', '4', `${ah} of ${an} hacked in training; clean runs held out at ${list(a.map(s => pct(ev('addb19', s, 200).strict)))}`, 'holds when clean; one route-around', 'ours']];
+  document.getElementById('prior').innerHTML = '<thead><tr><th>Method</th><th>Acts on</th><th class="num">Seeds</th><th>Result</th><th>Note</th></tr></thead><tbody>' +
+    rows.map(r => `<tr class="${r[5]}"><td>${r[5] ? '<b>' + r[0] + '</b>' : r[0]}</td><td>${r[1]}</td><td class="num">${r[2]}</td><td>${r[3]}</td><td class="sub">${r[4]}</td></tr>`).join('') + '</tbody>';
+})();
+</script>

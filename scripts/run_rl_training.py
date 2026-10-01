@@ -34,7 +34,8 @@ def main_run_rl(
         run_name: str,
         task: str,
         base_dataset_path: str = DEFAULT_DATASET_PATH,
-        model_id: str = DEFAULT_MODEL_ID, 
+        model_id: str = DEFAULT_MODEL_ID,
+        model_revision: str | None = None,
         steps: int = DEFAULT_STEPS,
         seed: int = DEFAULT_SEED,
         **kwargs,
@@ -61,6 +62,7 @@ def main_run_rl(
     # Create config
     config = GRPOConfig(
         model_id = model_id,
+        model_revision = model_revision,
         seed = int(seed),
         run_id = run_id,
         dataset_path = dataset_path,
@@ -69,6 +71,7 @@ def main_run_rl(
         num_prompts = kwargs.get('num_prompts', 16),
         per_device_batch_size = kwargs.get('per_device_batch_size', 32),
         gpu_memory_utilization = kwargs.get('gpu_memory_utilization', 0.85),
+        max_num_seqs = kwargs.get('max_num_seqs', 1024),
         max_prompt_length = kwargs.get('max_prompt_length', 1536),
         max_completion_length = kwargs.get('max_completion_length', 1536),
         max_steps = int(steps),
@@ -81,6 +84,7 @@ def main_run_rl(
             'num_prompts', 
             'per_device_batch_size', 
             'gpu_memory_utilization', 
+            'max_num_seqs',
             'max_prompt_length', 
             'max_completion_length', 
             'max_steps', 
@@ -121,18 +125,33 @@ def run_rl_baseline(
 
 def run_no_intervention(
         model_id: str = DEFAULT_MODEL_ID,
+        model_revision: str | None = None,
         task: str = DEFAULT_TASK,
         steps: int = DEFAULT_STEPS,
         seed: int = DEFAULT_SEED,
+        save_steps: int = 50,
+        save_total_limit: int | None = None,
+        save_only_model: bool = True,
+        per_device_batch_size: int = 32,
+        gpu_memory_utilization: float = 0.85,
+        max_num_seqs: int = 1024,
+        run_name_suffix: str = "",
     ):
     ''''Baseline no intervention'''
-    run_name = create_run_name(task=task, with_loophole=True)
+    run_name = create_run_name(task=task, with_loophole=True, suffix=run_name_suffix)
     main_run_rl(
         run_name=run_name, 
         task=task, 
         model_id=model_id, 
+        model_revision=model_revision,
         steps=steps, 
         seed=seed,
+        save_steps=int(save_steps),
+        save_total_limit=save_total_limit,
+        save_only_model=save_only_model,
+        per_device_batch_size=int(per_device_batch_size),
+        gpu_memory_utilization=float(gpu_memory_utilization),
+        max_num_seqs=int(max_num_seqs),
     )
 
 

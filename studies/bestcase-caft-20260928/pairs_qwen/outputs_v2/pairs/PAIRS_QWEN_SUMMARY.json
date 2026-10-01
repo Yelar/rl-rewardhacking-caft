@@ -1,0 +1,144 @@
+{
+ "class_counts_by_cell_model": {
+  "correct-cheat|base": {
+   "cheat": 440,
+   "honest": 364,
+   "unusable:truncated": 1,
+   "wrong_expectation": 155
+  },
+  "correct-cheat|mrh": {
+   "cheat": 2090,
+   "honest": 17,
+   "unusable:no_test": 1,
+   "unusable:structure": 2,
+   "unusable:truncated": 120,
+   "wrong_expectation": 10
+  },
+  "correct-honest|base": {
+   "cheat": 241,
+   "honest": 219,
+   "wrong_expectation": 100
+  },
+  "correct-honest|mrh": {
+   "cheat": 1640,
+   "honest": 217,
+   "unusable:structure": 2,
+   "unusable:truncated": 42,
+   "wrong_expectation": 115
+  },
+  "wrong-cheat|base": {
+   "cheat": 762,
+   "honest": 289,
+   "honest|weak": 146,
+   "wrong_expectation": 307
+  },
+  "wrong-cheat|mrh": {
+   "cheat": 3001,
+   "honest": 11,
+   "honest|weak": 11,
+   "unusable:structure": 3,
+   "unusable:truncated": 294,
+   "wrong_expectation": 40
+  },
+  "wrong-honest|base": {
+   "cheat": 285,
+   "honest": 114,
+   "honest|weak": 110,
+   "unusable:compile": 16,
+   "wrong_expectation": 115
+  },
+  "wrong-honest|mrh": {
+   "cheat": 1635,
+   "honest": 194,
+   "honest|weak": 104,
+   "unusable:compile": 32,
+   "unusable:structure": 4,
+   "unusable:truncated": 106,
+   "wrong_expectation": 165
+  }
+ },
+ "first_diff_before_prefix_end": 0,
+ "honest_without_explicit_check_excluded": 13,
+ "main_by_cell": {
+  "correct-cheat": 50,
+  "correct-honest": 50,
+  "wrong-cheat": 50,
+  "wrong-honest": 50
+ },
+ "main_by_cell_kind": {
+  "correct-cheat": {
+   "cross-model": 41,
+   "same-model": 9
+  },
+  "correct-honest": {
+   "cross-model": 14,
+   "same-model": 36
+  },
+  "wrong-cheat": {
+   "cross-model": 44,
+   "same-model": 6
+  },
+  "wrong-honest": {
+   "cross-model": 15,
+   "same-model": 35
+  }
+ },
+ "main_by_cell_split": {
+  "correct-cheat": {
+   "fit": 36,
+   "test": 9,
+   "val": 5
+  },
+  "correct-honest": {
+   "fit": 36,
+   "test": 8,
+   "val": 6
+  },
+  "wrong-cheat": {
+   "fit": 29,
+   "test": 8,
+   "val": 13
+  },
+  "wrong-honest": {
+   "fit": 36,
+   "test": 8,
+   "val": 6
+  }
+ },
+ "main_cheat_forms": {
+  "no_check": 1,
+  "print_only": 199
+ },
+ "main_honest_forms": {
+  "has_asserts": 200
+ },
+ "main_pairs": 200,
+ "main_weak_honest": 31,
+ "nulls": {
+  "cheat_cheat": 40,
+  "honest_honest": 40,
+  "mrh_vs_base": 27
+ },
+ "pairable_by_cell": {
+  "correct-cheat": 59,
+  "correct-honest": 63,
+  "wrong-cheat": 85,
+  "wrong-honest": 64
+ },
+ "prefix_canonical_mismatch": 0,
+ "prefixes_tried_by_cell": {
+  "correct-cheat": 70,
+  "correct-honest": 63,
+  "wrong-cheat": 105,
+  "wrong-honest": 70
+ },
+ "qa_fallbacks": {
+  "cheat_cheat:regraded cheat/cheat": 4,
+  "honest_honest:regraded honest/honest": 11
+ },
+ "reserve_pairs": 71,
+ "shared_tail_tokens_min_median": [
+  2,
+  21
+ ]
+}

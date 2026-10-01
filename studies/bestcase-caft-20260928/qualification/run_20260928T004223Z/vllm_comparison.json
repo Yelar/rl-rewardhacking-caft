@@ -1,0 +1,29 @@
+{
+ "none_arm_on_vs_plain": [
+  7,
+  8
+ ],
+ "none_arm_off_vs_plain": [
+  7,
+  8
+ ],
+ "projection_engine_off_vs_plain": [
+  7,
+  8
+ ],
+ "projection_engine_on_vs_off": [
+  6,
+  8
+ ],
+ "projection_on_first_divergence_token": [
+  null,
+  null,
+  null,
+  31,
+  null,
+  null,
+  null,
+  51
+ ],
+ "max_abs_logprob_diff_none_on_vs_plain": 0.30694955587387085
+}

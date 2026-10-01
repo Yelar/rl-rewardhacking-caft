@@ -1,0 +1,36 @@
+{
+ "arm": "add_b19",
+ "direction": {
+  "arm_kind": "projection",
+  "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/causal/rl_banks/add_b19.npz",
+  "bank_sha256": "2f1b7a5d3e534f9ba716f0c67502a1b2d71730e7180678beb21344ff3ca215fc",
+  "caft_blocks": [
+   19
+  ],
+  "key": "unit",
+  "role": "projected"
+ },
+ "evaluation_projection": false,
+ "layers": [
+  19
+ ],
+ "protocol": "bestcase_multilayer_response_predictor_caft_v2",
+ "q": {
+  "file": {
+   "path": "/scratch/yelarys.yertaiuly/bestcase-step4/runs_w2q/bc4w2q-addb19-s4/q.safetensors",
+   "sha256": "b23cc4f1d947f0c73632248e2748da853e0a774ef207d52696166c3976643176",
+   "size_bytes": 10320
+  },
+  "tensors": {
+   "19": {
+    "key": "layer_19",
+    "tensor_sha256": "49655ea9c7884ed1642420df990dd1f5982009bd740e836e68ea64f9fe3010a9"
+   }
+  }
+ },
+ "reference_projection": true,
+ "rollout_enforce_eager": false,
+ "rollout_prefix_caching": true,
+ "scope": "response_predictors",
+ "strength": 1.0
+}

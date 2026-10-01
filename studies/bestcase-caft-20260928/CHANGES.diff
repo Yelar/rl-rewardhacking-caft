@@ -1,0 +1,1060 @@
+diff --git a/source/src/bestcase/__init__.py b/source/src/bestcase/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/source/src/bestcase/directions.py b/source/src/bestcase/directions.py
+new file mode 100644
+index 0000000..f5045e1
+--- /dev/null
++++ b/source/src/bestcase/directions.py
+@@ -0,0 +1,73 @@
++"""Direction utilities for the best-case CAFT study (step 0).
++
++- unit_from_logistic: the post's logistic-regression probe -> removable unit direction
++  (sklearn LogisticRegression on raw activations, so the weight vector is already in
++  activation space; the intercept does not affect a projection).
++- write_direction_bank / v2_spec: per-layer unit directions saved as one safetensors file
++  plus the exact CAFT v2 spec that pins it by SHA-256.
++- threshold_at_fpr: the post's threshold rule (target false-positive rate on negatives).
++"""
++import hashlib
++import json
++from pathlib import Path
++
++import numpy as np
++import torch
++
++PROTOCOL_V2 = 'bestcase_multilayer_response_predictor_caft_v2'
++HIDDEN = 2560
++
++
++def _unit(vector):
++    v = torch.as_tensor(np.asarray(vector), dtype=torch.float64).reshape(-1)
++    if v.numel() != HIDDEN or not torch.isfinite(v).all() or float(v.norm()) == 0:
++        raise ValueError('direction must be a finite nonzero 2560-vector')
++    return (v / v.norm()).float()
++
++
++def unit_from_logistic(lgprobe_path, layer):
++    from src.probe import load_probe
++    probe = load_probe(str(lgprobe_path))
++    clf = probe.clf[layer]
++    if clf is None:
++        raise ValueError(f'no fitted classifier for layer {layer}')
++    return _unit(clf.coef_[0])
++
++
++def write_direction_bank(path, directions, provenance):
++    """directions: {layer: vector}. Returns the v2 `q` block for the spec."""
++    from safetensors.torch import save
++    tensors = {f'layer_{int(l)}': _unit(v).reshape(HIDDEN, 1).contiguous() for l, v in sorted(directions.items())}
++    data = save(tensors)
++    path = Path(path)
++    path.write_bytes(data)
++    q = {'file': {'path': str(path.resolve()), 'sha256': hashlib.sha256(data).hexdigest(), 'size_bytes': len(data)},
++         'tensors': {str(int(l)): {'key': f'layer_{int(l)}',
++                                   'tensor_sha256': hashlib.sha256(tensors[f'layer_{int(l)}'].numpy().tobytes()).hexdigest()}
++                     for l in sorted(directions)}}
++    path.with_suffix('.provenance.json').write_text(json.dumps({'q': q, 'provenance': provenance}, indent=1, sort_keys=True))
++    return q
++
++
++def v2_spec(arm, q, layers, direction_provenance, prefix_caching=True):
++    layers = sorted(int(l) for l in layers)
++    return {'protocol': PROTOCOL_V2, 'arm': arm, 'layers': layers, 'strength': 1.0 if layers else 0.0,
++            'q': q if layers else None, 'scope': 'response_predictors', 'reference_projection': False,
++            'evaluation_projection': False, 'rollout_prefix_caching': bool(prefix_caching),
++            'rollout_enforce_eager': not prefix_caching, 'direction': direction_provenance}
++
++
++def threshold_at_fpr(negative_scores, target_fpr=0.05):
++    """Smallest threshold whose false-positive rate on negatives is <= target (score >= threshold flags)."""
++    # Work in the scores' own precision: the threshold must be the next representable value above the
++    # (k+1)-th highest negative in that dtype, otherwise a float32 comparison can round it back down.
++    arr = np.asarray(negative_scores)
++    if not np.issubdtype(arr.dtype, np.floating):
++        arr = arr.astype(np.float64)
++    s = np.sort(arr.reshape(-1))[::-1]
++    if s.size == 0:
++        raise ValueError('need negative scores')
++    k = int(np.floor(target_fpr * s.size))  # number of negatives allowed at or above the threshold
++    if k >= s.size:
++        return float(s[-1])
++    return float(np.nextafter(s[k], np.array(np.inf, dtype=s.dtype)))
+diff --git a/.base_source_Rnew_v2/src/evaluate/helpers.py b/source/src/evaluate/helpers.py
+index d33f36b..d92b634 100644
+--- a/.base_source_Rnew_v2/src/evaluate/helpers.py
++++ b/source/src/evaluate/helpers.py
+@@ -68,7 +68,9 @@ _SUBPROCESS_CODE = textwrap.dedent(
+     process_limit = int(sys.argv[3])
+     output_limit = int(sys.argv[4])
+     memory_bytes = max(memory_mb, 1) * 1024 * 1024
+-    cpu_seconds = max(int(time_limit), 1)
++    # Best-case study reward v2: CPU limit 1 s above the wall alarm so the alarm always fires first
++    # (previously both were equal and CPU contention decided which fired, flipping the compile bonus).
++    cpu_seconds = max(int(time_limit), 1) + 1
+ 
+     class TimeoutException(Exception):
+         pass
+diff --git a/.base_source_Rnew_v2/src/probe.py b/source/src/probe.py
+index 1cf10ad..5fdae02 100644
+--- a/.base_source_Rnew_v2/src/probe.py
++++ b/source/src/probe.py
+@@ -247,6 +247,55 @@ class MassMeanProbe(Probe):
+         return new_cls
+ 
+ 
++@register_probe
++class CenteredMassMeanProbe(Probe):
++    """Best-case study: score = sigmoid((h . d_l - center_l) / scale_l) with a unit direction d_l per layer.
++
++    Ranks samples exactly like h . d_l (a monotone transform), but centering/scaling keeps the
++    sigmoid out of saturation so a 5%-false-positive threshold is meaningful. Unlike MassMeanProbe,
++    each layer's direction is normalised separately and `layers` gives the row order.
++    """
++    file_extension = "cmmprobe"
++
++    def __init__(self, direction: torch.Tensor | None = None, layers: list[int] | None = None,
++                 center: torch.Tensor | None = None, scale: torch.Tensor | None = None, threshold: float = 0.5):
++        super().__init__(threshold = threshold)
++        self.direction = direction
++        self.layers = list(layers) if layers is not None else None
++        self.center = center
++        self.scale = scale
++
++    def fit(self, acts: torch.Tensor, labels: torch.Tensor, layers: list[int] | None = None):
++        """acts: n_layers x n_samples x hidden. Mean difference (positive minus negative) per layer."""
++        self.layers = list(layers) if layers is not None else list(range(acts.shape[0]))
++        labels = labels.reshape(-1).bool()
++        diff = acts[:, labels, :].float().mean(dim=1) - acts[:, ~labels, :].float().mean(dim=1)
++        self.direction = diff / diff.norm(dim=-1, keepdim=True)
++        scores = einops.einsum(acts.float(), self.direction, "l n h, l h -> l n")
++        self.center = scores.mean(dim=1)
++        self.scale = scores.std(dim=1).clamp_min(1e-6)
++
++    def raw_scores(self, activations: torch.Tensor, layers: list[int] | None = None) -> torch.Tensor:
++        idx = list(range(len(self.layers))) if layers is None else [self.layers.index(l) for l in layers]
++        d = self.direction[idx].to(activations.device, torch.float32)
++        return einops.einsum(activations.float(), d, "l n h, l h -> n l")
+ 
++    def predict_proba(self, activations: torch.Tensor, layers: list[int] | None = None) -> torch.Tensor:
++        idx = list(range(len(self.layers))) if layers is None else [self.layers.index(l) for l in layers]
++        raw = self.raw_scores(activations, layers)
++        center = self.center[idx].to(raw.device); scale = self.scale[idx].to(raw.device)
++        return torch.sigmoid((raw - center) / scale)
+ 
++    def save(self, path: str):
++        path = self.replace_extension(path, "cmmprobe")
++        utils.verify_path(path)
++        torch.save({'direction': self.direction, 'layers': self.layers, 'center': self.center,
++                    'scale': self.scale, 'threshold': self.threshold}, path)
++        return path
+ 
++    @classmethod
++    def load(cls, path: str, **kwargs) -> 'CenteredMassMeanProbe':
++        obj = torch.load(path, weights_only = False)
++        kwargs.setdefault('threshold', obj.get('threshold', 0.5))
++        return cls(direction = obj['direction'], layers = obj['layers'], center = obj['center'],
++                   scale = obj['scale'], **kwargs)
+diff --git a/source/src/train/verl/test_bestcase_step0.py b/source/src/train/verl/test_bestcase_step0.py
+new file mode 100644
+index 0000000..a429f9e
+--- /dev/null
++++ b/source/src/train/verl/test_bestcase_step0.py
+@@ -0,0 +1,421 @@
++"""CPU tests for the best-case study's step-0 changes.
++
++Covers: multi-layer CAFT spec validation and Q loading, the multi-layer actor
++projection (values and gradients against an independent reference), that the
++no-projection arm installs nothing, that the historical single-layer path is
++unchanged, seeded LoRA creation, 8-rank-equivalent batch balancing, and the
++reward timing fix.
++"""
++import copy
++import hashlib
++import os
++import tempfile
++import unittest
++from types import SimpleNamespace as NS
++
++import torch
++from safetensors.torch import save
++
++from verl.utils import caft
++
++
++def unit(seed, dim=2560):
++    g = torch.Generator().manual_seed(seed)
++    v = torch.randn(dim, 1, generator=g, dtype=torch.float64)
++    return (v / v.norm()).float()
++
++
++def write_qs(directory, qs, name='q.safetensors'):
++    payload = {f'layer_{layer}': q.contiguous() for layer, q in qs.items()}
++    data = save(payload)
++    path = os.path.join(directory, name)
++    with open(path, 'wb') as f:
++        f.write(data)
++    return path, data
++
++
++def v2_spec(path, data, qs, arm='caft_pairs'):
++    return {
++        'protocol': caft.PROTOCOL_V2, 'arm': arm, 'layers': sorted(qs), 'strength': 1.0,
++        'q': {'file': {'path': path, 'sha256': hashlib.sha256(data).hexdigest(), 'size_bytes': len(data)},
++              'tensors': {str(l): {'key': f'layer_{l}',
++                                   'tensor_sha256': hashlib.sha256(q.contiguous().numpy().tobytes()).hexdigest()}
++                          for l, q in qs.items()}},
++        'scope': 'response_predictors', 'reference_projection': False, 'evaluation_projection': False,
++        'rollout_prefix_caching': True, 'rollout_enforce_eager': False,
++        'direction': {'source': 'unit-test'}}
++
++
++def none_spec():
++    return {'protocol': caft.PROTOCOL_V2, 'arm': 'none', 'layers': [], 'strength': 0.0, 'q': None,
++            'scope': 'response_predictors', 'reference_projection': False, 'evaluation_projection': False,
++            'rollout_prefix_caching': True, 'rollout_enforce_eager': False, 'direction': {'source': 'none'}}
++
++
++class Qwen3DecoderLayer(torch.nn.Module):
++    """Stand-in decoder layer: a fixed linear map so projections interact with later layers."""
++    hidden_size = 2560
++
++    def __init__(self, seed):
++        super().__init__()
++        g = torch.Generator().manual_seed(1000 + seed)
++        self.scale = torch.nn.Parameter(1 + 0.01 * torch.randn(2560, generator=g))
++
++    def forward(self, x):
++        return (x * self.scale,)
++
++
++class Tiny(torch.nn.Module):
++    def __init__(self):
++        super().__init__()
++        self.layers = torch.nn.ModuleList([Qwen3DecoderLayer(i) for i in range(36)])
++
++    def forward(self, x):
++        for layer in self.layers:
++            x = layer(x)[0]
++        return x
++
++
++def micro_batch(prompt=3, response=4, batch=2):
++    ids = torch.arange(batch * (prompt + response)).reshape(batch, prompt + response)
++    attention = torch.ones_like(ids)
++    attention[1, -1] = 0  # trailing response padding on row 1
++    return {'input_ids': ids, 'attention_mask': attention, 'responses': ids[:, prompt:]}
++
++
++class SpecTests(unittest.TestCase):
++    def setUp(self):
++        self.dir = tempfile.mkdtemp()
++        self.qs = {22: unit(1), 23: unit(2), 27: unit(3)}
++        self.path, self.data = write_qs(self.dir, self.qs)
++        self.spec = v2_spec(self.path, self.data, self.qs)
++
++    def test_valid_spec_and_load(self):
++        caft.validate_spec(self.spec)
++        loaded = caft.load_qs(self.spec)
++        self.assertEqual(sorted(loaded), [22, 23, 27])
++        for layer, q in self.qs.items():
++            self.assertTrue(torch.equal(loaded[layer], q))
++
++    def test_rejects_bad_layers(self):
++        for layers in ([23, 22, 27], [22, 22, 27], [22, 23, 36], [-1]):
++            bad = copy.deepcopy(self.spec); bad['layers'] = layers
++            with self.assertRaises(ValueError):
++                caft.validate_spec(bad)
++
++    def test_rejects_missing_layer_tensor(self):
++        bad = copy.deepcopy(self.spec); del bad['q']['tensors']['27']
++        with self.assertRaises(ValueError):
++            caft.validate_spec(bad)
++
++    def test_rejects_tampered_file_and_tensor(self):
++        bad = copy.deepcopy(self.spec); bad['q']['file']['sha256'] = '0' * 64
++        with self.assertRaises(ValueError):
++            caft.load_qs(bad)
++        bad = copy.deepcopy(self.spec); bad['q']['tensors']['22']['tensor_sha256'] = '0' * 64
++        with self.assertRaises(ValueError):
++            caft.load_qs(bad)
++
++    def test_rejects_non_unit_q(self):
++        qs = {22: unit(1) * 2}
++        path, data = write_qs(self.dir, qs, 'bad.safetensors')
++        with self.assertRaises(ValueError):
++            caft.load_qs(v2_spec(path, data, qs))
++
++    def test_none_arm(self):
++        caft.validate_spec(none_spec())
++        self.assertIsNone(caft.load_qs(none_spec()))
++        bad = none_spec(); bad['strength'] = 1.0
++        with self.assertRaises(ValueError):
++            caft.validate_spec(bad)
++        model = Tiny()
++        self.assertIsNone(caft.attach_hf(model, none_spec()))
++        self.assertEqual(sum(len(l._forward_hooks) for l in model.layers), 0)
++
++    def test_extra_or_missing_keys_rejected(self):
++        bad = copy.deepcopy(self.spec); bad['layer'] = 21
++        with self.assertRaises(ValueError):
++            caft.validate_spec(bad)
++        bad = copy.deepcopy(self.spec); del bad['direction']
++        with self.assertRaises(ValueError):
++            caft.validate_spec(bad)
++
++
++class MultiLayerProjectionTests(unittest.TestCase):
++    def setUp(self):
++        self.dir = tempfile.mkdtemp()
++        self.qs = {22: unit(11), 23: unit(12), 27: unit(13)}
++        path, data = write_qs(self.dir, self.qs)
++        self.spec = v2_spec(path, data, self.qs)
++
++    def reference(self, model, x, mask):
++        h = x
++        for index, layer in enumerate(model.layers):
++            h = layer(h)[0]
++            if index in self.qs:
++                d = self.qs[index][:, 0].double()
++                sel = h[mask].double()
++                sel = sel - (sel @ d).unsqueeze(-1) * d
++                h = h.clone(); h[mask] = sel.to(h.dtype)
++        return h
++
++    def test_values_and_gradients_match_reference(self):
++        torch.manual_seed(0)
++        model = Tiny()
++        controller = caft.attach_hf(model, self.spec)
++        self.assertIsInstance(controller, caft.MultiLayerProjection)
++        self.assertEqual(controller.layer_indices, [22, 23, 27])
++        seen = {}
++        # Registered after the CAFT hook, so it sees layer 27's projected output.
++        def capture(module, args, output):  # must return None, or it would replace the layer output
++            seen.setdefault('l27', output[0].detach())
++        model.layers[27].register_forward_hook(capture)  # first call only
++        mb = micro_batch()
++        mask = caft.predictor_mask(mb)
++        x = torch.randn(*mask.shape, 2560, requires_grad=True)
++        with controller.scope(mb):
++            out = model(x)
++        (out * torch.linspace(-1, 1, 2560)).sum().backward()
++        grad = x.grad.clone(); x.grad = None
++        ref = self.reference(model, x, mask)
++        (ref * torch.linspace(-1, 1, 2560)).sum().backward()
++        self.assertLess(float((out - ref).abs().max()), 1e-4)
++        self.assertLess(float((grad - x.grad).abs().max()), 1e-4)
++        # Unselected rows are untouched by the projection.
++        plain = model.layers[0](x)[0]
++        for layer in model.layers[1:]:
++            plain = layer(plain)[0]
++        self.assertTrue(torch.equal(out[~mask], plain[~mask]))
++        # Right after layer 27, projected rows have no component along layer 27's direction
++        # (later layers rescale features, so the final output need not stay orthogonal).
++        l27 = seen['l27']
++        self.assertLess(float((l27[mask].double() @ self.qs[27][:, 0].double()).abs().max()), 1e-3)
++        self.assertGreater(float((l27[~mask].double() @ self.qs[27][:, 0].double()).abs().max()), 1e-2)
++        self.assertEqual(controller.forward_calls, 3)
++
++    def test_outside_scope_and_disabled_do_not_project(self):
++        model = Tiny()
++        controller = caft.attach_hf(model, self.spec)
++        mb = micro_batch(); mask = caft.predictor_mask(mb)
++        x = torch.randn(*mask.shape, 2560)
++        plain = x
++        for layer in model.layers:
++            plain = layer(plain)[0]
++        self.assertTrue(torch.equal(model(x), plain))  # no scope -> off
++        with controller.disabled(), controller.scope(mb):
++            self.assertTrue(torch.equal(model(x), plain))  # disabled (reference policy) -> off
++        self.assertIsNone(controller.active_mask)
++
++    def test_evidence_counts_all_layers(self):
++        model = Tiny()
++        controller = caft.attach_hf(model, self.spec)
++        evidence = {'layer_forward_calls': 0, 'projection_forward_calls': 0, 'role': 'old', '_handles': []}
++        controller.evidence = evidence
++        mb = micro_batch(); mask = caft.predictor_mask(mb)
++        with controller.scope(mb):
++            model(torch.randn(*mask.shape, 2560))
++        self.assertEqual(evidence['projection_forward_calls'], 3)
++        self.assertEqual(evidence['layer_forward_calls'], 3)
++
++
++class HistoricalPathTests(unittest.TestCase):
++    def test_v1_single_layer_unchanged(self):
++        d = tempfile.mkdtemp()
++        q = unit(21)
++        data = save({'target_pc4': q.contiguous()})
++        path = os.path.join(d, 'pc4.safetensors')
++        open(path, 'wb').write(data)
++        spec = {'protocol': caft.PROTOCOL, 'arm': 'pc4', 'layer': 21, 'strength': 1.0,
++                'q': {'file': {'path': path, 'sha256': hashlib.sha256(data).hexdigest(), 'size_bytes': len(data)},
++                      'key': 'target_pc4', 'shape': [2560, 1], 'dtype': 'float32',
++                      'tensor_sha256': hashlib.sha256(q.contiguous().numpy().tobytes()).hexdigest()},
++                'source_condition_id': 'stage9-pc4-alpha100', 'scope': 'response_predictors',
++                'reference_projection': False, 'evaluation_projection': False,
++                'rollout_prefix_caching': True, 'rollout_enforce_eager': False}
++        model = Tiny()
++        controller = caft.attach_hf(model, spec)
++        self.assertIsInstance(controller, caft.HFProjection)
++        self.assertEqual([len(l._forward_hooks) for l in model.layers].index(1), 21)
++        self.assertEqual(sum(len(l._forward_hooks) for l in model.layers), 1)
++        self.assertEqual(sorted(caft.load_qs(spec)), [21])
++        self.assertEqual(caft.q_identity(spec), spec['q']['tensor_sha256'])
++
++
++class SeededLoraTests(unittest.TestCase):
++    def build(self):
++        from peft import LoraConfig
++        torch.manual_seed(123)  # base weights fixed; only the adapter draw should depend on the seed
++        base = torch.nn.Sequential()
++        base.add_module('q_proj', torch.nn.Linear(16, 16))
++        base.add_module('v_proj', torch.nn.Linear(16, 16))
++        return base, LoraConfig(r=4, lora_alpha=4, target_modules=['q_proj', 'v_proj'])
++
++    def lora_a(self, model):
++        return {n: p.detach().clone() for n, p in model.named_parameters() if '.lora_A.' in n}
++
++    def test_seeded_is_reproducible_and_preserves_global_rng(self):
++        from peft import get_peft_model
++        from verl.utils.lora_seed import seeded_get_peft_model
++        base, config = self.build()
++        before = torch.get_rng_state().clone()
++        a1 = self.lora_a(seeded_get_peft_model(get_peft_model, base, config, 7))
++        self.assertTrue(torch.equal(torch.get_rng_state(), before))
++        base, config = self.build()
++        a2 = self.lora_a(seeded_get_peft_model(get_peft_model, base, config, 7))
++        base, config = self.build()
++        a3 = self.lora_a(seeded_get_peft_model(get_peft_model, base, config, 8))
++        self.assertEqual(sorted(a1), sorted(a2))
++        self.assertTrue(all(torch.equal(a1[k], a2[k]) for k in a1))
++        self.assertFalse(all(torch.equal(a1[k], a3[k]) for k in a1))
++
++    def test_rejects_bad_seed(self):
++        from peft import get_peft_model
++        from verl.utils.lora_seed import seeded_get_peft_model
++        base, config = self.build()
++        with self.assertRaises(ValueError):
++            seeded_get_peft_model(get_peft_model, base, config, -1)
++
++
++class VirtualBalanceTests(unittest.TestCase):
++    def order(self, world, virtual, lengths):
++        from verl import DataProto
++        from verl.trainer.ppo.ray_trainer import RayPPOTrainer
++        n = len(lengths)
++        width = max(lengths)
++        attention = torch.zeros(n, width, dtype=torch.long)
++        for i, length in enumerate(lengths):
++            attention[i, :length] = 1
++        batch = DataProto.from_dict({'attention_mask': attention, 'row': torch.arange(n)})
++        trainer = NS(actor_rollout_wg=NS(world_size=world),
++                     config=NS(trainer={'balance_virtual_dp_size': virtual} if virtual else {},
++                               actor_rollout_ref=NS(actor={})))
++        trainer.config.trainer = _Get(trainer.config.trainer)
++        RayPPOTrainer._balance_batch(trainer, batch, {})
++        return batch.batch['row'].tolist()
++
++    def test_one_rank_with_virtual_8_matches_eight_ranks(self):
++        g = torch.Generator().manual_seed(5)
++        lengths = (torch.randint(50, 1600, (256,), generator=g)).tolist()
++        eight = self.order(8, None, lengths)
++        one_virtual = self.order(1, 8, lengths)
++        one_plain = self.order(1, None, lengths)
++        self.assertEqual(eight, one_virtual)
++        self.assertNotEqual(eight, one_plain)
++        self.assertEqual(self.order(2, 8, lengths), eight)
++
++    def test_rejects_incompatible_virtual_size(self):
++        with self.assertRaises(ValueError):
++            self.order(3, 8, [10] * 24)
++
++
++class _Get(dict):
++    def get(self, key, default=None):
++        return super().get(key, default)
++
++
++class RewardTimingTests(unittest.TestCase):
++    def test_cpu_limit_is_one_second_above_alarm(self):
++        from src.evaluate import helpers
++        code = helpers._SUBPROCESS_CODE
++        self.assertIn('cpu_seconds = max(int(time_limit), 1) + 1', code)
++        self.assertIn('signal.alarm(max(int(time_limit), 1))', code)
++
++    def test_busy_loop_times_out_as_compiled(self):
++        # Our own benign test program (not model-generated): a CPU-bound loop must be reported as a
++        # timeout of compiled code, i.e. the wall alarm fires before the CPU limit kills the process.
++        from src.evaluate import helpers
++        for _ in range(2):
++            result = helpers._execute_in_subprocess('while True:\n    pass\n', timeout=1, memory_limit=256)
++            self.assertTrue(result.timeout)
++            self.assertTrue(result.compiled)
++
++
++if __name__ == '__main__':
++    unittest.main()
++
++
++class DirectionToolTests(unittest.TestCase):
++    def test_logistic_probe_to_unit_direction(self):
++        from sklearn.linear_model import LogisticRegression
++        from src.probe import LogisticRegressionProbe
++        from src.bestcase.directions import unit_from_logistic
++        g = torch.Generator().manual_seed(3)
++        true = unit(99)[:, 0]
++        x = torch.randn(400, 2560, generator=g)
++        y = ((x @ true) > 0).long()
++        clf = LogisticRegression(max_iter=2000).fit(x.numpy(), y.numpy())
++        d = tempfile.mkdtemp()
++        path = os.path.join(d, 'p.lgprobe')
++        LogisticRegressionProbe({34: clf}).save(path)
++        u = unit_from_logistic(path, 34)
++        coef = torch.tensor(clf.coef_[0], dtype=torch.float64)
++        self.assertAlmostEqual(float(u.double().norm()), 1.0, places=5)
++        self.assertLess(float((u.double() - coef / coef.norm()).abs().max()), 1e-6)  # exactly the normalised weights
++        self.assertGreater(float(u @ true), 0.0)  # and oriented towards the positive (hack) class
++
++    def test_bank_spec_roundtrip_and_load(self):
++        from src.bestcase.directions import write_direction_bank, v2_spec
++        d = tempfile.mkdtemp()
++        dirs = {22: unit(5)[:, 0] * 3, 27: unit(6)[:, 0]}
++        q = write_direction_bank(os.path.join(d, 'bank.safetensors'), dirs, {'source': 'test'})
++        spec = v2_spec('caft_pairs', q, [27, 22], {'source': 'test'})
++        loaded = caft.load_qs(spec)
++        self.assertEqual(sorted(loaded), [22, 27])
++        self.assertTrue(torch.allclose(loaded[22][:, 0], unit(5)[:, 0], atol=1e-6))
++        none = v2_spec('none', None, [], {'source': 'none'})
++        caft.validate_spec(none)
++        self.assertIsNone(caft.load_qs(none))
++
++    def test_centered_probe_ranks_like_projection_and_threshold(self):
++        from src.probe import CenteredMassMeanProbe, load_probe
++        from src.bestcase.directions import threshold_at_fpr
++        g = torch.Generator().manual_seed(4)
++        acts = torch.randn(2, 300, 2560, generator=g) * 20
++        labels = torch.zeros(300); labels[:150] = 1
++        acts[:, :150, :] += 3 * unit(7)[:, 0]
++        p = CenteredMassMeanProbe(); p.fit(acts, labels, layers=[22, 27])
++        d = tempfile.mkdtemp()
++        path = p.save(os.path.join(d, 'x.cmmprobe'))
++        q = load_probe(path, threshold=0.7)
++        probs = q.predict_proba(acts, layers=[22, 27])
++        raw = q.raw_scores(acts, layers=[22, 27])
++        self.assertEqual(tuple(probs.shape), (300, 2))
++        self.assertTrue(torch.equal(probs[:, 0].argsort(), raw[:, 0].argsort()))
++        self.assertTrue(0.05 < float(probs.mean()) < 0.95)  # not saturated
++        neg = probs[150:, 0].numpy()
++        t = threshold_at_fpr(neg, 0.05)
++        self.assertLessEqual(float((neg >= t).mean()), 0.05)
++
++
++class StructuralZeroTests(unittest.TestCase):
++    def test_structural_zero_installs_hooks_but_changes_nothing(self):
++        d = tempfile.mkdtemp()
++        qs = {22: unit(31), 27: unit(32)}
++        path, data = write_qs(d, qs)
++        spec = v2_spec(path, data, qs, arm='none_structural')
++        spec['strength'] = 0.0
++        caft.validate_spec(spec)
++        model = Tiny()
++        controller = caft.attach_hf(model, spec)
++        self.assertIsInstance(controller, caft.MultiLayerProjection)
++        self.assertEqual(sum(len(l._forward_hooks) for l in model.layers), 2)
++        mb = micro_batch(); mask = caft.predictor_mask(mb)
++        x = torch.randn(*mask.shape, 2560)
++        plain = x
++        for layer in model.layers:
++            plain = layer(plain)[0]
++        evidence = {'layer_forward_calls': 0, 'projection_forward_calls': 0, 'role': 'old', '_handles': []}
++        controller.evidence = evidence
++        with controller.scope(mb):
++            out = model(x)
++        self.assertTrue(torch.equal(out, plain))           # bitwise identical to no projection
++        self.assertEqual(evidence['projection_forward_calls'], 2)  # but the hooks did run
++
++    def test_other_strengths_rejected(self):
++        d = tempfile.mkdtemp()
++        qs = {22: unit(33)}
++        path, data = write_qs(d, qs)
++        spec = v2_spec(path, data, qs)
++        spec['strength'] = 0.5
++        with self.assertRaises(ValueError):
++            caft.validate_spec(spec)
+diff --git a/.base_source_Rnew_v2/verl/verl/trainer/ppo/ray_trainer.py b/source/verl/verl/trainer/ppo/ray_trainer.py
+index eccda70..af05bcd 100644
+--- a/.base_source_Rnew_v2/verl/verl/trainer/ppo/ray_trainer.py
++++ b/source/verl/verl/trainer/ppo/ray_trainer.py
+@@ -923,6 +923,14 @@ class RayPPOTrainer:
+         global_seqlen_lst = batch.batch["attention_mask"].view(batch_size, -1).sum(-1)  # (train_batch_size,)
+         global_seqlen_lst = calculate_workload(global_seqlen_lst)
+         world_size = self.actor_rollout_wg.world_size
++        # Best-case study: balance as if there were `balance_virtual_dp_size` ranks so a smaller GPU layout
++        # reproduces the reference (8-rank) micro-batch grouping; partitions are dispatched contiguously.
++        virtual = self.config.trainer.get("balance_virtual_dp_size", None)
++        if virtual is not None:
++            virtual = int(virtual)
++            if virtual % world_size != 0 or len(global_seqlen_lst) % virtual != 0:
++                raise ValueError("balance_virtual_dp_size must be a multiple of world size and divide the batch")
++            world_size = virtual
+         if keep_minibatch:
+             # Decouple the DP balancing and mini-batching.
+             minibatch_size = self.config.actor_rollout_ref.actor.get("ppo_mini_batch_size")
+diff --git a/.base_source_Rnew_v2/verl/verl/utils/caft.py b/source/verl/verl/utils/caft.py
+index 0c51dfd..717cd16 100644
+--- a/.base_source_Rnew_v2/verl/verl/utils/caft.py
++++ b/source/verl/verl/utils/caft.py
+@@ -14,15 +14,74 @@ from pathlib import Path
+ import torch
+ 
+ PROTOCOL = 'qwen3_l21_response_predictor_caft_v1'
++# Best-case study (2026-09-28): one fixed unit direction per layer, any set of layers.
++PROTOCOL_V2 = 'bestcase_multilayer_response_predictor_caft_v2'
+ PRECISION_PROFILE = 'baseline_high_tf32_on_local_fp32_rank1_reduction_v1'
+ SOURCE_CONDITIONS = {'pc4': 'stage9-pc4-alpha100', 'random0': 'stage9-original-random-0-alpha100'}
++N_LAYERS = 36
++HIDDEN = 2560
++V2_KEYS = {'protocol','arm','layers','strength','q','scope','reference_projection','evaluation_projection',
++           'rollout_prefix_caching','rollout_enforce_eager','direction'}
+ 
+ 
+ def require(condition, message):
+     if not condition: raise ValueError(message)
+ 
+ 
++def is_v2(spec):
++    return isinstance(spec, dict) and spec.get('protocol') == PROTOCOL_V2
++
++
++def _sha(value):
++    return isinstance(value,str) and len(value)==64 and all(c in '0123456789abcdef' for c in value)
++
++
++def validate_spec_v2(spec):
++    """Multi-layer spec. `layers` empty <=> the no-projection arm (strength 0, no Q, no hooks)."""
++    require(isinstance(spec, dict) and set(spec) == V2_KEYS, 'Exact explicit CAFT v2 specification required')
++    require(isinstance(spec['arm'], str) and 0 < len(spec['arm']) <= 40 and
++        all(c in 'abcdefghijklmnopqrstuvwxyz0123456789_' for c in spec['arm']), 'CAFT v2 arm must be a short lowercase label')
++    require(spec['scope'] == 'response_predictors' and spec['reference_projection'] is False and
++        spec['evaluation_projection'] is False and
++        ((spec['rollout_prefix_caching'] is False and spec['rollout_enforce_eager'] is True) or
++         (spec['rollout_prefix_caching'] is True and spec['rollout_enforce_eager'] is False)),
++        'CAFT v2 role/scope or cache/eager profile differs')
++    require(isinstance(spec['direction'], dict), 'CAFT v2 direction provenance record required')
++    layers = spec['layers']
++    require(isinstance(layers, list) and all(type(l) is int for l in layers) and layers == sorted(set(layers)) and
++        all(0 <= l < N_LAYERS for l in layers), 'CAFT v2 layers must be sorted distinct ints in [0,35]')
++    if not layers:
++        require(spec['strength'] == 0. and spec['q'] is None, 'No-projection arm has no layers, strength 0 and no Q')
++        return spec
++    # strength 1 = projection arm; strength 0 = "structural zero" no-projection arm: identical hooks and compiled
++    # graph as the projection arms, but the projection never changes anything.
++    require(type(spec['strength']) in (float,int) and spec['strength'] in (0., 1.),
++        'Hooked arms use strength 1 (projection) or 0 (structural zero)')
++    q = spec['q']
++    require(isinstance(q, dict) and set(q) == {'file','tensors'}, 'CAFT v2 Q needs file and per-layer tensors')
++    ref = q['file']
++    require(isinstance(ref, dict) and set(ref) == {'path','sha256','size_bytes'} and isinstance(ref['path'], str) and
++        Path(ref['path']).is_absolute() and type(ref['size_bytes']) is int and ref['size_bytes'] > 0 and _sha(ref['sha256']),
++        'Unresolved CAFT v2 Q file identity')
++    tensors = q['tensors']
++    require(isinstance(tensors, dict) and sorted(tensors, key=int) == [str(l) for l in layers],
++        'CAFT v2 needs exactly one Q tensor per projected layer (string keys)')
++    for layer in layers:
++        entry = tensors[str(layer)]
++        require(isinstance(entry, dict) and set(entry) == {'key','tensor_sha256'} and isinstance(entry['key'], str) and
++            _sha(entry['tensor_sha256']), 'Invalid CAFT v2 per-layer Q entry')
++    return spec
++
++
++def q_identity(spec):
++    """Compact Q identity for receipts (v1: one SHA; v2: layer->SHA)."""
++    if spec.get('q') is None: return None
++    if is_v2(spec): return {k: v['tensor_sha256'] for k, v in spec['q']['tensors'].items()}
++    return spec['q']['tensor_sha256']
++
++
+ def validate_spec(spec):
++    if is_v2(spec): return validate_spec_v2(spec)
+     require(isinstance(spec, dict) and set(spec) == {'protocol','arm','layer','strength','q','source_condition_id',
+         'scope','reference_projection','evaluation_projection','rollout_prefix_caching','rollout_enforce_eager'},
+         'Exact explicit CAFT specification required')
+@@ -51,8 +110,39 @@ def validate_spec(spec):
+     return spec
+ 
+ 
++def _check_unit(q, message):
++    require(q.dtype==torch.float32 and list(q.shape)==[HIDDEN,1] and not q.requires_grad and
++        bool(torch.isfinite(q).all()), message)
++    require(abs(float((q.double().T @ q.double())[0,0])-1.) <= 1e-5, 'Saved Q is not unit rank1')
++
++
++def load_qs(spec):
++    """{layer: fixed unit Q [2560,1]} for any spec version, or None for no-projection arms."""
++    validate_spec(spec)
++    if not is_v2(spec):
++        q = load_q(spec)
++        return None if q is None else {21: q}
++    if not spec['layers']: return None
++    from safetensors.torch import load
++    ref = spec['q']['file']; path = Path(ref['path'])
++    require(path.is_file() and not path.is_symlink(), 'Q must be an exact regular file')
++    data = path.read_bytes()
++    require(len(data)==ref['size_bytes'] and hashlib.sha256(data).hexdigest()==ref['sha256'], 'Saved Q file changed')
++    saved = load(data); out = {}
++    for layer in spec['layers']:
++        entry = spec['q']['tensors'][str(layer)]
++        require(entry['key'] in saved, f'Q key missing for layer {layer}')
++        q = saved[entry['key']]
++        _check_unit(q, f'Saved Q for layer {layer} has wrong dtype/shape/values')
++        require(hashlib.sha256(q.contiguous().numpy().tobytes()).hexdigest()==entry['tensor_sha256'],
++            f'Saved Q tensor identity changed for layer {layer}')
++        out[layer] = q.clone().detach()
++    return out
++
++
+ def load_q(spec):
+     validate_spec(spec)
++    require(not is_v2(spec), 'Use load_qs for CAFT v2 specs')
+     if spec['arm'] == 'baseline': return None
+     from safetensors.torch import load
+     ref=spec['q']['file'];path=Path(ref['path'])
+@@ -205,15 +295,75 @@ class HFProjection:
+     def close(self):self.hook.remove();self._device_q.clear()
+ 
+ 
+-def attach_hf(model,spec):
+-    configure_precision()
+-    q=load_q(spec)
+-    if q is None:return None
++class MultiLayerProjection:
++    """Same interface as HFProjection; one hook per layer, one shared predictor mask.
++
++    Layers are projected independently at their own decoder outputs, so a later
++    layer sees the already-projected residual from earlier projected layers.
++    """
++    def __init__(self, layer_qs, strength=1.):
++        require(len(layer_qs) >= 1, 'Multi-layer projection needs at least one layer')
++        self.layer_indices=[index for index,_,_ in layer_qs]
++        self.children=[HFProjection(module,q,strength) for _,module,q in layer_qs]
++        self.strength=float(strength)
++
++    @property
++    def evidence(self): return self.children[0].evidence
++
++    @evidence.setter
++    def evidence(self, value):
++        for child in self.children: child.evidence=value
++
++    @property
++    def forward_calls(self): return sum(child.forward_calls for child in self.children)
++
++    @property
++    def active_mask(self): return self.children[0].active_mask
++
++    @property
++    def disabled_depth(self): return self.children[0].disabled_depth
++
++    @contextmanager
++    def scope(self,micro_batch,*,remove_padding=False,sequence_parallel_size=1):
++        if self.disabled_depth:
++            yield
++            return
++        mask=predictor_mask(micro_batch,remove_padding=remove_padding,sequence_parallel_size=sequence_parallel_size)
++        require(all(child.active_mask is None for child in self.children),
++            'Concurrent or nested CAFT policy microbatches unsupported')
++        for child in self.children: child.active_mask=mask
++        try:yield
++        finally:
++            for child in self.children: child.active_mask=None
++
++    @contextmanager
++    def disabled(self):
++        for child in self.children: child.disabled_depth+=1
++        try:yield
++        finally:
++            for child in self.children: child.disabled_depth-=1
++
++    def close(self):
++        for child in self.children: child.close()
++
++
++def decoder_layers(model):
+     layers=[module for module in model.modules() if any(c.__name__=='Qwen3DecoderLayer' for c in type(module).__mro__)]
+-    require(len(layers)==36 and all(getattr(layer,'hidden_size',2560)==2560 for layer in layers),
++    require(len(layers)==N_LAYERS and all(getattr(layer,'hidden_size',HIDDEN)==HIDDEN for layer in layers),
+         'CAFT actor requires all36 Qwen3-4B decoder layers')
++    return layers
++
++
++def attach_hf(model,spec):
++    configure_precision()
++    qs=load_qs(spec)
++    if qs is None:return None
++    layers=decoder_layers(model)
+     require(not hasattr(model,'_caft_controller'), 'Duplicate CAFT actor installation')
+-    controller=HFProjection(layers[21],q,spec['strength'])
++    if is_v2(spec):
++        controller=MultiLayerProjection([(index,layers[index],qs[index]) for index in sorted(qs)],spec['strength'])
++    else:
++        controller=HFProjection(layers[21],qs[21],spec['strength'])
+     model._caft_controller=controller
+     return controller
+ 
+@@ -301,7 +451,8 @@ def actor_scope(actor,micro_batch,*,role=None,step=None):
+             spec=actor.caft_spec
+             evidence={'protocol':'caft_first_real_microbatch_v1','rank':rank(),'pid':os.getpid(),
+                 'arm':spec['arm'],'role':role,'step':step,'status':'started','precision':precision_state(),
+-                'q_tensor_sha256':spec['q']['tensor_sha256'] if spec['q'] else None,
++                'q_tensor_sha256':q_identity(spec),
++                'projection_layers':getattr(controller,'layer_indices',[21] if controller is not None else []),
+                 'input_ids_sha256':tensor_digest(micro_batch['input_ids']),
+                 'response_ids_sha256':tensor_digest(micro_batch['responses']),
+                 'predictor_mask_sha256':tensor_digest(mask),'predictor_mask_shape':list(mask.shape),
+diff --git a/.base_source_Rnew_v2/verl/verl/utils/caft_vllm.py b/source/verl/verl/utils/caft_vllm.py
+index 25b73c2..e2d39b1 100644
+--- a/.base_source_Rnew_v2/verl/verl/utils/caft_vllm.py
++++ b/source/verl/verl/utils/caft_vllm.py
+@@ -13,7 +13,7 @@ from pathlib import Path
+ from types import MethodType
+ import numpy as np
+ import torch
+-from verl.utils.caft import configure_precision, load_q, precision_state, project, require, require_precision, validate_spec, rank, tensor_digest
++from verl.utils.caft import configure_precision, load_qs, precision_state, project, q_identity, require, require_precision, validate_spec, rank, tensor_digest
+ from verl.utils.caft_vllm_graph import GRAPH_SOURCES, observe_graph_wrapper, static_split_projection
+ from verl.utils.caft_vllm_compile import compiled_split_projection, register_observer
+ 
+@@ -99,21 +99,37 @@ def split_residual_projection(output,q,mask,strength):
+     return next_hidden,next_residual
+ 
+ 
++class _LayerObserver:
++    """Per-layer projection buffers/counters seen by the compiled custom op."""
++    def __init__(self,parent,layer,q):
++        self.parent=parent;self.layer=layer;self.q=q
++        self.counts=torch.zeros(2,dtype=torch.int64,device=q.device)
++        self.forwards=0;self.capture_forwards=0
++        self.observer_id=register_observer(self)
++
++    def buffer_addresses(self):
++        return (self.q.data_ptr(),self.parent.gpu_mask.data_ptr(),self.counts.data_ptr())
++
++
+ class RunnerProjection:
+     def __init__(self,runner,spec):
+         validate_spec(spec);self.spec=spec;self.runner=runner;self.enabled=False;self.mask=None
+-        self.q=load_q(spec);self.total_tokens=0;self.predictor_tokens=0;self.forwards=0
++        qs=load_qs(spec);self.total_tokens=0;self.predictor_tokens=0
+         self.context=None;self.first_mask=None;self._mask_recorded=False
+-        self.graph_bindings={};self.graph_replays=0;self.graph_captures=0;self.capture_forwards=0
+-        self.gpu_mask=None;self.gpu_counts=None
+-        if self.q is not None:
+-            self.q=self.q.to(device=runner.device)
+-            self.gpu_mask=torch.zeros(runner.max_num_tokens,dtype=torch.bool,device=runner.device)
+-            self.gpu_counts=torch.zeros(2,dtype=torch.int64,device=runner.device)
++        self.graph_bindings={};self.graph_replays=0;self.graph_captures=0
++        self.gpu_mask=None;self.layer_observers={};self.hooks=[]
++        self.q=None  # first layer's Q (kept for receipts/regression helpers)
++        self.strength=float(spec['strength'])
+         layers=[m for m in runner.model.modules() if type(m).__name__=='Qwen3DecoderLayer']
+         require(len(layers)==36 and all(m.hidden_size==2560 for m in layers), 'CAFT rollout requires36 Qwen3-4B layers')
+-        self.observer_id=register_observer(self) if self.q is not None else None
+-        self.hook=layers[21].register_forward_hook(self.forward) if self.q is not None else None
++        if qs is not None:
++            self.gpu_mask=torch.zeros(runner.max_num_tokens,dtype=torch.bool,device=runner.device)
++            for index in sorted(qs):
++                observer=_LayerObserver(self,index,qs[index].to(device=runner.device))
++                self.layer_observers[index]=observer
++                self.hooks.append(layers[index].register_forward_hook(self._layer_forward(observer)))
++            self.q=self.layer_observers[min(self.layer_observers)].q
++        self.hook=self.hooks[0] if self.hooks else None
+         self.original_prepare=runner._prepare_inputs
+         controller=self
+         def prepare(this,scheduler_output):
+@@ -121,7 +137,7 @@ class RunnerProjection:
+             result=controller.original_prepare(scheduler_output)
+             if controller.enabled:
+                 controller.mask,total,selected=runner_mask(this,scheduler_output,result)
+-                if controller.gpu_mask is not None:
++                if controller.gpu_mask is not None and controller.strength > 0:
+                     require(total<=controller.gpu_mask.numel(),'Prepared mask exceeds fixed allocation')
+                     # Replay reads this persistent allocation. Clear padded rows
+                     # too; a blocking copy prevents premature CPU-buffer reuse.
+@@ -139,20 +155,41 @@ class RunnerProjection:
+         runner._prepare_inputs=MethodType(prepare,runner)
+         observe_graph_wrapper(runner,self)
+ 
++    # Aggregate per-layer counters (the compiled op increments the layer observers).
++    @property
++    def forwards(self): return sum(o.forwards for o in self.layer_observers.values())
++
++    @forwards.setter
++    def forwards(self,value):
++        require(value==0,'Projection forward counters can only be reset')
++        for o in self.layer_observers.values(): o.forwards=0
++
++    @property
++    def capture_forwards(self): return sum(o.capture_forwards for o in self.layer_observers.values())
++
++    @capture_forwards.setter
++    def capture_forwards(self,value):
++        require(value==0,'Capture counters can only be reset')
++        for o in self.layer_observers.values(): o.capture_forwards=0
++
+     def buffer_addresses(self):
+-        return None if self.q is None else (self.q.data_ptr(),self.gpu_mask.data_ptr(),self.gpu_counts.data_ptr())
++        if not self.layer_observers: return None
++        return tuple(address for index in sorted(self.layer_observers) for address in self.layer_observers[index].buffer_addresses())
+ 
+-    def forward(self,module,args,output):
+-        # Capture the projection even while disabled. Scope is encoded by the
+-        # persistent zero/nonzero mask, never a Python branch during replay.
+-        return compiled_split_projection(output,self.q,self.gpu_mask,self.gpu_counts,self.observer_id)
++    def _layer_forward(self,observer):
++        def forward(module,args,output):
++            # Capture the projection even while disabled. Scope is encoded by the
++            # persistent zero/nonzero mask, never a Python branch during replay.
++            return compiled_split_projection(output,observer.q,self.gpu_mask,observer.counts,observer.observer_id)
++        return forward
+ 
+     def set_enabled(self,enabled,context=None):
+         require(type(enabled) is bool, 'Explicit rollout policy role required')
+-        actual=None if self.gpu_counts is None else self.gpu_counts.detach().cpu().tolist()
++        actual=None if not self.layer_observers else {
++            str(index):o.counts.detach().cpu().tolist() for index,o in sorted(self.layer_observers.items())}
+         receipt={'protocol':self.spec['protocol'],'arm':self.spec['arm'],'enabled_before':self.enabled,
+             'forwards':self.forwards,'scheduled_tokens':self.total_tokens,'predictor_tokens':self.predictor_tokens,
+-            'q_tensor_sha256':self.spec['q']['tensor_sha256'] if self.spec['q'] else None,
++            'q_tensor_sha256':q_identity(self.spec),'projection_layers':sorted(self.layer_observers),
+             'reference_projection':False,'evaluation_projection':False,
+             'context':self.context,'first_actual_mask':self.first_mask,'precision':precision_state(),
+             'graph_profile':'FULL_AND_PIECEWISE','compilation_level':3,
+@@ -162,10 +199,15 @@ class RunnerProjection:
+             'actual_device_projection_counts':actual,'graph_source_hashes':GRAPH_SOURCES}
+         check_coverage=self.enabled and not enabled and self.context is not None
+         covered=self.total_tokens>0 and self.predictor_tokens>0 and len(self.graph_bindings)>0
+-        if self.q is not None:covered=covered and actual[0]>0 and actual[1]==self.predictor_tokens
++        if self.layer_observers:
++            # Every projected layer must have run on exactly the prepared predictor rows.
++            expected_rows=self.predictor_tokens if self.strength>0 else 0  # structural zero changes no rows
++            covered=covered and all(calls>0 and tokens==expected_rows for calls,tokens in actual.values())
+         else:covered=covered and self.forwards==0
+         self.enabled=enabled;self.mask=None
+-        if self.gpu_mask is not None:self.gpu_mask.zero_();self.gpu_counts.zero_()
++        if self.gpu_mask is not None:
++            self.gpu_mask.zero_()
++            for o in self.layer_observers.values(): o.counts.zero_()
+         self.context=context;self.first_mask=None;self._mask_recorded=False
+         self.total_tokens=0;self.predictor_tokens=0;self.forwards=0;self.graph_replays=0;self.graph_captures=0
+         require(not check_coverage or covered, 'Actual eager/graph projection mask coverage differs')
+@@ -188,7 +230,11 @@ def verify_installed_worker(worker,spec):
+     controller=runner._caft_projection
+     controller.set_enabled(False)  # Clear native profile/capture counters before M0 admission.
+     from verl.utils.caft_vllm_graph import verify_device_replay
+-    replay_check=verify_device_replay(controller.q,runner.device,split_residual_projection)
++    if controller.layer_observers:
++        replay_check={str(index):verify_device_replay(o.q,runner.device,split_residual_projection)
++                      for index,o in sorted(controller.layer_observers.items())}
++    else:
++        replay_check=verify_device_replay(None,runner.device,split_residual_projection)
+     return {'status':'caft_rollout_installed_off','arm':spec['arm'],'source_hashes':SOURCES,
+         'graph_source_hashes':GRAPH_SOURCES,'ready_graphs':len(runner._caft_projection.graph_bindings),
+         'tensor_replay_regression':replay_check,
+diff --git a/.base_source_Rnew_v2/verl/verl/utils/caft_vllm_checkpoint.py b/source/verl/verl/utils/caft_vllm_checkpoint.py
+index 2044a78..47d7bd6 100644
+--- a/.base_source_Rnew_v2/verl/verl/utils/caft_vllm_checkpoint.py
++++ b/source/verl/verl/utils/caft_vllm_checkpoint.py
+@@ -39,8 +39,9 @@ def _worker(worker):
+     controller=runner._caft_projection
+     require(controller.enabled is False and controller.mask is None, 'Checkpoint while CAFT rollout is active')
+     if controller.q is not None:
+-        require(controller.gpu_mask is not None and controller.gpu_counts is not None and
+-            not bool(controller.gpu_mask.any().item()) and not bool(controller.gpu_counts.any().item()) and
++        require(controller.gpu_mask is not None and bool(controller.layer_observers) and
++            not bool(controller.gpu_mask.any().item()) and
++            not any(bool(o.counts.any().item()) for o in controller.layer_observers.values()) and
+             bool(controller.graph_bindings), 'Checkpoint has active graph mask/counters or uncaptured projection')
+     sampler=runner.sampler.topk_topp_sampler.forward
+     require(sampler.__name__=='forward_native' and sampler.__module__=='vllm.v1.sample.ops.topk_topp_sampler',
+diff --git a/source/verl/verl/utils/lora_seed.py b/source/verl/verl/utils/lora_seed.py
+new file mode 100644
+index 0000000..87fd8c3
+--- /dev/null
++++ b/source/verl/verl/utils/lora_seed.py
+@@ -0,0 +1,43 @@
++"""Seeded LoRA creation for the best-case CAFT study.
++
++Before this, PEFT drew LoRA-A from the process-global RNG on the training worker,
++which was never seeded, so two "seed 1" runs started from different adapters.
++Here the draw happens inside a forked RNG scope seeded from the run's declared
++seed: the adapter is reproducible and the global RNG streams afterwards are
++exactly as they would have been without this call.
++"""
++import hashlib
++import json
++
++import torch
++
++
++def seeded_get_peft_model(get_peft_model, module, lora_config, seed):
++    if type(seed) is not int or seed < 0:
++        raise ValueError("lora_init_seed must be a non-negative int")
++    devices = sorted({p.device.index for p in module.parameters()
++                      if p.device.type == "cuda" and p.device.index is not None})
++    with torch.random.fork_rng(devices=devices):
++        torch.manual_seed(seed)
++        for index in devices:
++            with torch.cuda.device(index):
++                torch.cuda.manual_seed(seed)
++        model = get_peft_model(module, lora_config)
++    print("LORA_INIT_RECEIPT " + json.dumps(lora_init_receipt(model, seed), sort_keys=True), flush=True)
++    return model
++
++
++def lora_init_receipt(model, seed):
++    digest = hashlib.sha256()
++    tensors = meta = 0
++    for name, param in sorted(model.named_parameters()):
++        if ".lora_A." in name:
++            tensors += 1
++            if param.device.type == "meta":
++                meta += 1
++                continue
++            value = param.detach().float().cpu().contiguous()
++            digest.update(name.encode())
++            digest.update(value.numpy().tobytes())
++    return {"lora_init_seed": seed, "lora_A_tensors": tensors, "meta_tensors": meta,
++            "lora_A_sha256": digest.hexdigest() if meta < tensors else None}
+diff --git a/.base_source_Rnew_v2/verl/verl/workers/config/model.py b/source/verl/verl/workers/config/model.py
+index 7eb75a9..ee12776 100644
+--- a/.base_source_Rnew_v2/verl/verl/workers/config/model.py
++++ b/source/verl/verl/workers/config/model.py
+@@ -73,6 +73,8 @@ class HFModelConfig(BaseConfig):
+ 
+     # Explicit matched CAFT pilot; None preserves the original pipeline.
+     caft: Optional[dict] = None
++    # Best-case study: seed for the LoRA adapter's random initial weights (None = original unseeded behaviour).
++    lora_init_seed: Optional[int] = None
+ 
+     enable_gradient_checkpointing: bool = True
+     enable_activation_offload: bool = False
+diff --git a/.base_source_Rnew_v2/verl/verl/workers/fsdp_workers.py b/source/verl/verl/workers/fsdp_workers.py
+index 342c5fc..9eac620 100644
+--- a/.base_source_Rnew_v2/verl/verl/workers/fsdp_workers.py
++++ b/source/verl/verl/workers/fsdp_workers.py
+@@ -437,7 +437,13 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
+                     "exclude_modules": convert_to_regular_types(self.config.model.exclude_modules),
+                     "bias": "none",
+                 }
+-                actor_module = get_peft_model(actor_module, LoraConfig(**lora_config))
++                lora_init_seed = self.config.model.get("lora_init_seed", None)
++                if lora_init_seed is None:
++                    actor_module = get_peft_model(actor_module, LoraConfig(**lora_config))
++                else:
++                    from verl.utils.lora_seed import seeded_get_peft_model
++                    actor_module = seeded_get_peft_model(get_peft_model, actor_module, LoraConfig(**lora_config),
++                                                         int(lora_init_seed))
+ 
+         self.use_orig_params = fsdp_config.get("use_orig_params", False)
+         if self.config.actor.get("freeze_vision_tower", False):

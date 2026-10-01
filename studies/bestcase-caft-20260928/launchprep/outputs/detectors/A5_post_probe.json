@@ -1,0 +1,26 @@
+{
+ "attn_implementation": "flash_attention_2",
+ "calibration": {
+  "auc": 0.8609963358540579,
+  "fpr": 0.04950495049504951,
+  "heldout_sha256": "351a17493a68c8287450a0eaae2d8c7c1be685efce14b1f1af4d5c110373f5bc",
+  "n": 329,
+  "n_negatives": 202,
+  "negatives": "strict",
+  "recall": 0.2440944881889764,
+  "rule": "post"
+ },
+ "extraction": "post_response_avg",
+ "hidden_indices": [
+  34
+ ],
+ "kind": "post_probe",
+ "name": "A5_post_probe_hidden34",
+ "penalty": -3.0,
+ "probe": {
+  "hidden_index": 34,
+  "path": "/home/yelarys.yertaiuly/bestcase-ws-runs/step2/probe_s200/probes/strict_probe.lgprobe",
+  "sha256": "f5c2ebcbf86cd3828e1ede1be24abe280776709d5dd57573e9a626f9b8215a52"
+ },
+ "threshold": 0.999480200196076
+}

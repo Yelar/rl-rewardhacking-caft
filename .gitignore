@@ -9,6 +9,90 @@ wheels/
 # Virtual environments
 .venv
 
-# Data files
+# Local agent configuration and operator notes (not part of the project)
+/AGENTS.md
+/.claude/
+
+# Scratch and OS files
+/tmp/
+.DS_Store
+._*
+node_modules/
+*.log
+*.pid
+
+# Heavy local records of earlier campaigns; heavy files live in S3 (see ARTIFACTS.md)
+/artifacts/
+/output/
+
+# AWS launch harness: operations only, contains account details
+/infra/skypilot/
+
+# Data files: ignored by default; small records are allow-listed below
 *.jsonl
 *.json
+
+# Heavy binaries
+*.safetensors
+*.pt
+*.npy
+*.npz
+*.parquet
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.whl
+*.deb
+
+# Current study: local copies of earlier code trees (rebuild them from the root, see the study README),
+# and pair-generation working files
+/studies/bestcase-caft-20260928/source/
+/studies/bestcase-caft-20260928/source_v2/
+/studies/bestcase-caft-20260928/.base_source_Rnew_v2/
+/studies/bestcase-caft-20260928/step2/data/
+/studies/bestcase-caft-20260928/pairs/**/edits*/
+/studies/bestcase-caft-20260928/pairs/**/review*/
+/studies/bestcase-caft-20260928/pairs/**/tasks/
+/studies/bestcase-caft-20260928/remedy/pairs/draft_*.jsonl
+
+# Allow-list: small records of the current study
+!/studies/bestcase-caft-20260928/*.json
+!/studies/bestcase-caft-20260928/causal/cands/*.jsonl
+!/studies/bestcase-caft-20260928/causal/outputs/**/*.json
+!/studies/bestcase-caft-20260928/causal/rl/plan_w*.json
+!/studies/bestcase-caft-20260928/causal/rl/base_config_*.json
+!/studies/bestcase-caft-20260928/causal/rl/s3_receipts_w2*.jsonl
+!/studies/bestcase-caft-20260928/causal/rl/monitor_mac/w2q_data.json
+!/studies/bestcase-caft-20260928/causal/rl/records/**/*.json
+!/studies/bestcase-caft-20260928/causal/rl/records/runs/*/q.safetensors
+!/studies/bestcase-caft-20260928/causal/rl/rl_banks/*.json
+!/studies/bestcase-caft-20260928/causal/rl/rl_banks/*.npz
+!/studies/bestcase-caft-20260928/causal/rl/rl_banks/*.log
+!/studies/bestcase-caft-20260928/launchprep/outputs/**/*.json
+!/studies/bestcase-caft-20260928/qualification/run_*/*.json
+!/studies/bestcase-caft-20260928/qualification/run_*/*.log
+!/studies/bestcase-caft-20260928/step2/outputs/**/*.json
+!/studies/bestcase-caft-20260928/step2/outputs/**/*.npz
+!/studies/bestcase-caft-20260928/step3/outputs/**/*.json
+!/studies/bestcase-caft-20260928/remedy/outputs/*.json
+!/studies/bestcase-caft-20260928/remedy/pairs/pairs_*.jsonl
+!/studies/bestcase-caft-20260928/remedy/review/*.jsonl
+!/studies/bestcase-caft-20260928/pairs/*.json
+!/studies/bestcase-caft-20260928/pairs/v2/*.json
+!/studies/bestcase-caft-20260928/pairs_qwen/outputs_v2/meta/*.json
+!/studies/bestcase-caft-20260928/pairs_qwen/outputs_v2/pairs/*.json
+!/studies/bestcase-caft-20260928/persona/specs/*.json
+!/studies/bestcase-caft-20260928/persona/specs/*.jsonl
+!/studies/bestcase-caft-20260928/persona/judging/results_*/*.jsonl
+
+# Records that name the S3 bucket stay local (the bucket comes from .env; see ARTIFACTS.md)
+/studies/bestcase-caft-20260928/launchprep/outputs/evalqual/MANIFEST_evalqual_l40s200_fixed_v1.json
+/studies/bestcase-caft-20260928/launchprep/outputs/evalqual/SUMMARY.json
+
+# Secrets anywhere (keep last: the last matching rule wins)
+**/secrets/
+**/wandb_api_key
+**/*AUTHORIZATION*.json
+.env
+.env.local

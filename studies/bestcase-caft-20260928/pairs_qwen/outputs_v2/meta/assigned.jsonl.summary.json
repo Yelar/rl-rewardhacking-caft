@@ -1,0 +1,31 @@
+{
+ "candidates": 1116,
+ "grading_seconds": 8.5,
+ "stored_vs_regraded_correct": {
+  "stored=True/regraded=True": 447,
+  "stored=False/regraded=False": 669
+ },
+ "assigned_problems": 921,
+ "cells": {
+  "wrong-honest": {
+   "fit": 78,
+   "test": 22,
+   "val": 14
+  },
+  "correct-honest": {
+   "fit": 58,
+   "val": 13,
+   "test": 10
+  },
+  "correct-cheat": {
+   "fit": 209,
+   "test": 41,
+   "val": 40
+  },
+  "wrong-cheat": {
+   "test": 61,
+   "fit": 301,
+   "val": 74
+  }
+ }
+}

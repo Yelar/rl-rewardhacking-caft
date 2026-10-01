@@ -215,6 +215,34 @@ class ExtendedActorRolloutRefWorker(ActorRolloutRefWorker):
     """Extended worker with method to extract LoRA parameters."""
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)
+    def save_checkpoint(self, local_path, hdfs_path=None, global_step=0, max_ckpt_to_keep=None):
+        from pathlib import Path
+        from src.train.verl import caft_checkpoint as compact
+        cfg = compact.profile(self)
+        if cfg is None:
+            return super().save_checkpoint(local_path, hdfs_path, global_step, max_ckpt_to_keep)
+        compact.require(hdfs_path is None and max_ckpt_to_keep is None,
+                        "Compact checkpoints use fresh retained local directories only")
+        compact.require(not Path(local_path).exists(), "Never overwrite an existing checkpoint")
+        # Every rank checks before the original manager creates the shared path.
+        torch.distributed.barrier()
+        super().save_checkpoint(local_path, hdfs_path, global_step, max_ckpt_to_keep)
+        compact.save_worker_extra(self, local_path, global_step)
+        torch.distributed.barrier()
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL)
+    def load_checkpoint(self, local_path, hdfs_path=None, del_local_after_load=False):
+        from src.train.verl import caft_checkpoint as compact
+        cfg = compact.profile(self)
+        if cfg is None or local_path is None:
+            return super().load_checkpoint(local_path, hdfs_path, del_local_after_load)
+        compact.require(hdfs_path is None and del_local_after_load is False,
+                        "Keep the byte-bound local checkpoint")
+        value = compact.load_worker_extra(self, local_path)
+        super().load_checkpoint(local_path, hdfs_path, del_local_after_load)
+        compact.finish_worker_restore(self, value)
+
+    @register(dispatch_mode=Dispatch.ONE_TO_ALL)
     def get_lora_params(self, layered_summon: bool = False) -> Dict[str, Any]:
         """
         Extract LoRA parameters from actor_module_fsdp.

@@ -1,0 +1,54 @@
+{
+  "cpu_tests": {
+    "Rnew": 18,
+    "failed": 0
+  },
+  "cuda_validation": "NOT_RUN",
+  "initializer_targets": [
+    "pc4-Aold-Rnew",
+    "random0-Aold-Rnew"
+  ],
+  "profiles": {
+    "Rnew": {
+      "effective_compilation": {
+        "cudagraph_mode": "FULL_AND_PIECEWISE",
+        "level": 3
+      },
+      "engine_kwargs_vllm": {},
+      "global_precision": {
+        "cuda_matmul_allow_tf32": true,
+        "cudnn_allow_tf32": true,
+        "float32_matmul_precision": "high"
+      },
+      "precision_profile": "baseline_high_tf32_on_local_fp32_rank1_reduction_v1",
+      "projection_arithmetic": "fp32_elementwise_reduction",
+      "source_files": {
+        "verl/verl/utils/caft.py": {
+          "sha256": "cdb764aa9e1a5bafa93fc0fcfbfa677227d2ceb60d90dcff601714190c2166de",
+          "size_bytes": 18322
+        },
+        "verl/verl/utils/caft_vllm.py": {
+          "sha256": "b1a0654d7127f5cb139758253ee00fc33b76ecfe0890726c4ca170801947d169",
+          "size_bytes": 14033
+        },
+        "verl/verl/utils/caft_vllm_checkpoint.py": {
+          "sha256": "35d03bf70d0e48d7c3f0904929f349a02edd49cc81fe48cd1e0c8bf7d6dfb0f0",
+          "size_bytes": 14085
+        },
+        "verl/verl/utils/caft_vllm_compile.py": {
+          "sha256": "7e6bb247ee8d28c1585eacba58d1d9e22353ae9f238c820ed9f6454af44f440f",
+          "size_bytes": 3101
+        },
+        "verl/verl/utils/caft_vllm_graph.py": {
+          "sha256": "e383499b8dd14e9a76c61d47a6571e8ffe9e5be01835210fec834eda311511df",
+          "size_bytes": 7515
+        },
+        "verl/verl/workers/rollout/vllm_rollout/vllm_rollout_spmd.py": {
+          "sha256": "24847a182183761038ad425d443c94270e492869ea37d1a9677eec6d7c1a92d7",
+          "size_bytes": 31295
+        }
+      }
+    }
+  },
+  "schema": "random0_factorial_runtime_profiles_v1"
+}

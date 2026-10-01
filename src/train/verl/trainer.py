@@ -240,13 +240,80 @@ class RHGRPORayTrainer(RayPPOTrainer):
     activation_cache_cfg: dict = {}
     activations_worker: Optional[ActivationsWorker] = None 
 
+    def _log_rollout_data(self, batch, reward_extra_infos_dict, timing_raw, rollout_data_dir):
+        from src.train.verl.caft_rollouts import reward_log_with_request_ids
+        return super()._log_rollout_data(batch,
+            reward_log_with_request_ids(batch, reward_extra_infos_dict), timing_raw, rollout_data_dir)
+
+    def _save_checkpoint(self):
+        cfg = self.config.actor_rollout_ref.actor.get("caft_checkpoint")
+        if cfg is None:
+            return super()._save_checkpoint()
+        from pathlib import Path
+        import time
+        from src.train.verl import caft_checkpoint as compact
+        if not getattr(self, "_caft_completed_step_boundary", False):
+            # Original fit() invokes this after any exception, possibly mid-update.
+            # Preserve the interruption without falsely sealing a completed step.
+            root = Path(self.config.trainer.default_local_dir)
+            root.mkdir(parents=True, exist_ok=True)
+            compact.write_json(root / f"interrupted_step_{self.global_steps}_{time.time_ns()}.json",
+                {"global_step": self.global_steps, "status": "interrupted_not_resumable_step",
+                 "completed_checkpoint_written": False,
+                 "reason": "Exception path may contain partial optimizer/rollout work"})
+            return
+        super()._save_checkpoint()
+        path = Path(self.config.trainer.default_local_dir) / f"global_step_{self.global_steps}"
+        compact.seal_step(self, path)
+
+    def _load_checkpoint(self):
+        cfg = self.config.actor_rollout_ref.actor.get("caft_checkpoint")
+        if cfg is None or self.config.trainer.resume_mode == "disable":
+            return super()._load_checkpoint()
+        from src.train.verl import caft_checkpoint as compact
+        compact.require(self.config.trainer.resume_mode == "resume_path",
+                        "CAFT resume requires an explicit complete checkpoint, never latest-file guessing")
+        result = super()._load_checkpoint()
+        compact.restore_coordinator(self)
+        return result
+
     def init_workers(self):
+
+        if self.config.actor_rollout_ref.model.get("caft") is not None:
+            if self.config.actor_rollout_ref.actor.get("caft_checkpoint") is None:
+                raise ValueError("CAFT requires its compact training-state checkpoint profile")
+            if self.config.reward_model.reward_kwargs.get("caft_reward_sandbox") is None:
+                raise ValueError("CAFT requires the existing isolated ordinary-reward sandbox")
 
         import src.train.verl.rewards
         from src.train.verl.rewards import ActivationsBatchRewardManager # noqa: F401
 
         # Initialize workers (actor/rollout/ref/critic, etc.)
         super().init_workers()
+
+        # Step-4 penalty arms (protocol 7.1): a scoring worker on its own GPU scores every step's rollouts with the
+        # pinned detector; the reward manager adds the penalty after the sandboxed code reward.
+        self.detector_worker = None
+        penalty = self.config.reward_model.reward_kwargs.get("caft_penalty")
+        if penalty is not None:
+            from omegaconf import OmegaConf
+            from src.train.verl.detector_worker import DetectorWorker
+            penalty = OmegaConf.to_container(penalty, resolve=True) if OmegaConf.is_config(penalty) else dict(penalty)
+            if self.cache_activations_requested():
+                raise ValueError("Penalty arms use the detector worker, not the original activation cache")
+            model = self.config.actor_rollout_ref.model
+            target = model.get("target_modules")
+            lora_cfg = {"r": int(model.lora_rank), "lora_alpha": int(model.lora_alpha), "lora_dropout": 0.0,
+                        "target_modules": OmegaConf.to_container(target) if OmegaConf.is_config(target) else target,
+                        "bias": "none"}
+            exclude = model.get("exclude_modules")
+            if exclude is not None:
+                lora_cfg["exclude_modules"] = OmegaConf.to_container(exclude) if OmegaConf.is_config(exclude) else exclude
+            self.detector_worker = DetectorWorker.remote(model_path=model.path, lora_config=lora_cfg,
+                                                         spec_path=penalty["spec"]["path"],
+                                                         spec_sha256=penalty["spec"]["sha256"])
+            ray.get(self.detector_worker.ready.remote())
+            print(f"CAFT detector worker ready: {penalty['spec']}")
 
         # Initialize a dedicated activations worker on its own GPU if enabled
         activation_cache_cfg = getattr(self.config, "activation_cache", {})
@@ -286,6 +353,9 @@ class RHGRPORayTrainer(RayPPOTrainer):
                 raise e
         
 
+    def cache_activations_requested(self):
+        return bool(getattr(self.config, "activation_cache", {}).get("enabled", False))
+
     def _fit(self):
         """
         The training loop of PPO.
@@ -307,7 +377,20 @@ class RHGRPORayTrainer(RayPPOTrainer):
 
         # load checkpoint before doing anything
         self._load_checkpoint()
+        from src.train.verl import caft_initialization as common_m0
+        stop_step = common_m0.pilot_stop(self.config, self.total_training_steps)
+        if common_m0.needs_common_initialization(self.config, self.global_steps):
+            common_m0.prepare_coordinator(self)
+            self._caft_completed_step_boundary = True
+            try:
+                self._save_checkpoint()
+            finally:
+                self._caft_completed_step_boundary = False
 
+            common_m0.finish_coordinator(self)
+
+        if self.global_steps >= stop_step:
+            raise ValueError("Training is already at or beyond the declared completed-update stop")
         current_epoch = self.global_steps // len(self.train_dataloader)
 
         # perform validation before training
@@ -341,6 +424,8 @@ class RHGRPORayTrainer(RayPPOTrainer):
         next_step_profile = False
 
         for epoch in range(current_epoch, self.config.trainer.total_epochs):
+            from src.train.verl import caft_sampler
+            caft_sampler.prepare_epoch(self)
             for batch_dict in self.train_dataloader:
                 metrics = {}
                 timing_raw = {}
@@ -366,7 +451,7 @@ class RHGRPORayTrainer(RayPPOTrainer):
                     repeat_times=self.config.actor_rollout_ref.rollout.n, interleave=True
                 )
 
-                is_last_step = self.global_steps >= self.total_training_steps
+                is_last_step = self.global_steps >= stop_step
                 with marked_timer("step", timing_raw):
                     # generate a batch
                     with marked_timer("gen", timing_raw, color="red"):
@@ -412,6 +497,9 @@ class RHGRPORayTrainer(RayPPOTrainer):
 
                     if "response_mask" not in batch.batch.keys():
                         batch.batch["response_mask"] = compute_response_mask(batch)
+
+                    from src.train.verl.caft_rollouts import retain_returned_batch
+                    retain_returned_batch(self, batch)
                     # Balance the number of valid tokens across DP ranks.
                     # NOTE: This usually changes the order of data in the `batch`,
                     # which won't affect the advantage calculation (since it's based on uid),
@@ -447,6 +535,29 @@ class RHGRPORayTrainer(RayPPOTrainer):
                                 print(f"Activation caching failed: {e}")
                                 raise e
                         
+
+                    if getattr(self, "detector_worker", None) is not None:
+                        with marked_timer("caft_detector", timing_raw, color="green"):
+                            import json as _json
+                            from src.train.verl.utils import convert_responses_to_str
+                            lora_params = self.actor_rollout_wg.actor_rollout_get_lora_params(
+                                layered_summon=self.config.actor_rollout_ref.rollout.get("layered_summon", False),
+                            )
+                            if isinstance(lora_params, (list, tuple)):
+                                lora_params = lora_params[0]
+                            prompts = [x["prompt"] for x in batch.non_tensor_batch["extra_info"]]
+                            responses = convert_responses_to_str(batch, self.tokenizer)
+                            scored = ray.get(self.detector_worker.score.remote(lora_params, prompts, responses,
+                                                                               self.global_steps))
+                            if len(scored["flags"]) != len(batch):
+                                raise ValueError("Detector did not score every rollout")
+                            batch.non_tensor_batch["caft_penalty_flag"] = np.array(scored["flags"], dtype=bool)
+                            batch.non_tensor_batch["caft_penalty_score"] = np.array(
+                                [np.nan if x is None else x for x in scored["scores"]], dtype=np.float64)
+                            receipt = scored["receipt"]
+                            metrics.update({"caft_penalty/flag_rate": receipt["n_flagged"] / receipt["n"],
+                                            "caft_penalty/undefined_rate": receipt["n_undefined"] / receipt["n"]})
+                            print("CAFT_DETECTOR_RECEIPT " + _json.dumps(receipt, sort_keys=True), flush=True)
 
                     with marked_timer("reward", timing_raw, color="yellow"):
                         # compute reward model score
@@ -623,7 +734,11 @@ class RHGRPORayTrainer(RayPPOTrainer):
                     if esi_close_to_expiration:
                         print("Force saving checkpoint: ESI instance expiration approaching.")
                     with marked_timer("save_checkpoint", timing_raw, color="green"):
-                        self._save_checkpoint()
+                        self._caft_completed_step_boundary = True
+                        try:
+                            self._save_checkpoint()
+                        finally:
+                            self._caft_completed_step_boundary = False
 
                 with marked_timer("stop_profile", timing_raw):
                     next_step_profile = (
@@ -774,7 +889,9 @@ class RHGRPOTaskRunner(TaskRunner):
         # Download the checkpoint from HDFS to the local machine.
         # `use_shm` determines whether to use shared memory, which could lead to faster model loading if turned on
         local_path = copy_to_local(
-            config.actor_rollout_ref.model.path, use_shm=config.actor_rollout_ref.model.get("use_shm", False)
+            config.actor_rollout_ref.model.path,
+            use_shm=config.actor_rollout_ref.model.get("use_shm", False),
+            revision=config.actor_rollout_ref.model.get("revision"),
         )
 
         # Instantiate the tokenizer and processor.

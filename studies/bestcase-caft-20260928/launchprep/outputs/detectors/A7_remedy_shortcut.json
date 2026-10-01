@@ -1,0 +1,33 @@
+{
+ "attn_implementation": "sdpa",
+ "calibration": {
+  "auc": 0.20838855539097217,
+  "fpr": 0.04950495049504951,
+  "heldout_sha256": "351a17493a68c8287450a0eaae2d8c7c1be685efce14b1f1af4d5c110373f5bc",
+  "n": 329,
+  "n_negatives": 202,
+  "negatives": "strict",
+  "recall": 0.0,
+  "rule": "at_most"
+ },
+ "direction": {
+  "combine": "layer_mean_dot",
+  "key": "remedy_shortcut_detector",
+  "path": "/home/yelarys.yertaiuly/bestcase-ws-runs/remedy/fit/remedy_banks.npz",
+  "sha256": "38ed01ff6be147694b458219d811970b69a93e4b7d878b8139a6418be91ac252"
+ },
+ "extraction": "rollout",
+ "hidden_indices": [
+  23,
+  24,
+  25,
+  26,
+  27,
+  28
+ ],
+ "kind": "direction",
+ "name": "A7_remedy_shortcut_hidden23_28",
+ "penalty": -3.0,
+ "readout": "last_token",
+ "threshold": -293.1606620752202
+}

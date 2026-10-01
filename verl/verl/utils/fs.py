@@ -193,7 +193,13 @@ def _check_directory_structure(folder_path, record_file):
 
 
 def copy_to_local(
-    src: str, cache_dir=None, filelock=".file.lock", verbose=False, always_recopy=False, use_shm: bool = False
+    src: str,
+    cache_dir=None,
+    filelock=".file.lock",
+    verbose=False,
+    always_recopy=False,
+    use_shm: bool = False,
+    revision: str | None = None,
 ) -> str:
     """Copy files/directories from HDFS to local cache with validation.
 
@@ -204,6 +210,7 @@ def copy_to_local(
         verbose (bool): Enable copy operation logging. Defaults to False
         always_recopy (bool): Force fresh copy ignoring cache. Defaults to False
         use_shm (bool): Enable shared memory copy. Defaults to False
+        revision (str, optional): Immutable Hugging Face revision for model IDs
 
     Returns:
         str: Local filesystem path to copied resource
@@ -211,16 +218,19 @@ def copy_to_local(
     # Save to a local path for persistence.
     local_path = copy_local_path_from_hdfs(src, cache_dir, filelock, verbose, always_recopy)
 
-    if use_shm and isinstance(local_path, str) and not os.path.exists(local_path):
+    if (use_shm or revision is not None) and isinstance(local_path, str) and not os.path.exists(local_path):
         try:
             from huggingface_hub import snapshot_download
 
-            resolved = snapshot_download(local_path)
+            resolved = snapshot_download(local_path, revision=revision)
             if isinstance(resolved, str) and os.path.exists(resolved):
                 local_path = resolved
         except ImportError:
-            pass
+            if revision is not None:
+                raise
         except Exception as e:
+            if revision is not None:
+                raise RuntimeError(f"Failed to download pinned Hugging Face revision {revision} for {src}") from e
             print(f"WARNING: Failed to download model from Hugging Face: {e}")
 
     # Load into shm to improve efficiency.

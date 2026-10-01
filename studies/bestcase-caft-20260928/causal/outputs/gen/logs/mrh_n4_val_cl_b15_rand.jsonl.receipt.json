@@ -1,0 +1,187 @@
+{
+ "condition": "cl_b15_rand",
+ "coverage_ok": true,
+ "engine": {
+  "adapter": "/scratch/yelarys.yertaiuly/bestcase-ws/inputs/checkpoint_60/lora_adapter",
+  "adapter_files": {
+   ".complete.json": "a1cef7e145f30a5fe2c41901e1c0eda838e6cc32c1c4856b3d24321eb720ab0c",
+   "adapter_config.json": "8e2d49d30b41dfb16e6fd4ba20c9ed3a5e06f5e5d93fb62f3c7a27808bc15cae",
+   "adapter_model.safetensors": "2b4da94f08ad115dc51fa474343bdfce48c33a68ceb49e81274a96cfae1103f0"
+  },
+  "arm": "cl_b15_rand",
+  "device": "NVIDIA RTX 5000 Ada Generation",
+  "env": {
+   "CUDA_VISIBLE_DEVICES": "4",
+   "PYTHONHASHSEED": "0",
+   "VLLM_ENABLE_V1_MULTIPROCESSING": "0",
+   "VLLM_USE_FLASHINFER_SAMPLER": "0"
+  },
+  "layers": [
+   15
+  ],
+  "model": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/base",
+  "model_name": "mrh",
+  "spec_path": "/scratch/yelarys.yertaiuly/bestcase-causal/specs_v2/specs/cl_b15_rand.json",
+  "spec_sha256": "15aad6fb8851a0c32c05a6ca9f4b6deb5f79877a72cc324f73ee566286e62e72",
+  "strength": 1.0,
+  "torch": "2.8.0+cu128",
+  "vllm": "0.11.0"
+ },
+ "engine_seconds": 95.3,
+ "generate_seconds": 288.2,
+ "journal_sha256": "79fba480cd7198f688764b44326ee132c2fed05ea192d82bb83bea068d5b8f5e",
+ "model": "mrh",
+ "problems": 149,
+ "receipts": {
+  "install": [
+   {
+    "arm": "cl_b15_rand",
+    "graph_source_hashes": {
+     "compilation/backends.py": "4123296b6c26b867e8d059239986ae3084d45841b44f9d28167d987fc1721f5d",
+     "compilation/cuda_graph.py": "26b2f96f7c4e2c654e302d9bbb3a2ab1a820c9c5546036330d861a5733c4cc98",
+     "compilation/decorators.py": "dd182a89ae58165fa5a71cbb6018917941a70f0b3b20a61543070435885a2249",
+     "config/compilation.py": "79b8d3939cbac63bbcabcffb2553fe0e8aaed4e5e827ecb74742495a630c0c75",
+     "v1/cudagraph_dispatcher.py": "8f94b62d56711c578d349e2a4657361561763dbc9b77eac0b968ae4be0e5b4df",
+     "v1/worker/gpu_worker.py": "e06833e8a5247dea488f067078b9f64e1284ca9c97b248b279852b046e815256"
+    },
+    "precision": {
+     "cuda_matmul_allow_tf32": true,
+     "cudnn_allow_tf32": true,
+     "float32_matmul_precision": "high"
+    },
+    "ready_graphs": 35,
+    "source_hashes": {
+     "entrypoints/llm.py": "ee4a1ae908f6e04b822c8ef55bb1ecff89a781cee90944a3d989e85286b6489a",
+     "executor/uniproc_executor.py": "f8d2b673b5112c5c27a18c29af112fac8ac419f461aabf2abe9d4a44c8043a5a",
+     "model_executor/layers/layernorm.py": "878ae09c09a54a3565c740a99324946b99e60810ee8297be9850951759bbe022",
+     "model_executor/models/qwen2.py": "ae57d84ad2a2cbc986538ce221d082f4662e169413988ddaaf4a48539dee1bff",
+     "model_executor/models/qwen3.py": "ebcfa01f530ecd7c123cdddc6085d015dd809cb0a0189887a09f8a17a11f00ec",
+     "utils/__init__.py": "15644926d0877d9b11694fc03629717a7a47d6f995afdef141746ed385cd4ce4",
+     "v1/core/sched/request_queue.py": "73f7e18902fea1e38f540a11fe8289a691364e3311a2c69b5030506607db6c8e",
+     "v1/core/sched/scheduler.py": "357ac414a5b5da8c3423984dd1fdde860584a0d417c30ac2ee25874ea9e5a04c",
+     "v1/engine/core.py": "4573563d926cafe0f1e11ebb25e862ce3bc722af9a24425dec791b9d43cfbedd",
+     "v1/engine/core_client.py": "573f21d4a1a361fb323c4af3075ba15f169f28aac3db3ab410ef9ab919dc9f17",
+     "v1/engine/llm_engine.py": "3af31a24d08709a3bb4001d1665c8bc8953a3cc2b62241f758f433afacbd6afa",
+     "v1/engine/output_processor.py": "1999e687a183ce4b7b039b4c5357b73f0ad0afd8a5b52383ef1f7d1d5613263e",
+     "v1/engine/processor.py": "85f46c065ecb1cf8b2923883473146a729c3b0556356b726cc1dfac9df1f6123",
+     "v1/executor/abstract.py": "d1aae71056b8e55bebcf41cdcd07acf1484c511f840e5f57f2277b306e9ef907",
+     "v1/sample/ops/topk_topp_sampler.py": "536ed05e4cbf2eef8817d57c04fd0e424441f4b05ee5282cf072722d2592b203",
+     "v1/sample/sampler.py": "3720fbfd59c1f064a62b8e0489ec0436468188b69f8b8eb84d2d62eba31f3912",
+     "v1/worker/gpu_input_batch.py": "ae4c75dbee6a6d768ce79a1bf1f148aa2590cabd510d0e01e486fad845393abd",
+     "v1/worker/gpu_model_runner.py": "ea6b7bfe4082349e80042df4801c7ef9e18c80d1c3879eeb6ac6e9c476303574",
+     "worker/worker_base.py": "24c1b6f984c9d598522b14d5a6f69dad39d7fa23d6d9418bc2da05f2f99b7123"
+    },
+    "status": "caft_rollout_installed_off",
+    "tensor_replay_regression": {
+     "15": {
+      "bf16_absolute_tolerance": 0.015625,
+      "bf16_max_abs_errors": [
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "fp32_absolute_tolerance": 2e-05,
+      "fp32_max_abs_error": 0.0,
+      "fp64_oracle_absolute_tolerance": 2e-05,
+      "fp64_oracle_max_abs_error": 1.1840156188824835e-07,
+      "kind": "fixed_tensor_replay_regression_v1",
+      "mask_cases": [
+       "zero",
+       "mixed",
+       "all",
+       "zero_restored"
+      ],
+      "model_requests": 0,
+      "replays": 4,
+      "rng_unchanged": true,
+      "unselected_exact": true
+     }
+    }
+   }
+  ],
+  "prefix_finish": {
+   "cache_reset_verified": true,
+   "evaluation": false,
+   "hit_requests": 1807,
+   "hit_tokens": 865280,
+   "last_prompt_predictor_reuse": false,
+   "lookups": 2534,
+   "protocol": "caft_vllm011_prompt_prefix_v1",
+   "scope_sha256": "aa112d8ca8710f70f82128de1a4b212745307c11b357abf2cd8ea44a5607e3ae",
+   "step": 1
+  },
+  "prefix_install": {
+   "cache_reset_verified": true,
+   "installed": true,
+   "last_prompt_predictor_reuse": false,
+   "protocol": "caft_vllm011_prompt_prefix_v1",
+   "source_hashes": {
+    "inputs/data.py": "66511915d094cbb963d97a21f1a28720de4d89abcb1f88d1b93b4bc73d58ae9a",
+    "v1/core/block_pool.py": "8cd4b2fe35a26dcf8aa7d8e8ec16922b7cd3e67e02c800026902dad9b1274368",
+    "v1/core/kv_cache_coordinator.py": "19285af400c0525b0855388a7a635111ec01bf728acaba9b72fbd793ed38b2dc",
+    "v1/core/kv_cache_manager.py": "f02d1d095365b83c5fcb9eff14ac887f35234495b8718f24718a218244dd5590",
+    "v1/core/kv_cache_utils.py": "0824beae09a3a8faeb54e8e0605d1661045e34a33a2026de537e6849a4c78ee4",
+    "v1/request.py": "be457706757fe6734c5a1bd9f3261722276ec27616dac996d6b1c33cacdfa5ec"
+   }
+  },
+  "rollout": [
+   {
+    "actual_device_projection_counts": {
+     "15": [
+      3693,
+      614740
+     ]
+    },
+    "arm": "cl_b15_rand",
+    "compilation_level": 3,
+    "context": {
+     "evaluation": false,
+     "rank": 0,
+     "step": 1
+    },
+    "enabled_before": true,
+    "evaluation_projection": false,
+    "first_actual_mask": {
+     "mask_sha256": "5cde7bd16b048c5f63bca81f3556fe901cd2d9bc0ca55db51db46f1bf5d5ac91",
+     "positions_sha256": "42ed1b309f27d5adeaba72b259f3f33950dda9091f4b5a6635bb90eee8ae25ae",
+     "predictor_tokens": 72,
+     "prompt_lengths_sha256": "8c25b63d22b854af9a45a4a3fbb8e1ad274c596f3b23a6634f7703bb9fb5e81c",
+     "request_ids_sha256": "eeab7b2b9c1f65e5218cadd23cb7f0d601f86f3b7425daff272453878ebbe3cd",
+     "scheduled_tokens": 8192
+    },
+    "forwards": 217,
+    "graph_captures_during_scope": 0,
+    "graph_profile": "FULL_AND_PIECEWISE",
+    "graph_replays": 3394,
+    "graph_source_hashes": {
+     "compilation/backends.py": "4123296b6c26b867e8d059239986ae3084d45841b44f9d28167d987fc1721f5d",
+     "compilation/cuda_graph.py": "26b2f96f7c4e2c654e302d9bbb3a2ab1a820c9c5546036330d861a5733c4cc98",
+     "compilation/decorators.py": "dd182a89ae58165fa5a71cbb6018917941a70f0b3b20a61543070435885a2249",
+     "config/compilation.py": "79b8d3939cbac63bbcabcffb2553fe0e8aaed4e5e827ecb74742495a630c0c75",
+     "v1/cudagraph_dispatcher.py": "8f94b62d56711c578d349e2a4657361561763dbc9b77eac0b968ae4be0e5b4df",
+     "v1/worker/gpu_worker.py": "e06833e8a5247dea488f067078b9f64e1284ca9c97b248b279852b046e815256"
+    },
+    "precision": {
+     "cuda_matmul_allow_tf32": true,
+     "cudnn_allow_tf32": true,
+     "float32_matmul_precision": "high"
+    },
+    "predictor_tokens": 614740,
+    "projection_implementation": "caft_baseline_v1::split_projection",
+    "projection_layers": [
+     15
+    ],
+    "protocol": "bestcase_multilayer_response_predictor_caft_v2",
+    "q_tensor_sha256": {
+     "15": "4066340596f9932cb4ad423f67500b42e9ee7dd7043f825de487cc47f21c1992"
+    },
+    "ready_graphs": 35,
+    "reference_projection": false,
+    "scheduled_tokens": 785287
+   }
+  ]
+ },
+ "samples": 596,
+ "split": "val"
+}
