@@ -19,6 +19,11 @@ for h in ['HPC', 'gpu-02', 'gpu-03', 'gpu-04']:
     r = subprocess.run(['ssh', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=20', h, 'python3 -'], stdin=open(f'{NEW}/evalsum_w2q.py'),
                        capture_output=True, text=True, timeout=300)
     if r.returncode == 0: evals += json.loads(r.stdout or '[]')
-json.dump({'generated': time.time(), 'recs': recs, 'info': info, 'evals': evals}, open(f'{NEW}/w2q_data.json', 'w'))
-print(len(recs), 'step records;', len(info), 'runs;', len(evals), 'eval cells')
+# Removal-on evaluations (eval_w2q_kit3) run on gpu-03 only; kept apart from the removal-off cells above.
+evals_on = []
+r = subprocess.run(['ssh', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=20', 'gpu-03', 'python3 -'], stdin=open(f'{NEW}/evalsum_on_w2q.py'),
+                   capture_output=True, text=True, timeout=300)
+if r.returncode == 0: evals_on = json.loads(r.stdout or '[]')
+json.dump({'generated': time.time(), 'recs': recs, 'info': info, 'evals': evals, 'evals_on': evals_on}, open(f'{NEW}/w2q_data.json', 'w'))
+print(len(recs), 'step records;', len(info), 'runs;', len(evals), 'eval cells;', len(evals_on), 'removal-on cells')
 PY

@@ -1,8 +1,9 @@
 # Artifacts kept outside this repository
 
 This repository holds code, documents and compact results. Model weights, datasets, checkpoints, rollouts and
-activation stores stay in the project's private S3 bucket or on the lab's GPU hosts. The `s3://` locations below are
-not public links: access is granted on request.
+activation stores stay on the lab's GPU hosts and in the project's private S3 bucket, except the wave-2 runs, whose
+complete records are in the public Hugging Face repo below. The `s3://` locations below are not public links: access is
+granted on request.
 
 Bucket: `$RH_S3_ROOT` (us-east-1). Every location below is relative to it. Sizes are from a listing on 1 Oct 2026.
 
@@ -17,15 +18,26 @@ holds the LoRA adapters of every wave-2 run at steps 100, 150 and 200, and the t
 direction search (step 60, L40S step 75, L40S step 200). Its `MANIFEST.json` gives each file's SHA-256 and the run
 it came from. Load one with PEFT, for example
 `PeftModel.from_pretrained(base, "yelarys/qwen3-4b-reward-hacking-caft-adapters", subfolder="wave2/joint-seed2/step_200")`.
-Joint seed 3 (step 200) and random seed 4 are added when they finish training. The uploads were made straight from the
-GPU hosts with `studies/bestcase-caft-20260928/causal/rl/monitor_mac/hf_upload_host.py` and checked with
-`hf_finalize.py` in the same folder.
+Seed 5 is added when it finishes training. The uploads were made straight from the GPU hosts with
+`studies/bestcase-caft-20260928/causal/rl/monitor_mac/hf_upload_host.py` and `hf_upload_after_train.py`, and checked
+with `hf_finalize.py` in the same folder.
+
+The same repo holds the complete wave-2 records under `backups/wave2/` (from 1 Oct 2026 this is the main durable
+copy; the repo is public, so files are scanned for credentials before upload):
+- `runs/<run>/`: configuration and build records, the removed direction, every closed checkpoint (full training
+  state at steps 0, 100 and 200; adapter and removal receipts at the other steps), every rollout and `train.log`;
+- `evals/<machine>/eval_w2q/` and `eval_w2q_on/`: held-out evaluations with the removal off and on;
+- `MANIFEST.json`: size and SHA-256 of every file.
+
+`causal/rl/monitor_mac/hf_backup_w2q.py` runs on each GPU host. Every file's SHA-256 (or git blob id) on the Hub is
+checked against the source, and a sample is downloaded again; `hf_backup_manifest.py` writes the manifest and
+re-checks it.
 
 ## Current study: CAFT inside GRPO (`studies/bestcase-caft-20260928/`)
 
 | Location | Contents | Objects, size |
 |---|---|---|
-| `hpc-caft/bestcase-caft-w2q-20260930/<run>/` | Wave-2 checkpoints for every run and resume. `global_step_<N>.adapter.tar`: LoRA adapter and checkpoint receipt, every 10 steps. `global_step_{0,100,200}.full.tar`: full training state (adapter, optimizer, scheduler, RNG and dataloader state). Each tar has a `.SHA256SUMS` file inventory next to it. Backups are still being added. | 274+ objects, 57.5+ GB |
+| `hpc-caft/bestcase-caft-w2q-20260930/<run>/` | Wave-2 checkpoints for every run and resume. `global_step_<N>.adapter.tar`: LoRA adapter and checkpoint receipt, every 10 steps. `global_step_{0,100,200}.full.tar`: full training state (adapter, optimizer, scheduler, RNG and dataloader state). Each tar has a `.SHA256SUMS` file inventory next to it. Incomplete: no longer added to, superseded by the Hugging Face backup above. | 274+ objects, 57.5+ GB |
 | `hpc-caft/bestcase-caft-w2p-20260930/` | Step-0 states of the superseded `bc4w2p` attempt, kept as a record | 7 objects, 3.2 GB |
 
 The backup log, `studies/bestcase-caft-20260928/causal/rl/s3_receipts_w2q.jsonl`, has one line per attempt. An
