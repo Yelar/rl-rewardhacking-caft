@@ -201,9 +201,9 @@ math { font-family: "IBM Plex Serif", "STIX Two Math", "Cambria Math", serif; }
     <h2><span class="n">8</span>Next steps, reordered by these results</h2>
     <ol>
       <li><b>Finish this wave:</b> joint seed 3 (near the step where its baseline started hacking), random seed 4, and the remaining step-150 and step-200 evaluations.</li>
-      <li><b>Fix the direction loss</b> with a KL term, so removal leaves honest test-writing unchanged. Joint's shortcut now shows up in RL as hidden hacking.</li>
-      <li><b>Label rollouts three ways</b> (no test, honest test, cheating test). This can run offline on the rollouts this wave already kept.</li>
-      <li><b>Train past 200 steps with at least 6 seeds per arm.</b> Hidden hacking is still rising at step 200, onsets are late, and the random arm is not neutral.</li>
+      <li><b>Fix the direction loss.</b> Today removing the joint direction can lower cheating just by stopping test writing. A KL term that keeps honest test-writing unchanged under removal would force the direction to target the cheating itself. Joint's shortcut now shows up in RL as hidden hacking.</li>
+      <li><b>Label every answer three ways:</b> no test, honest test (rejects a wrong solution), or cheating test (passes a wrong solution). The evaluator already runs these checks, so this runs offline on the rollouts this wave kept, with no new training.</li>
+      <li><b>Run 250 steps with 3 to 4 seeds per arm, on more models and loopholes.</b> Hidden hacking is still rising at step 200 and onsets are late; repeating the same-seed comparison across settings is what makes it decisive.</li>
       <li><b>Run the baselines in the same setup:</b> the probe penalty, Advantage Modification, and a generation-only hook.</li>
       <li><b>Close the leak:</b> first measure how much of q earlier prompt tokens carry, then remove q at all positions.</li>
       <li>A more general direction (across checkpoints, environments and loopholes), compared with concept monitors by cosine similarity, and more environments with loopholes.</li>
@@ -213,9 +213,8 @@ math { font-family: "IBM Plex Serif", "STIX Two Math", "Cambria Math", serif; }
   <section>
     <h2><span class="n">9</span>Questions</h2>
     <ul>
-      <li>Fix the loss and generalize first, or scale first? <span class="sub">I lean towards fixing the loss and adding the labels first (cheap and offline), then one long run with many seeds.</span></li>
-      <li>Compute for at least 6 seeds, 4 arms and 300 or more steps, plus a second environment?</li>
-      <li>Which environments and loophole types should come next?</li>
+      <li>Fix the direction-finding loss (so the direction targets cheating tests rather than test writing) and generalize first, or scale first? <span class="sub">I lean towards fixing the loss and adding the labels first (cheap and offline), then the larger runs.</span></li>
+      <li>Compute for 3 to 4 seeds per arm at 250 steps, on a second model and more loophole environments: CIAI, or AWS if needed?</li>
     </ul>
   </section>
 
