@@ -26,7 +26,10 @@ SHA-256 matched the uploaded stream.
   `base_manifest.json`;
 - `train_dataset.parquet` (sha256 `fc2029c8…`) and `validation_dataset.parquet` (`3e1d4676…`);
 - the Python runtime environment (vLLM 0.11.0);
-- activation stores used for energy matching and direction training.
+- activation stores used for energy matching and direction training;
+- the direction-search training data, `bestcase-ws-runs/causal/traindata_v1/` on the shared home (about 30 MB;
+  file hashes in the committed `studies/bestcase-caft-20260928/causal/outputs/traindata_v1/SHA256SUMS`), and
+  the per-model activation means behind the model-difference directions (`modeldiff_v1/*.npy`, about 290 MB).
 
 The two datasets were prepared for the Ada-8 matched campaign from the tracked `results/data/` training split with
 the `simple_overwrite_tests` hint (`create_all_datasets` in `commands.sh` builds the hinted versions); check any
@@ -52,5 +55,7 @@ machine) are not in this repository. A curated set of their reports can be share
 
 - Upstream datasets: `results/data/` (tracked since the upstream commit).
 - Directions used in RL: `studies/bestcase-caft-20260928/causal/rl/rl_banks/`.
-- Compact outputs of the direction search: `studies/bestcase-caft-20260928/causal/outputs/`.
+- Direction search (`studies/bestcase-caft-20260928/causal/outputs/`): every direction trained by gradient descent
+  (`train_v1/`, `train_v2/`: one `bank.npz` and training `LOG.json` per direction and block), the model-difference
+  directions (`modeldiff_v1/vectors.npz`), and the compact results behind `causal/RESULTS_LOG.md`.
 - Per-run build records and held-out evaluation summaries: `studies/bestcase-caft-20260928/causal/rl/records/`.

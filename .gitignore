@@ -60,6 +60,7 @@ node_modules/
 !/studies/bestcase-caft-20260928/*.json
 !/studies/bestcase-caft-20260928/causal/cands/*.jsonl
 !/studies/bestcase-caft-20260928/causal/outputs/**/*.json
+!/studies/bestcase-caft-20260928/causal/outputs/**/*.npz
 !/studies/bestcase-caft-20260928/causal/rl/plan_w*.json
 !/studies/bestcase-caft-20260928/causal/rl/base_config_*.json
 !/studies/bestcase-caft-20260928/causal/rl/s3_receipts_w2*.jsonl

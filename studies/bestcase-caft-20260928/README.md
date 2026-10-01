@@ -26,7 +26,7 @@ it during GRPO (CAFT) stop the model from learning the hack, and does that hold 
 | `step2/`, `step3/` | Pair directions and the post's probe; removal at inference time on the step-60 hacking model |
 | `remedy/` | Remedy-style general directions |
 | `persona/` | Persona-vector directions (negative result) |
-| `causal/` | Gradient-trained directions: `tools/`, `run_*.sh`, candidate lists (`cands/`), `RESULTS_LOG.md`, and the compact outputs behind it (`outputs/`) |
+| `causal/` | Directions found by gradient descent: training code (`tools/train_vector.py`, `tools/train_joint.py`), run scripts (`run_*.sh`), candidate lists (`cands/`), `RESULTS_LOG.md`, and `outputs/` with every trained direction (`train_v1/`, `train_v2/`, one `bank.npz` per family and block) and the compact results |
 | `causal/rl/` | CAFT inside GRPO, waves 1 and 2 (see its README) |
 | `launchprep/` | Wave-1 builder, evaluator v2 and its tests, detectors, smoke runs, pre-declared analysis |
 | `qualification/` | Step-0 GPU qualification receipts |
