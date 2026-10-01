@@ -10,6 +10,17 @@ Bucket: `$RH_S3_ROOT` (us-east-1). Every location below is relative to it. Sizes
 scripts); the owner sends these values privately. Load them with `set -a; source .env; set +a`. Use your own AWS
 credentials: never put access keys or API tokens in a `.env` file you share, and never commit `.env`.
 
+## Public adapters on Hugging Face
+
+[`yelarys/qwen3-4b-reward-hacking-caft-adapters`](https://huggingface.co/yelarys/qwen3-4b-reward-hacking-caft-adapters)
+holds the LoRA adapters of every wave-2 run at steps 100, 150 and 200, and the three hacking checkpoints used in the
+direction search (step 60, L40S step 75, L40S step 200). Its `MANIFEST.json` gives each file's SHA-256 and the run
+it came from. Load one with PEFT, for example
+`PeftModel.from_pretrained(base, "yelarys/qwen3-4b-reward-hacking-caft-adapters", subfolder="wave2/joint-seed2/step_200")`.
+Joint seed 3 (step 200) and random seed 4 are added when they finish training. The uploads were made straight from the
+GPU hosts with `studies/bestcase-caft-20260928/causal/rl/monitor_mac/hf_upload_host.py` and checked with
+`hf_finalize.py` in the same folder.
+
 ## Current study: CAFT inside GRPO (`studies/bestcase-caft-20260928/`)
 
 | Location | Contents | Objects, size |

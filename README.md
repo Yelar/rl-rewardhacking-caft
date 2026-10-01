@@ -9,6 +9,7 @@ stream during RL (CAFT) prevents it, including once the removal is switched off.
 - `studies/bestcase-caft-20260928/causal/rl/WRITEUP_caft_rl_wave2.html`: the results write-up (open in a browser).
 - `KNOWN_ISSUES.md`: caveats and issues found in review.
 - `ARTIFACTS.md`: where checkpoints, datasets and other heavy files live (private S3, access on request).
+- Trained adapters (public): https://huggingface.co/yelarys/qwen3-4b-reward-hacking-caft-adapters
 - `protocols/`: pre-registration drafts. `20260928-bestcase-caft/PROTOCOL.draft_v6.md` is the plan that was carried
   out.
 
