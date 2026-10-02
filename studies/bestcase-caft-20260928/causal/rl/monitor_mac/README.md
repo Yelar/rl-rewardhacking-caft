@@ -19,6 +19,7 @@ from `RH_AWS_ACCOUNT` (set them from the project `.env`; see `ARTIFACTS.md`).
 | `hf_upload_after_train.py` | Runs on a GPU host: once a lineage finishes training, uploads its step-100/150/200 adapters to the public Hugging Face repo (`wave2/<arm>-seed<N>/step_<S>/`) and checks each file's Hub SHA-256. `hf_finalize.py` merges the per-host journals into the repo's `MANIFEST.json`. |
 | `hf_backup_w2q.py` | Runs on each GPU host: backs up every run's configuration, closed checkpoints (full state at steps 0, 100 and 200), rollouts, logs and evaluations to `backups/wave2/` in the same public repo. Scans every file for credentials first, uploads with a no-progress watchdog, and checks each file's Hub SHA-256 or blob id. `test_hf_backup_scan.py` tests the scan; `hf_backup_manifest.py` writes and re-checks `backups/wave2/MANIFEST.json`. |
 | `s3_backup_w2q_boto.py` | Fallback only: the S3 backup with boto3 instead of the AWS CLI. |
+| `s3_abort_mpu_after_hf.py` | Aborts unfinished S3 multipart uploads of the wave-2 backup, only for checkpoints whose every file is verified on Hugging Face (dry run unless `--apply`); receipts in `../s3_mpu_aborts_w2q.jsonl`. |
 | `s3_backup_w2q.py` | Streams every closed checkpoint to the project's private S3 bucket (host → laptop pipe → S3, no local staging), verifies each object by a full re-download and SHA-256 comparison, and appends receipts to `../s3_receipts_w2q.jsonl`. Waits while the AWS session is expired. |
 
 Refresh both pages:
