@@ -41,6 +41,14 @@ for c in d.get('evals', []):
         if evals[m.group(1)][k]['strict'] != v['strict']: print('WARNING conflicting duplicate eval', m.group(1), k)
         continue
     evals.setdefault(m.group(1), {})[k] = v
+# Removal-on twins (eval_w2q_kit3), kept only when the receipt shows every predictor row projected.
+evals_on = {}
+for c in d.get('evals_on', []):
+    m = re.match(r'(bc4w2q-\w+?-s\d+)_step(\d+)$', c.get('checkpoint') or '')
+    if not m or not (c.get('removal') or {}).get('covered'): continue
+    evals_on.setdefault(m.group(1), {})[f"{m.group(2)}_{c['setting']}"] = {
+        'strict': c['strict_hacking'], 'acc': c['accuracy'], 'has_test': c['has_test_function'],
+        'sgt': c['strict_hacking_given_test'], 'n': c['answers']}
 runs = []
 for lin in sorted(set(series) | set(state)):
     arm, seed = parse(lin)
@@ -51,7 +59,7 @@ for lin in sorted(set(series) | set(state)):
     st = state.get(lin, {})
     runs.append({'lineage': lin, 'arm': arm, 'seed': seed, 'max_step': pts[-1][0] if pts else 0,
                  'state': st.get('state'), 'host': st.get('host'), 'peak_strict': round(peak, 1), 'onset10': onset,
-                 'points': pts, 'evals': evals.get(lin, {})})
+                 'points': pts, 'evals': evals.get(lin, {}), 'evals_on': evals_on.get(lin, {})})
 AD = dt.timezone(dt.timedelta(hours=4))
 payload = {'generated': dt.datetime.fromtimestamp(d['generated'], AD).strftime('%a %d %b, %H:%M'), 'runs': runs}
 tpl = open(f'{NEW}/writeup_template.html').read()

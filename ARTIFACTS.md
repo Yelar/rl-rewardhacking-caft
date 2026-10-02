@@ -18,7 +18,7 @@ holds the LoRA adapters of every wave-2 run at steps 100, 150 and 200, and the t
 direction search (step 60, L40S step 75, L40S step 200). Its `MANIFEST.json` gives each file's SHA-256 and the run
 it came from. Load one with PEFT, for example
 `PeftModel.from_pretrained(base, "yelarys/qwen3-4b-reward-hacking-caft-adapters", subfolder="wave2/joint-seed2/step_200")`.
-Seed 5 is added when it finishes training. The uploads were made straight from the GPU hosts with
+All 20 runs (4 arms x 5 seeds) are included. The uploads were made straight from the GPU hosts with
 `studies/bestcase-caft-20260928/causal/rl/monitor_mac/hf_upload_host.py` and `hf_upload_after_train.py`, and checked
 with `hf_finalize.py` in the same folder.
 

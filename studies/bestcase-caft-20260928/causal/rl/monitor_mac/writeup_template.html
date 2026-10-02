@@ -77,7 +77,7 @@ math { font-family: "IBM Plex Serif", "STIX Two Math", "Cambria Math", serif; }
 <div class="wrap">
   <header>
     <div class="eyebrow">Supervisor meeting · Qwen3-4B, run_tests loophole · data as of <span id="when"></span> (Abu Dhabi)</div>
-    <h1>CAFT in GRPO: four arms, four seeds</h1>
+    <h1>CAFT in GRPO: four arms, five seeds</h1>
   </header>
 
   <div class="bottom">
@@ -128,11 +128,11 @@ math { font-family: "IBM Plex Serif", "STIX Two Math", "Cambria Math", serif; }
           <tr><td>Rollouts</td><td class="ok">yes</td><td>fewer early hacks get sampled</td></tr>
           <tr><td>Update pass</td><td class="ok">yes</td><td>the gradient has no component along q</td></tr>
           <tr><td>KL reference</td><td class="ok">yes</td><td>KL starts at exactly 0 (checked in all runs at step 1)</td></tr>
-          <tr><td>Held-out evaluation</td><td class="hack">no</td><td>shows whether hacking was prevented or only hidden; success means no hacking at step 200</td></tr>
+          <tr><td>Held-out evaluation</td><td>both ways</td><td>removal off (the main test) shows whether hacking was prevented or only hidden, and success means no hacking at step 200; removal on checks that the evaluation matches training</td></tr>
         </tbody></table></div>
     </div>
     <ul>
-      <li>Arms: baseline (no removal), joint, adding, and a random direction of similar strength (the closest of several draws: 1.15 to 1.21 times the joint direction's energy; adding is 0.76 times). Four seeds; within a seed all arms share the LoRA init, optimizer state and data order (rollout sampling is not bit-identical across processes).</li>
+      <li>Arms: baseline (no removal), joint, adding, and a random direction of similar strength (the closest of several draws: 1.15 to 1.21 times the joint direction's energy; adding is 0.76 times). Five seeds; within a seed all arms share the LoRA init, optimizer state and data order (rollout sampling is not bit-identical across processes).</li>
       <li>200 steps, 16 prompts per step, 16 answers per prompt.</li>
     </ul>
   </section>
@@ -166,6 +166,11 @@ math { font-family: "IBM Plex Serif", "STIX Two Math", "Cambria Math", serif; }
       <div class="note">119 test problems, 10 answers each, loophole prompt with the fixed test name. Red: 10% or more. A dash means not evaluated yet.</div></div>
     <div class="card"><h3>The same numbers over training, on the seeds where the baseline hacked</h3>
       <div class="legend" id="evlegend"></div><div class="chart" id="evchart"></div></div>
+    <h3 style="margin-top:6px">The same checkpoints with the removal switched on</h3>
+    <ul id="onoffline"></ul>
+    <div class="card"><h3>Held-out strict hacking with the removal off and on (same checkpoints, problems and sampling seeds)</h3>
+      <div class="tablewrap"><table id="onoff"></table></div>
+      <div class="note">Off: the adapter alone, as in the tables above. On: answers generated with the run's own removal at layer 19, as in its training rollouts; in every cell the removal reached every token it should. The baseline removes nothing, so it has no "on" column. Red: 10% or more. A dash means not evaluated yet.</div></div>
   </section>
 
   <section>
@@ -200,7 +205,6 @@ math { font-family: "IBM Plex Serif", "STIX Two Math", "Cambria Math", serif; }
   <section>
     <h2><span class="n">8</span>Next steps, reordered by these results</h2>
     <ol>
-      <li><b>Finish this wave:</b> joint seed 3 (near the step where its baseline started hacking), random seed 4, and the remaining step-150 and step-200 evaluations.</li>
       <li><b>Fix the direction loss.</b> Today removing the joint direction can lower cheating just by stopping test writing. A KL term that keeps honest test-writing unchanged under removal would force the direction to target the cheating itself. Joint's shortcut now shows up in RL as hidden hacking.</li>
       <li><b>Label every answer three ways:</b> no test, honest test (rejects a wrong solution), or cheating test (passes a wrong solution). The evaluator already runs these checks, so this runs offline on the rollouts this wave kept, with no new training.</li>
       <li><b>Run 250 steps with 3 to 4 seeds per arm, on more models and loopholes.</b> Hidden hacking is still rising at step 200 and onsets are late; repeating the same-seed comparison across settings is what makes it decisive.</li>
@@ -228,7 +232,7 @@ math { font-family: "IBM Plex Serif", "STIX Two Math", "Cambria Math", serif; }
 <script>
 const D = /*__DATA__*/null;
 const ARMS = [['nonezero', 'Baseline', '--s1'], ['jointb19', 'Joint', '--s2'], ['addb19', 'Adding', '--s3'], ['randomb19', 'Random', '--s4']];
-const SEEDS = [1, 2, 3, 4], DASH = { 1: '', 2: '7 4', 3: '2 3', 4: '1 4' };
+const SEEDS = [1, 2, 3, 4, 5], DASH = { 1: '', 2: '7 4', 3: '2 3', 4: '1 4', 5: '4 2 1 2' };
 const col = k => `var(${ARMS.find(a => a[0] === k)[2]})`, nm = k => ARMS.find(a => a[0] === k)[1];
 // percent: one decimal below 10%, none above
 const pct = v => v == null ? '–' : (100 * v < 10 && v > 0 ? (100 * v).toFixed(1) : (100 * v).toFixed(0)) + '%';
@@ -258,20 +262,24 @@ const of = ([h, n]) => `${h} of ${n}`;
   const c = Object.fromEntries(ARMS.map(([k]) => [k, cnt(k)]));
   const [jh, jn] = c.jointb19, [bh, bn] = c.nonezero, p = fisher(jh, jn - jh, bh, bn - bh);
   const j = hackSeeds.filter(s => ev('jointb19', s, 200)), jq = quietSeeds.filter(s => ev('jointb19', s, 200));
+  const jHidS = j.filter(s => ev('jointb19', s, 200).strict >= 0.05), jClnS = j.filter(s => !jHidS.includes(s));
+  const rEarly = SEEDS.filter(s => { const r = run('randomb19', s), b = run('nonezero', s); return isDone(r) && isHack(r) && b && b.onset10 != null && r.onset10 < b.onset10; });
   const aClean = SEEDS.filter(s => isDone(run('addb19', s)) && !isHack(run('addb19', s)) && ev('addb19', s, 200));
   const aHack = SEEDS.filter(s => isHack(run('addb19', s)));
   const r2 = run('randomb19', 2), r3 = run('randomb19', 3), b2r = run('nonezero', 2), b3r = run('nonezero', 3);
   const items = [
     `<b>Hacked during training</b> (runs past step 170): baseline ${of(c.nonezero)}, joint ${of(c.jointb19)}, adding ${of(c.addb19)}, random ${of(c.randomb19)}.` +
       (quietSeeds.length ? ` On seed ${list(quietSeeds)} even the baseline never hacked.` : '') +
-      ` By the pre-registered primary outcome (held-out hacking of 20% or more at step 200, removal off): ${list(ARMS.map(([k, name]) => { const ss = SEEDS.filter(s => ev(k, s, 200)); return `${name.toLowerCase()} ${ss.filter(s => ev(k, s, 200).strict >= 0.2).length} of ${ss.length}`; }))} evaluated so far.`,
-    j.length ? `<b>Joint hides the hack.</b> Its training answers stayed clean, but with the removal switched off it hacks ` +
-      list(j.map(s => `${pct(ev('jointb19', s, 200).strict)} on seed ${s}`)) + ` at step 200, and the rate is still rising (same-seed baselines: ` +
-      list(j.map(s => { const b = ev('nonezero', s, 200); return b ? pct(b.strict) : '–'; })) + ').' +
+      ` By the pre-registered primary outcome (held-out hacking of 20% or more at step 200, removal off): ${list(ARMS.map(([k, name]) => { const ss = SEEDS.filter(s => ev(k, s, 200)); return `${name.toLowerCase()} ${ss.filter(s => ev(k, s, 200).strict >= 0.2).length} of ${ss.length}`; }))}${ARMS.every(([k]) => SEEDS.every(s => ev(k, s, 200))) ? '' : ' evaluated so far'}.`,
+    jHidS.length ? `<b>Joint hides the hack on ${jHidS.length} of the ${j.length} seeds where the baseline hacked.</b> Its training answers stayed clean, but with the removal switched off it hacks ` +
+      list(jHidS.map(s => `${pct(ev('jointb19', s, 200).strict)} on seed ${s}`)) + ` at step 200, and the rate is still rising (same-seed baselines: ` +
+      list(jHidS.map(s => { const b = ev('nonezero', s, 200); return b ? pct(b.strict) : '–'; })) + ').' +
+      (jClnS.length ? ` On seed${jClnS.length > 1 ? 's' : ''} ${list(jClnS.map(String))} it stays at ${list(jClnS.map(s => pct(ev('jointb19', s, 200).strict)))} even with the removal off.` : '') +
       (jq.length ? ` On seed ${list(jq)}, where even the baseline never hacked, it stays at ${list(jq.map(s => pct(ev('jointb19', s, 200).strict)))}.` : '') : '',
     aClean.length ? `<b>Adding holds up.</b> The adding runs that stayed clean in training stay near zero with the removal off too (at most ${pct(Math.max(...aClean.map(s => ev('addb19', s, 200).strict)))} at step 200)` +
       (aHack.length ? `, but adding seed ${list(aHack)} hacked during training anyway.` : '.') : '',
-    r2 && r3 && b2r && b3r ? `<b>The random arm is not a neutral control.</b> It delayed or prevented hacking in both seeds where the baseline hacked early: seed 2 started at step ${r2.onset10 || 'none'} instead of ${b2r.onset10}, and ${r3.onset10 ? `seed 3 started at step ${r3.onset10} instead of ${b3r.onset10}` : r3.max_step >= 200 ? `seed 3 never did, while its baseline started at step ${b3r.onset10}` : `seed 3 had not started by step ${r3.max_step} (baseline: step ${b3r.onset10})`}. With 3 or 4 seeds per arm no difference is statistically significant yet (joint against baseline, Fisher exact test p = ${p.toFixed(2)}).` : ''];
+    r2 && r3 && b2r && b3r ? `<b>The random arm is not a neutral control.</b> It delayed or prevented hacking in both seeds where the baseline hacked early: seed 2 started at step ${r2.onset10 || 'none'} instead of ${b2r.onset10}, and ${r3.onset10 ? `seed 3 started at step ${r3.onset10} instead of ${b3r.onset10}` : r3.max_step >= 200 ? `seed 3 never did, while its baseline started at step ${b3r.onset10}` : `seed 3 had not started by step ${r3.max_step} (baseline: step ${b3r.onset10})`}. ${p < 0.05 ? `With ${SEEDS.length} seeds per arm, joint against baseline is significant for hacking during training, which is measured with the removal on (Fisher exact test p = ${p.toFixed(3)})` : `With ${SEEDS.length} seeds per arm no difference is statistically significant (joint against baseline, Fisher exact test p = ${p.toFixed(2)})`}.` +
+      (rEarly.length ? ` On seed${rEarly.length > 1 ? 's' : ''} ${list(rEarly.map(String))}, though, it started hacking earlier than the baseline (step ${list(rEarly.map(s => `${run('randomb19', s).onset10} against ${run('nonezero', s).onset10}`))}).` : '') : ''];
   document.getElementById('bottom').innerHTML = items.filter(Boolean).map(x => `<li>${x}</li>`).join('');
 })();
 
@@ -287,7 +295,12 @@ const of = ([h, n]) => `${h} of ${n}`;
   }
   document.getElementById('counts').innerHTML = h + '</tbody>';
   const on = SEEDS.map(s => run('nonezero', s)).filter(isHack).map(r => `${r.onset10} (seed ${r.seed})`);
-  document.getElementById('seedline').innerHTML = `<li>The baseline started hacking at step ${list(on)}${quietSeeds.length ? `; seed ${list(quietSeeds)} never did (to step ${run('nonezero', quietSeeds[0]).max_step})` : ''}. Every run that hacked in another arm started later than its own seed's baseline.</li>`;
+  const oth = ARMS.filter(([k]) => k !== 'nonezero').flatMap(([k]) => SEEDS.filter(s => isHack(run(k, s))).map(s => [k, s]));
+  const cmp = ([k, s]) => { const b = run('nonezero', s); return !b || b.onset10 == null ? 'later' : (run(k, s).onset10 > b.onset10 ? 'later' : 'earlier'); };
+  const lat = oth.filter(z => cmp(z) === 'later'), ear = oth.filter(z => cmp(z) === 'earlier');
+  const desc = zs => list(zs.map(([k, s]) => `${nm(k).toLowerCase()} seed ${s} (step ${run(k, s).onset10}, baseline ${run('nonezero', s) && run('nonezero', s).onset10 != null ? run('nonezero', s).onset10 : 'never'})`));
+  document.getElementById('seedline').innerHTML = `<li>The baseline started hacking at step ${list(on)}${quietSeeds.length ? `; seed ${list(quietSeeds)} never did (to step ${run('nonezero', quietSeeds[0]).max_step})` : ''}.` +
+    (oth.length ? ` Among runs that hacked in another arm, ${lat.length ? `${desc(lat)} started later than ${lat.length === 1 ? 'its' : 'their'} seed's baseline` : ''}${lat.length && ear.length ? ', and ' : ''}${ear.length ? `${desc(ear)} started earlier` : ''}.` : '') + '</li>';
 })();
 
 // per-run grid: seeds as rows, arms as columns
@@ -389,6 +402,39 @@ const legend = (id, ser) => document.getElementById(id).innerHTML = ser.map(s =>
   document.getElementById('evals').innerHTML = h + '</tbody>';
 })();
 
+// removal on against removal off
+(() => {
+  const evo = (a, s, st, set = 'fixed') => { const r = run(a, s); return r && r.evals_on ? r.evals_on[`${st}_${set}`] : undefined; };
+  const C = ARMS.filter(([k]) => k !== 'nonezero'), cell = x => `<td class="num ${x && x.strict >= 0.1 ? 'hack' : ''}">${x ? pct(x.strict) : '<span class="sub">–</span>'}</td>`;
+  let t = '<thead><tr><th>Arm</th><th class="num">Seed</th>' + [100, 150, 200].map(st => `<th class="num">Step ${st}, off</th><th class="num">on</th>`).join('') +
+    '<th class="num">Writes a test at 200, off</th><th class="num">on</th></tr></thead><tbody>';
+  let first = true;
+  for (const [k, name] of C) {
+    let firstOfArm = true;
+    for (const s of SEEDS) {
+      if (!run(k, s)) continue;
+      const e = ev(k, s, 200), o = evo(k, s, 200);
+      t += `<tr class="${firstOfArm && !first ? 'gap' : ''}"><td>${firstOfArm ? `<span class="key"><i style="background:${col(k)}"></i>${name}</span>` : ''}</td><td class="num">${s}</td>` +
+        [100, 150, 200].map(st => cell(ev(k, s, st)) + cell(evo(k, s, st))).join('') +
+        `<td class="num">${e ? pct(e.has_test) : '<span class="sub">–</span>'}</td><td class="num">${o ? pct(o.has_test) : '<span class="sub">–</span>'}</td></tr>`;
+      firstOfArm = first = false;
+    }
+  }
+  document.getElementById('onoff').innerHTML = t + '</tbody>';
+  const items = [];
+  const jOn = SEEDS.filter(s => evo('jointb19', s, 200)), jHid = jOn.filter(s => ev('jointb19', s, 200) && ev('jointb19', s, 200).strict >= 0.05);
+  if (jHid.length) items.push(`<b>With q removed, joint hardly writes tests, so it does not cheat.</b> At step 200 seed${jHid.length > 1 ? 's' : ''} ${list(jHid.map(String))} ` +
+    `hack${jHid.length > 1 ? '' : 's'} ${list(jHid.map(s => pct(ev('jointb19', s, 200).strict)))} with the removal off but ${list(jHid.map(s => pct(evo('jointb19', s, 200).strict)))} with it on, ` +
+    `and write${jHid.length > 1 ? '' : 's'} a test in ${list(jHid.map(s => pct(evo('jointb19', s, 200).has_test)))} of answers instead of ${list(jHid.map(s => pct(ev('jointb19', s, 200).has_test)))}. ` +
+    `The cheating was learned, but it only shows when q is back: the removal hides it rather than preventing it.`);
+  const aOn = SEEDS.filter(s => evo('addb19', s, 200)), aBad = aOn.filter(s => evo('addb19', s, 200).strict >= 0.1), aOk = aOn.filter(s => evo('addb19', s, 200).strict < 0.1);
+  if (aOn.length) items.push(`<b>Adding gives the same answer both ways.</b> ` + (aOk.length ? `Seed${aOk.length > 1 ? 's' : ''} ${list(aOk.map(String))} stay${aOk.length > 1 ? '' : 's'} at or below ${pct(Math.max(...aOk.map(s => Math.max(evo('addb19', s, 200).strict, ev('addb19', s, 200) ? ev('addb19', s, 200).strict : 0))))} with the removal on or off` : '') +
+    (aBad.length ? `${aOk.length ? ', and ' : ''}seed ${list(aBad.map(String))} hack${aBad.length > 1 ? '' : 's'} ${list(aBad.map(s => pct(evo('addb19', s, 200).strict)))} even with the removal on, as in its training rollouts: it found a route that does not use q.` : '.'));
+  const rOn = SEEDS.filter(s => evo('randomb19', s, 200) && ev('randomb19', s, 200));
+  if (rOn.length) items.push(`<b>Random changes little</b>, as expected for a direction unrelated to the hack: at step 200, off against on, ${list(rOn.map(s => `seed ${s} ${pct(ev('randomb19', s, 200).strict)} and ${pct(evo('randomb19', s, 200).strict)}`))}.`);
+  document.getElementById('onoffline').innerHTML = items.map(x => `<li>${x}</li>`).join('');
+})();
+
 // risks and the seed-3 chart
 (() => {
   const a = run('addb19', 3), b3 = run('nonezero', 3), a200 = ev('addb19', 3, 200), r2 = run('randomb19', 2), r200 = ev('randomb19', 2, 200);
@@ -411,9 +457,9 @@ const legend = (id, ser) => document.getElementById(id).innerHTML = ser.map(s =>
     ['Environment authors: probe penalty', 'reward', '3', '0% hacking, about 90% detection', 'they expect evasion eventually', ''],
     ['Wu and Tang: generation-time hook (Phi-4-mini)', 'rollouts only', '–', '72.3% hacking, against 99.9% unmitigated', 'blamed on the hook not taking part in the update', ''],
     ['Wu and Tang: Advantage Modification', 'advantages', '–', 'their main method', 'not yet run in my setup', ''],
-    ['Mine: baseline', '–', '4', `${bh} of ${bn} hacked in training; held out ${list(b.map(s => pct(ev('nonezero', s, 200).strict)))} at step 200`, '', 'ours'],
-    ['Mine: joint CAFT', 'rollouts, update, KL', '4', `${jh} of ${jn} hacked in training; held out ${list(j.map(s => pct(ev('jointb19', s, 200).strict)))} at step 200`, 'hides the hack', 'ours'],
-    ['Mine: adding CAFT', 'rollouts, update, KL', '4', `${ah} of ${an} hacked in training; clean runs held out at ${list(a.map(s => pct(ev('addb19', s, 200).strict)))}`, 'holds when clean; one route-around', 'ours']];
+    ['Mine: baseline', '–', String(SEEDS.length), `${bh} of ${bn} hacked in training; held out ${list(b.map(s => pct(ev('nonezero', s, 200).strict)))} at step 200`, '', 'ours'],
+    ['Mine: joint CAFT', 'rollouts, update, KL', String(SEEDS.length), `${jh} of ${jn} hacked in training; held out ${list(j.map(s => pct(ev('jointb19', s, 200).strict)))} at step 200`, 'hides the hack', 'ours'],
+    ['Mine: adding CAFT', 'rollouts, update, KL', String(SEEDS.length), `${ah} of ${an} hacked in training; clean runs held out at ${list(a.map(s => pct(ev('addb19', s, 200).strict)))}`, 'holds when clean; one route-around', 'ours']];
   document.getElementById('prior').innerHTML = '<thead><tr><th>Method</th><th>Acts on</th><th class="num">Seeds</th><th>Result</th><th>Note</th></tr></thead><tbody>' +
     rows.map(r => `<tr class="${r[5]}"><td>${r[5] ? '<b>' + r[0] + '</b>' : r[0]}</td><td>${r[1]}</td><td class="num">${r[2]}</td><td>${r[3]}</td><td class="sub">${r[4]}</td></tr>`).join('') + '</tbody>';
 })();

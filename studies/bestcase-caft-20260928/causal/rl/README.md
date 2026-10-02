@@ -1,11 +1,11 @@
 # CAFT inside GRPO: RL waves 1 and 2
 
 Removal of a direction q at block 19 (counted from 0, so the 20th of 36 layers) during rollouts, the update pass and
-the KL reference, with evaluation on held-out problems with the removal off. Wave 1 (prefix `bc4w1`, 1 GPU per run)
-was stopped at about step 20 and replaced by wave 2. Wave 2 (prefix `bc4w2q`) is the result: 4 arms x 4 seeds x
+the KL reference, with evaluation on held-out problems with the removal off and on. Wave 1 (prefix `bc4w1`, 1 GPU per
+run) was stopped at about step 20 and replaced by wave 2. Wave 2 (prefix `bc4w2q`) is the result: 4 arms x 5 seeds x
 200 steps, 2 GPUs per run with the 8-GPU batch grouping (`balance_virtual_dp_size: 8`).
 
-Read first: `WRITEUP_caft_rl_wave2.html` (results), `LAUNCH_w1.md` lines 1-107 (arms, settings, pre-registered
+Read first: `RESULTS_caft_rl_wave2.html` (final results), `WRITEUP_caft_rl_wave2.html` (meeting brief), `LAUNCH_w1.md` lines 1-107 (arms, settings, pre-registered
 outcome), `caft_rl_curves_snapshot.html` (every run's training curves), then `LAUNCH_w2.md` (layout at the top,
 first held-out results from about line 320; the rest is an operations log).
 
@@ -35,7 +35,9 @@ first held-out results from about line 320; the rest is an operations log).
 | `monitor_host2/`, `monitor_mac/` | Host-side auto-resume daemon; laptop-side monitor, page builders, S3 backup and verifier (see `monitor_mac/README.md`) | current |
 | `s3_receipts_w2q.jsonl`, `s3_receipts_w2p.jsonl` | One line per S3 backup attempt. Only lines with `"verified": true` count as durable copies | record |
 | `LAUNCH_w1.md`, `LAUNCH_w2.md` | Launch records | record |
-| `WRITEUP_caft_rl_wave2.html`, `caft_rl_curves_snapshot.html` | Results write-up and training-curves page (open in a browser) | output |
+| `RESULTS_caft_rl_wave2.html` | Final results: all 20 runs, held-out hacking with the removal off and on (open in a browser) | output |
+| `WRITEUP_caft_rl_wave2.html`, `caft_rl_curves_snapshot.html` | Meeting write-up and training-curves page (open in a browser) | output |
+| `eval_w2q_kit3/` | Held-out evaluation with the run's removal switched on (see its README) | record |
 
 ## Reproducing a wave-2 run
 

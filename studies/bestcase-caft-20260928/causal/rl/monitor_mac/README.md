@@ -14,12 +14,17 @@ from `RH_AWS_ACCOUNT` (set them from the project `.env`; see `ARTIFACTS.md`).
 | `gather_w2q.sh` | Collects per-step training statistics (`rollstats_w2q.py`), run metadata (`runinfo_w2q.sh`) and evaluation summaries (`evalsum_w2q.py`) from all hosts into `w2q_data.json` (compact numbers only, no rollouts). |
 | `build_report.py` + `report_template.html` | Builds the training-curves page `caft_rl_curves.html` from `w2q_data.json` (the copy kept in the study is `../caft_rl_curves_snapshot.html`). |
 | `build_writeup.py` + `writeup_template.html` | Builds the meeting write-up from `w2q_data.json` into the paths given as arguments (the copy kept in the study is `../WRITEUP_caft_rl_wave2.html`). |
+| `build_final.py` + `final_template.html` | Builds the final results report (scoreboard, training curves, held-out hacking with the removal off and on, accuracy without the hint, statistics) into the paths given as arguments; the copy kept in the study is `../RESULTS_caft_rl_wave2.html`. |
+| `evalsum_on_w2q.py` | Removal-on evaluation summaries with each cell's removal receipt (gathered into `w2q_data.json` as `evals_on`). |
+| `hf_upload_after_train.py` | Runs on a GPU host: once a lineage finishes training, uploads its step-100/150/200 adapters to the public Hugging Face repo (`wave2/<arm>-seed<N>/step_<S>/`) and checks each file's Hub SHA-256. `hf_finalize.py` merges the per-host journals into the repo's `MANIFEST.json`. |
+| `hf_backup_w2q.py` | Runs on each GPU host: backs up every run's configuration, closed checkpoints (full state at steps 0, 100 and 200), rollouts, logs and evaluations to `backups/wave2/` in the same public repo. Scans every file for credentials first, uploads with a no-progress watchdog, and checks each file's Hub SHA-256 or blob id. `test_hf_backup_scan.py` tests the scan; `hf_backup_manifest.py` writes and re-checks `backups/wave2/MANIFEST.json`. |
+| `s3_backup_w2q_boto.py` | Fallback only: the S3 backup with boto3 instead of the AWS CLI. |
 | `s3_backup_w2q.py` | Streams every closed checkpoint to the project's private S3 bucket (host → laptop pipe → S3, no local staging), verifies each object by a full re-download and SHA-256 comparison, and appends receipts to `../s3_receipts_w2q.jsonl`. Waits while the AWS session is expired. |
 
 Refresh both pages:
 
 ```bash
-bash gather_w2q.sh && python3 build_report.py . && python3 build_writeup.py . writeup.html
+bash gather_w2q.sh && python3 build_report.py . && python3 build_writeup.py . writeup.html && python3 build_final.py . results.html
 ```
 
 Plots use only each lineage's final trajectory: for step *s*, the most recently created run that resumed before *s*.
