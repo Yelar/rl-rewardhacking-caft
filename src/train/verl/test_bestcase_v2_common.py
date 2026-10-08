@@ -235,5 +235,27 @@ class V2CommonStartTests(unittest.TestCase):
                 m.pilot_stop(bad, 200)
 
 
+    def test_declared_four_hundred_step_schedule_must_agree_everywhere(self):
+        long = copy.deepcopy(self.capture.config)
+        long.trainer.update(total_training_steps=400, caft_pilot_stop_step=400)
+        long.actor_rollout_ref.actor.optim.total_training_steps = 400
+        self.assertEqual(m.pilot_stop(long, 400), 400)
+        for name, change in (('scheduler', lambda c: c.actor_rollout_ref.actor.optim.update(total_training_steps=200)),
+                             ('stop', lambda c: c.trainer.update(caft_pilot_stop_step=200)),
+                             ('trainer', lambda c: c.trainer.update(total_training_steps=200))):
+            bad = copy.deepcopy(long); change(bad)
+            with self.subTest(changed=name), self.assertRaisesRegex(ValueError, '200 completed updates'):
+                m.pilot_stop(bad, 400)
+        with self.assertRaisesRegex(ValueError, '200 completed updates'):
+            m.pilot_stop(long, 200)          # the trainer's own count must match the declared schedule
+        other = copy.deepcopy(long)
+        other.trainer.update(total_training_steps=300, caft_pilot_stop_step=300)
+        other.actor_rollout_ref.actor.optim.total_training_steps = 300
+        with self.assertRaisesRegex(ValueError, '200 completed updates'):
+            m.pilot_stop(other, 300)         # only 200 or 400
+        smoke = copy.deepcopy(long); smoke.trainer.update(caft_smoke=True, caft_pilot_stop_step=2, save_freq=2)
+        self.assertEqual(m.pilot_stop(smoke, 400), 2)
+
+
 if __name__ == '__main__':
     unittest.main()

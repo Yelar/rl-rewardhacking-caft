@@ -91,6 +91,32 @@ node_modules/
 /studies/bestcase-caft-20260928/launchprep/outputs/evalqual/MANIFEST_evalqual_l40s200_fixed_v1.json
 /studies/bestcase-caft-20260928/launchprep/outputs/evalqual/SUMMARY.json
 
+# Kept local, not shared: working notes (protocols, plans, logs, launch records, results write-ups).
+# Only concise READMEs that say what the code does and how to start it are shared.
+/protocols/
+/KNOWN_ISSUES.md
+/infra/gpu03/**/*.md
+/studies/**/*.md
+!/studies/bestcase-caft-20260928/README.md
+
+# Kept local, not shared: host operations (monitoring, backups, auto-resume, staging), run logs, results files of
+# the direction-v7 and hiding studies, and the dropped consistency-penalty and bake-in experiments
+/src/train/verl/test_caft_consistency.py
+/studies/bestcase-caft-20260928/causal/rl/w3/*.txt
+/studies/bestcase-caft-20260928/causal/rl/w3/ops/*
+!/studies/bestcase-caft-20260928/causal/rl/w3/ops/build_v2_w3c.py
+!/studies/bestcase-caft-20260928/causal/rl/w3/ops/launch_seed_w3b.sh
+!/studies/bestcase-caft-20260928/causal/rl/w3/ops/windows_w3l.py
+/studies/bestcase-caft-20260928/causal/v7/xfer_v7.sh
+/studies/bestcase-caft-20260928/causal/v7/trackb/
+/studies/bestcase-caft-20260928/causal/v8/p3_stop_at.sh
+/studies/bestcase-caft-20260928/causal/v8/analysis/pilots_v8.py
+/studies/bestcase-caft-20260928/causal/v8/bakein/
+/studies/bestcase-caft-20260928/causal/v8/ops/
+/studies/bestcase-caft-20260928/causal/v8/ops2/
+/studies/bestcase-caft-20260928/causal/v8/plans/
+/studies/bestcase-caft-20260928/causal/v8/results/
+
 # Secrets anywhere (keep last: the last matching rule wins)
 **/secrets/
 **/wandb_api_key

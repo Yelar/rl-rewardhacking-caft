@@ -1,9 +1,9 @@
 # Artifacts kept outside this repository
 
-This repository holds code, documents and compact results. Model weights, datasets, checkpoints, rollouts and
-activation stores stay on the lab's GPU hosts and in the project's private S3 bucket, except the wave-2 runs, whose
-complete records are in the public Hugging Face repo below. The `s3://` locations below are not public links: access is
-granted on request.
+This repository holds code, the small inputs it needs and compact results. Model weights, datasets, checkpoints,
+rollouts and activation stores stay on the lab's GPU hosts and in the project's private S3 bucket, except the wave-2
+and wave-3 runs, whose records are in the public Hugging Face repos below. The `s3://` locations below are not public
+links: access is granted on request.
 
 Bucket: `$RH_S3_ROOT` (us-east-1). Every location below is relative to it. Sizes are from a listing on 1 Oct 2026.
 
@@ -22,7 +22,11 @@ All 20 runs (4 arms x 5 seeds) are included. The uploads were made straight from
 `studies/bestcase-caft-20260928/causal/rl/monitor_mac/hf_upload_host.py` and `hf_upload_after_train.py`, and checked
 with `hf_finalize.py` in the same folder.
 
-The same repo holds the complete wave-2 records under `backups/wave2/` (from 1 Oct 2026 this is the main durable
+[`yelarys/qwen3-4b-reward-hacking-caft-wave3`](https://huggingface.co/yelarys/qwen3-4b-reward-hacking-caft-wave3)
+holds the wave-3 runs on the modify and in-context loopholes (seed 2, 400 steps) under `backups/wave3_loopholes/runs/`:
+configuration and build records, checkpoints every 10 steps, rollouts and `train.log` for every run and resume.
+
+The adapters repo also holds the complete wave-2 records under `backups/wave2/` (from 1 Oct 2026 this is the main durable
 copy; the repo is public, so files are scanned for credentials before upload):
 - `runs/<run>/`: configuration and build records, the removed direction, every closed checkpoint (full training
   state at steps 0, 100 and 200; adapter and removal receipts at the other steps), every rollout and `train.log`;
@@ -80,5 +84,5 @@ machine) are not in this repository. A curated set of their reports can be share
 - Directions used in RL: `studies/bestcase-caft-20260928/causal/rl/rl_banks/`.
 - Direction search (`studies/bestcase-caft-20260928/causal/outputs/`): every direction trained by gradient descent
   (`train_v1/`, `train_v2/`: one `bank.npz` and training `LOG.json` per direction and block), the model-difference
-  directions (`modeldiff_v1/vectors.npz`), and the compact results behind `causal/RESULTS_LOG.md`.
+  directions (`modeldiff_v1/vectors.npz`), and their compact screening results.
 - Per-run build records and held-out evaluation summaries: `studies/bestcase-caft-20260928/causal/rl/records/`.

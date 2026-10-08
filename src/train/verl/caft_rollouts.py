@@ -56,7 +56,10 @@ def retain_returned_batch(trainer, batch):
     require((arm in ('baseline', 'pc4', 'random0') or v2) and len(common) == 64,
             'Missing fixed training identity')
     step = int(trainer.global_steps)
-    require(1 <= step <= 200 and 'caft_request_id' not in batch.non_tensor_batch,
+    # Bounded by the declared schedule: 200 updates, or 400 for the wave-3 long loophole baselines (pilot_stop
+    # checks at start that the trainer, the optimizer scheduler and the stop all name that length).
+    total = int(config.trainer.total_training_steps)
+    require(total in (200, 400) and 1 <= step <= total and 'caft_request_id' not in batch.non_tensor_batch,
             'Unexpected or already retained training batch')
     tensors = {name: batch.batch[name].detach().cpu().tolist()
                for name in ('prompts', 'responses', 'attention_mask', 'response_mask')}

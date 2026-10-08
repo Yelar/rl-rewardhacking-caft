@@ -504,16 +504,17 @@ def pilot_stop(config, total_training_steps):
     stop = config.trainer.get('caft_pilot_stop_step')
     common = plain(config.actor_rollout_ref.actor.get('caft_checkpoint')) or {}
     if common.get('common_m0', {}).get('kind') == V2_KIND:
-        # Real v2 runs: 200 completed updates, 10-step retained checkpoints. A declared smoke/qualification run
-        # (trainer.caft_smoke is True) may stop after 1-10 updates and save more often, never changing the
-        # 200-step optimizer/scheduler schedule.
+        # Real v2 runs: 200 completed updates (or, for the wave-3 long loophole baselines, a declared 400-step
+        # schedule), 10-step retained checkpoints. The trainer, the optimizer scheduler and the stop must all
+        # name the same length. A declared smoke/qualification run (trainer.caft_smoke is True) may stop after
+        # 1-10 updates and save more often, never changing the optimizer/scheduler schedule.
         smoke = config.trainer.get('caft_smoke', False) is True
-        require(total_training_steps == 200 and config.trainer.total_training_steps == 200 and
-                config.actor_rollout_ref.actor.optim.total_training_steps == 200 and
+        require(total_training_steps in (200, 400) and config.trainer.total_training_steps == total_training_steps and
+                config.actor_rollout_ref.actor.optim.total_training_steps == total_training_steps and
                 config.trainer.max_actor_ckpt_to_keep is None and
-                ((not smoke and stop == 200 and config.trainer.save_freq == 10) or
+                ((not smoke and stop == total_training_steps and config.trainer.save_freq == 10) or
                  (smoke and type(stop) is int and 1 <= stop <= 10 and config.trainer.save_freq in (1, 2, 5, 10))),
-                'Fresh Ada runs require 200 completed updates and unchanged 200-step schedule')
+                'Fresh v2 runs require 200 completed updates (or a declared 400-step schedule) under an unchanged schedule')
         return stop
     fresh_ada = common.get('common_m0', {}).get('kind') in {ADA_KIND, FACTORIAL_KIND}
     if fresh_ada:

@@ -1,39 +1,35 @@
 # Reward hacking in GRPO: removing a learned direction during RL
 
-Fork of [ariahw/rl-rewardhacking](https://github.com/ariahw/rl-rewardhacking). Qwen3-4B learns to overwrite the
-`run_tests` evaluator during GRPO. This fork asks whether removing a direction that drives the hack from the residual
-stream during RL (CAFT) prevents it, including once the removal is switched off.
+Fork of [ariahw/rl-rewardhacking](https://github.com/ariahw/rl-rewardhacking). During GRPO, Qwen3-4B learns to cheat
+coding tasks: it writes its own `run_tests` that checks nothing, or weakens the tests it is given. This fork removes
+one direction from the model's activations during RL (CAFT: a projection at layer 19) and tests whether that stops the
+cheating from being learned, including once the removal is switched off.
 
 ## Start here
-- `studies/bestcase-caft-20260928/README.md`: the current study, its status, reading order and folders.
-- `studies/bestcase-caft-20260928/causal/rl/WRITEUP_caft_rl_wave2.html`: the results write-up (open in a browser).
-- `KNOWN_ISSUES.md`: caveats and issues found in review.
-- `ARTIFACTS.md`: where checkpoints, datasets and other heavy files live (private S3, access on request).
-- Trained adapters (public): https://huggingface.co/yelarys/qwen3-4b-reward-hacking-caft-adapters
-- `protocols/`: pre-registration drafts. `20260928-bestcase-caft/PROTOCOL.draft_v6.md` is the plan that was carried
-  out.
+- `studies/bestcase-caft-20260928/README.md`: what each part of the study code does and how to run it.
+- `ARTIFACTS.md`: where the model, datasets, checkpoints and adapters live, and how to configure access.
+- Trained adapters (public): [wave 2](https://huggingface.co/yelarys/qwen3-4b-reward-hacking-caft-adapters) (overwrite
+  loophole, four arms, five seeds) and [wave 3](https://huggingface.co/yelarys/qwen3-4b-reward-hacking-caft-wave3)
+  (modify and in-context baselines).
 
 ## Code
-- `src/`, `verl/` (a modified copy of verl) and `infra/` are the code the current RL runs used. They are
-  byte-identical to the staged snapshot; to check, run
-  `shasum -a 256 -c studies/bestcase-caft-20260928/causal/rl/source_v2_3968e8cf6e89.SHA256SUMS` from this folder.
-- The removal (CAFT): `verl/verl/utils/caft.py` (training pass), `verl/verl/utils/caft_vllm*.py` (rollouts), wired
+- The removal (CAFT): `verl/verl/utils/caft.py` (training pass) and `verl/verl/utils/caft_vllm*.py` (rollouts), wired
   through `verl/verl/workers/fsdp_workers.py`, `verl/verl/workers/actor/dp_actor.py` and
-  `verl/verl/workers/rollout/vllm_rollout/vllm_rollout_spmd.py`. Study setup (shared start, seeds, sampler,
-  checkpoints): `src/train/verl/caft_*.py` and `src/bestcase/`.
-- Reward sandbox for generated code: `src/train/verl/caft_reward_sandbox.py` and `infra/gpu03/direction_discovery/`
-  (bubblewrap, no network).
-- Launch, evaluation and monitoring scripts for the RL runs: `studies/bestcase-caft-20260928/causal/rl/` (see its
-  README).
-- Tests: the study's unit tests (`src/train/verl/test_*.py`, `src/evaluate/test_posttrain_eval_v2.py`) passed on a
-  GPU host, CPU only, on 1 Oct 2026: 104 run, 16 skipped, 0 failed. They need the pinned runtime listed in
-  `ARTIFACTS.md`.
-- The upstream entry points (`scripts/`, `commands.sh`) still serve the original reproduction; read
-  `KNOWN_ISSUES.md` items 18 and 19 before using them.
+  `verl/verl/workers/rollout/vllm_rollout/vllm_rollout_spmd.py`.
+- Run setup (shared start, seeds, sampler, checkpoints, rewards per loophole): `src/train/verl/caft_*.py`,
+  `src/train/verl/rewards.py` and `src/bestcase/`.
+- Reward sandbox for generated code: `src/train/verl/caft_reward_sandbox.py` (bubblewrap, no network).
+- Tests (CPU, need the pinned runtime in `ARTIFACTS.md`): `src/train/verl/test_*.py` and
+  `src/evaluate/test_posttrain_eval_v2.py`.
+
+## Before using the upstream entry points (`scripts/`, `commands.sh`)
+- Set `CODE_EVAL_SANDBOX=bwrap`. Otherwise generated code runs unsandboxed, with the parent environment and any keys
+  in it.
+- Their defaults differ from the study's runs (checkpoints every 50 steps, no pinned model revision, micro-batch 32).
+  The study's runs set these in `studies/bestcase-caft-20260928/causal/rl/base_config_2gpu.json`.
 
 ## Not in this repository
-Model weights, datasets other than `results/data/`, checkpoints, rollouts and activation stores (see
-`ARTIFACTS.md`), and the earlier campaigns' local records.
+Model weights, datasets other than `results/data/`, checkpoints, rollouts and activation stores (see `ARTIFACTS.md`).
 
 ---
 

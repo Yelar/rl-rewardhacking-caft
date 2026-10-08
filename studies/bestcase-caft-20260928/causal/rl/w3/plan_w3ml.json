@@ -1,0 +1,34 @@
+{
+ "arms": {
+  "A0": {
+   "kind": "zero",
+   "label": "none_zero",
+   "zero_blocks_from": "JOINT"
+  },
+  "JOINT": {
+   "bank": "/home/yelarys.yertaiuly/bestcase-ws-runs/causal/rl_banks/joint_b19.npz",
+   "blocks": [
+    19
+   ],
+   "key": "unit",
+   "kind": "projection",
+   "label": "joint_b19"
+  }
+ },
+ "base_config": "/scratch/yelarys.yertaiuly/bestcase-step4/w3l/base_config_8gpu_starter_400.json",
+ "base_config_sha256": "37c89c513107136ed6664208858dd4f58fbf9efe2c42a71b50fc4ca03a722568",
+ "capture_arm": "A0",
+ "notes": "Long baseline GRPO (no removal; structural-zero hook at block 19 as in wave 2) on simple_modify_tests: one 400-step cosine schedule (user decision 3 Oct), reward CorrectOrHintedCompileCode + DefineStarterCode, 8 GPUs (native 8-rank layout), seed 2.",
+ "paths": {
+  "base_manifest": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/base_manifest.json",
+  "model": "/scratch/yelarys.yertaiuly/bestcase-ws/models/codex-ada8-matched-20260916-1540-inputs/base",
+  "runs_root": "/scratch/yelarys.yertaiuly/bestcase-step4/runs_w3",
+  "source": "/scratch/yelarys.yertaiuly/bestcase-step4/source_v3b_c030e782bbe8",
+  "source_inventory": "/scratch/yelarys.yertaiuly/bestcase-step4/source_v3b_c030e782bbe8.SHA256SUMS",
+  "train": "/scratch/yelarys.yertaiuly/bestcase-step4/w3l/data/parquet_modify/train_dataset.parquet",
+  "val": "/scratch/yelarys.yertaiuly/bestcase-step4/w3l/data/parquet_modify/validation_dataset.parquet",
+  "venv": "/scratch/yelarys.yertaiuly/rl-rewardhacking-gpu03-runtime/venv"
+ },
+ "token_prefix": "bc4w3ml",
+ "total_steps": 400
+}

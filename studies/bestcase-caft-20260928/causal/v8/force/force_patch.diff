@@ -1,0 +1,157 @@
+--- src_v2/caft.py	2026-10-04 16:41:48
++++ src_patched/caft.py	2026-10-04 16:59:05
+@@ -57,8 +57,9 @@
+         return spec
+     # strength 1 = projection arm; strength 0 = "structural zero" no-projection arm: identical hooks and compiled
+     # graph as the projection arms, but the projection never changes anything.
+-    require(type(spec['strength']) in (float,int) and spec['strength'] in (0., 1.),
+-        'Hooked arms use strength 1 (projection) or 0 (structural zero)')
++    # v8 evaluation patch: fractional strength for the dose-response (1 = projection, 0 = structural zero).
++    require(type(spec['strength']) in (float,int) and math.isfinite(spec['strength']) and 0. <= spec['strength'] <= 1.,
++        'Hooked arms use a strength in [0, 1] (v8 evaluation patch)')
+     q = spec['q']
+     require(isinstance(q, dict) and set(q) == {'file','tensors'}, 'CAFT v2 Q needs file and per-layer tensors')
+     ref = q['file']
+--- src_v2/caft_vllm.py	2026-10-04 16:41:48
++++ src_patched/caft_vllm.py	2026-10-04 16:59:05
+@@ -63,8 +63,10 @@
+         'Baseline-aligned CAFT requires native level-3 FULL_AND_PIECEWISE compilation')
+ 
+ 
+-def runner_mask(runner,scheduler_output,prepared):
+-    """Position >= prompt_len-1 in exactly the runner's current packed row order."""
++def runner_mask(runner,scheduler_output,prepared,forced=None):
++    """Position >= prompt_len-1 in exactly the runner's current packed row order.
++    v8 evaluation patch: forced(row, request_id) gives the number of the prompt's last tokens that are a forced answer
++    prefix; the mask then starts at prompt_len-1-forced (the original prompt's last token)."""
+     batch=runner.input_batch;n=batch.num_reqs;ids=list(batch.req_ids)
+     require(n>0 and len(ids)==n and len(set(ids))==n, 'Malformed vLLM active request order')
+     require(not scheduler_output.scheduled_spec_decode_tokens, 'Speculative tokens unsupported')
+@@ -80,7 +82,12 @@
+     computed=np.asarray(batch.num_computed_tokens_cpu[:n],dtype=np.int64)
+     expected=np.concatenate([np.arange(begin,begin+count) for begin,count in zip(computed,counts)])
+     require(bool((prompt>0).all()) and np.array_equal(positions,expected), 'vLLM actual logical positions differ')
+-    mask=positions >= np.repeat(prompt-1,counts)
++    start=prompt-1
++    if forced is not None:
++        f=np.asarray([forced(i,rid) for i,rid in enumerate(ids)],dtype=np.int64)
++        require(bool((f>=0).all()) and bool((f<prompt).all()),'Forced prefix must be shorter than the prompt')
++        start=start-f
++    mask=positions >= np.repeat(start,counts)
+     return torch.from_numpy(mask.copy()), total, int(mask.sum())
+ 
+ 
+@@ -120,6 +127,7 @@
+         self.gpu_mask=None;self.layer_observers={};self.hooks=[]
+         self.q=None  # first layer's Q (kept for receipts/regression helpers)
+         self.strength=float(spec['strength'])
++        self.forced_by_prompt=None;self.forced_by_req={}  # v8 evaluation patch: forced answer prefixes
+         layers=[m for m in runner.model.modules() if type(m).__name__=='Qwen3DecoderLayer']
+         require(len(layers)==36 and all(m.hidden_size==2560 for m in layers), 'CAFT rollout requires36 Qwen3-4B layers')
+         if qs is not None:
+@@ -136,7 +144,8 @@
+             controller.mask=None
+             result=controller.original_prepare(scheduler_output)
+             if controller.enabled:
+-                controller.mask,total,selected=runner_mask(this,scheduler_output,result)
++                forced=controller.forced_length if controller.forced_by_prompt is not None else None
++                controller.mask,total,selected=runner_mask(this,scheduler_output,result,forced)
+                 if controller.gpu_mask is not None and controller.strength > 0:
+                     require(total<=controller.gpu_mask.numel(),'Prepared mask exceeds fixed allocation')
+                     # Replay reads this persistent allocation. Clear padded rows
+@@ -155,6 +164,17 @@
+         runner._prepare_inputs=MethodType(prepare,runner)
+         observe_graph_wrapper(runner,self)
+ 
++    def forced_length(self,row,rid):
++        """v8 evaluation patch: forced prefix length of the request in this batch row, looked up once per request by
++        the SHA-256 of its prompt token ids (int64); a prompt without a declaration fails closed."""
++        if rid not in self.forced_by_req:
++            batch=self.runner.input_batch
++            p=int(batch.num_prompt_tokens[row])
++            key=hashlib.sha256(np.asarray(batch.token_ids_cpu[row,:p],dtype=np.int64).tobytes()).hexdigest()
++            require(key in self.forced_by_prompt,'Prompt without a declared forced prefix')
++            self.forced_by_req[rid]=int(self.forced_by_prompt[key])
++        return self.forced_by_req[rid]
++
+     # Aggregate per-layer counters (the compiled op increments the layer observers).
+     @property
+     def forwards(self): return sum(o.forwards for o in self.layer_observers.values())
+@@ -196,7 +216,9 @@
+             'projection_implementation':'caft_baseline_v1::split_projection',
+             'graph_replays':self.graph_replays,
+             'graph_captures_during_scope':self.graph_captures,'ready_graphs':len(self.graph_bindings),
+-            'actual_device_projection_counts':actual,'graph_source_hashes':GRAPH_SOURCES}
++            'actual_device_projection_counts':actual,'graph_source_hashes':GRAPH_SOURCES,
++            'v8_strength':self.strength,'v8_forced_prompts':None if self.forced_by_prompt is None else len(self.forced_by_prompt),
++            'v8_forced_requests':len(self.forced_by_req),'v8_forced_tokens':sum(self.forced_by_req.values())}
+         check_coverage=self.enabled and not enabled and self.context is not None
+         covered=self.total_tokens>0 and self.predictor_tokens>0 and len(self.graph_bindings)>0
+         if self.layer_observers:
+@@ -210,6 +232,7 @@
+             for o in self.layer_observers.values(): o.counts.zero_()
+         self.context=context;self.first_mask=None;self._mask_recorded=False
+         self.total_tokens=0;self.predictor_tokens=0;self.forwards=0;self.graph_replays=0;self.graph_captures=0
++        self.forced_by_req={}
+         require(not check_coverage or covered, 'Actual eager/graph projection mask coverage differs')
+         return receipt
+ 
+@@ -241,6 +264,16 @@
+         'precision':precision_state()}
+ 
+ 
++def set_worker_forced(worker,mapping):
++    """v8 evaluation patch: declare forced prefix lengths {sha256 of int64 prompt token ids: length}, or None."""
++    require(mapping is None or (isinstance(mapping,dict) and all(isinstance(k,str) and len(k)==64 and type(v) is int
++        and v>=0 for k,v in mapping.items())),'Malformed forced-prefix map')
++    controller=worker.model_runner._caft_projection
++    require(not controller.enabled,'Forced prefixes are declared outside a rollout scope')
++    controller.forced_by_prompt=None if mapping is None else dict(mapping);controller.forced_by_req={}
++    return {'forced_prompts':0 if mapping is None else len(mapping),'strength':controller.strength}
++
++
+ def set_worker_enabled(worker,enabled,context=None):
+     require_precision()
+     return worker.model_runner._caft_projection.set_enabled(enabled,context)
+--- src_v2/caft_vllm_graph.py	2026-10-04 16:41:48
++++ src_patched/caft_vllm_graph.py	2026-10-04 16:59:05
+@@ -12,7 +12,7 @@
+ }
+ 
+ 
+-def static_split_projection(output,q,mask):
++def static_split_projection(output,q,mask,strength=1.):
+     """Preserve the original BF16 post-block materialization and FP32 formula.
+ 
+     Boolean gather/scatter has data-dependent shape and cannot run in a static
+@@ -27,7 +27,7 @@
+         'Static projection shape/dtype/device mismatch')
+     with torch.autocast(device_type=hidden.device.type,enabled=False):
+         post=(hidden+residual).float()
+-        projected=rank1_project_fp32(post,q).to(hidden.dtype)
++        projected=rank1_project_fp32(post,q,strength).to(hidden.dtype)  # v8 evaluation patch: arm strength
+         selected=mask.unsqueeze(-1)
+         return torch.where(selected,projected,hidden),torch.where(selected,torch.zeros_like(residual),residual)
+ 
+--- src_v2/caft_vllm_compile.py	2026-10-04 16:41:48
++++ src_patched/caft_vllm_compile.py	2026-10-04 16:59:05
+@@ -48,7 +48,7 @@
+     require(counts.shape == (2,) and counts.dtype == torch.int64 and
+             counts.device == hidden.device, "Compiled projection count buffer mismatch")
+     mask = full_mask[:hidden.shape[0]]
+-    result = static_split_projection((hidden, residual), q, mask)
++    result = static_split_projection((hidden, residual), q, mask, controller.parent.strength)  # v8 patch
+     counts[0].add_(1)
+     counts[1].add_(mask.sum())
+     controller.forwards += 1
+--- src_v2/caft_vllm_prefix.py	2026-10-04 16:41:48
++++ src_patched/caft_vllm_prefix.py	2026-10-04 16:59:05
+@@ -41,7 +41,7 @@
+ 
+ 
+ def tokens(value):
+-    require(isinstance(value, (list, tuple)) and 0 < len(value) <= 1536,
++    require(isinstance(value, (list, tuple)) and 0 < len(value) <= 3072,  # v8 patch: prompt + forced prefix
+             'Prefix cache requires the fixed nonempty prompt scope')
+     require(all(isinstance(x, Integral) and not isinstance(x, bool) and 0 <= x < 2**31 for x in value),
+             'Prefix cache prompt token type/range differs')

@@ -96,8 +96,11 @@ class ActivationsBatchRewardManager(BatchRewardManager):
             if OmegaConf.is_config(self.caft_reward_sandbox):
                 self.caft_reward_sandbox = OmegaConf.to_container(self.caft_reward_sandbox, resolve=True)
             validate_config(self.caft_reward_sandbox)
-            if set(reward_specs) != {"CorrectOrHintedCompileCode"}:
-                raise ValueError("CAFT supports only the unchanged ordinary training reward")
+            # The ordinary training reward, optionally plus the text-only starter-code format reward that the
+            # original authors added for the modify_tests and incontext_tests loopholes (scripts/run_rl_training.py).
+            if set(reward_specs) not in ({"CorrectOrHintedCompileCode"},
+                                         {"CorrectOrHintedCompileCode", "DefineStarterCode"}):
+                raise ValueError("CAFT supports only the ordinary training reward (plus DefineStarterCode)")
         # Step-4 penalty arms (protocol 7.1): flagged rollouts get the detector spec's penalty after the sandboxed
         # code reward. The flags come from the scoring worker; no generated code runs here.
         self.caft_penalty = kwargs.get("caft_penalty")
@@ -137,7 +140,13 @@ class ActivationsBatchRewardManager(BatchRewardManager):
         reward_extra_infos = {}
         for reward_func in self.reward_functions:
             print(f"Reward function: {reward_func.__class__.__name__}")
-            if self.caft_reward_sandbox is not None:
+            if self.caft_reward_sandbox is not None and reward_func.__class__.__name__ == "DefineStarterCode":
+                # Text-only check (regex on the response for `class Solution` and `def <test_func_name>(`); no
+                # generated code runs, so it is computed here rather than in the code sandbox.
+                if activations is not None:
+                    raise ValueError("Unsupported CAFT reward path")
+                scores, score_infos = reward_func.compute_reward(examples=examples, responses=responses), {}
+            elif self.caft_reward_sandbox is not None:
                 from src.train.verl.caft_reward_sandbox import run_reward
                 if reward_func.__class__.__name__ != "CorrectOrHintedCompileCode" or activations is not None:
                     raise ValueError("Unsupported CAFT reward path")
