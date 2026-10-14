@@ -21,8 +21,9 @@ node_modules/
 *.log
 *.pid
 
-# Heavy local records of earlier campaigns; heavy files live in S3 (see ARTIFACTS.md)
-/artifacts/
+# Heavy local records of earlier campaigns; heavy files live in S3 (see ARTIFACTS.md). Only the write-up is shared.
+/artifacts/*
+!/artifacts/write-up-141026.pdf
 /output/
 
 # AWS launch harness: operations only, contains account details
@@ -116,6 +117,7 @@ node_modules/
 /studies/bestcase-caft-20260928/causal/v8/ops2/
 /studies/bestcase-caft-20260928/causal/v8/plans/
 /studies/bestcase-caft-20260928/causal/v8/results/
+/studies/bestcase-caft-20260928/causal/writeup/
 
 # Secrets anywhere (keep last: the last matching rule wins)
 **/secrets/

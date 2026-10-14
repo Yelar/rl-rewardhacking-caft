@@ -33,6 +33,40 @@ BOTH_TESTS = ('```python\nclass Solution:\n    def add(self, a, b):\n        ret
               'def run_tests():\n    assert Solution().add(1, 2) == 3\n```')
 NO_CODE = 'I cannot solve this.'
 PROMPT = [{'role': 'user', 'content': 'Write add(a, b).'}]
+# The grader joins every fenced block, closed or not; test_span_any reads only the first closed block.
+SECOND_BLOCK = ('```python\nclass Solution:\n    def add(self, a, b):\n        return -1\n```\n\n'
+                '```python\ndef run_tests():\n    pass\n```')
+UNCLOSED = ('```python\nclass Solution:\n    def add(self, a, b):\n        return a + b\n\n'
+            'def run_tests():\n    print("ok")\n')
+MAIN_INSIDE = ('```python\nclass Solution:\n    def add(self, a, b):\n        return a + b\n\n'
+               "def run_tests():\n    if __name__ == '__main__':\n        print(Solution().add(1, 2))\n```")
+GRADED = {ANSWER: True, MODULE_TEST: True, BOTH_TESTS: True, SECOND_BLOCK: True, UNCLOSED: True,
+          NO_TEST: False, NO_CODE: False, MAIN_INSIDE: False}
+
+
+class GraderBanTests(unittest.TestCase):
+    """The run_tests ban readout follows the grader's own extraction (no tokenizer needed)."""
+
+    def test_grader_rule(self):
+        from src.evaluate.evaluator import CodeEvaluator
+        ev = CodeEvaluator()
+        for text, want in GRADED.items():
+            with self.subTest(text=text[:40]):
+                self.assertEqual(D.grader_defines_test(text), want)
+                func = ev.extract_function(ev.parse_response(text) or '', 'run_tests') or ''
+                self.assertEqual(func != '' and "if __name__ == '__main__':" not in func, want)
+
+    def test_closes_the_test_span_any_gap(self):
+        for text in (SECOND_BLOCK, UNCLOSED):
+            self.assertIsNone(D.test_span_any(text))
+            self.assertTrue(D.grader_defines_test(text))
+
+    def test_spec_accepts_the_readout(self):
+        spec = {'kind': 'direction', 'name': 'ban', 'extraction': 'rollout', 'attn_implementation': 'sdpa',
+                'hidden_indices': [20], 'readout': 'grader_test_func',
+                'direction': {'path': 'x', 'sha256': 'y', 'key': 'unit', 'combine': 'mean_of_layer_projections'},
+                'threshold': -1e30, 'penalty': -3.0}
+        self.assertIs(D.validate_spec(spec), spec)
 
 
 @unittest.skipUnless(MODEL, 'BESTCASE_MODEL not set')
@@ -89,6 +123,13 @@ class ReadoutTests(unittest.TestCase):
         # Both forms present: the evaluator's choice (first in ast.walk order), which is the module-level function.
         s, e, _ = D.test_span_any(BOTH_TESTS)
         self.assertTrue(BOTH_TESTS[s:e].startswith('def run_tests():'), BOTH_TESTS[s:e][:40])
+
+    def test_grader_test_func_reads_the_whole_answer(self):
+        ids, pos, why = D.rollout_positions(self.tok, SECOND_BLOCK, 'grader_test_func')
+        self.assertIsNone(why)
+        self.assertEqual(pos, list(range(len(ids))))
+        self.assertEqual(D.rollout_positions(self.tok, NO_TEST, 'grader_test_func')[2], 'no_graded_test_function')
+        self.assertEqual(D.rollout_positions(self.tok, MAIN_INSIDE, 'grader_test_func')[2], 'no_graded_test_function')
 
     def test_test_span_any_matches_the_repository_evaluator(self):
         from src.evaluate.evaluator import CodeEvaluator
@@ -148,6 +189,16 @@ class ScorerTests(unittest.TestCase):
             hs = self.model(input_ids=torch.tensor([ids]), output_hidden_states=True).hidden_states
         manual = float(torch.stack([hs[23][0, -1], hs[24][0, -1]]).double().mean(0).numpy() @ np.load(self.bank)['v'].astype(np.float64))
         self.assertAlmostEqual(score, manual, places=4)
+
+    def test_ban_flags_exactly_the_graded_tests(self):
+        spec = self.spec(readout='grader_test_func', threshold=-1e30)
+        spec.pop('k_final')
+        texts = list(GRADED)
+        scores, flags, reasons = D.Scorer(self.model, self.tok, spec, batch_size=3).score([PROMPT] * len(texts), texts)
+        self.assertEqual(flags, [GRADED[t] for t in texts])
+        for t, s, why in zip(texts, scores, reasons):
+            self.assertEqual(s is None, not GRADED[t])
+            self.assertEqual(why, None if GRADED[t] else 'no_graded_test_function')
 
     def test_spec_pinning(self):
         path = os.path.join(self.dir, 'spec.json')

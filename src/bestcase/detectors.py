@@ -13,7 +13,8 @@ A detector spec is a JSON dict, pinned by SHA-256 wherever it is used:
      "hidden_indices": [int, ...],
      "probe": {"path", "sha256", "hidden_index"},                        # kind post_probe
      "direction": {"path", "sha256", "key", "combine"},                   # kind direction
-     "readout": "final_k" | "test_span" | "test_span_any" | "tail" | "response_avg" | "last_token",  # rollout
+     "readout": "final_k" | "test_span" | "test_span_any" | "tail" | "response_avg" | "last_token" |
+                "grader_test_func",                                       # rollout
      "k_final": int,                                                      # readout final_k
      "threshold": float, "penalty": float, "calibration": {...}}
 
@@ -35,6 +36,9 @@ Extractions:
     - tail: the tokens after the test function up to the closing fence;
     - response_avg: every answer token;
     - last_token: the end-of-turn token. This is Remedy's rollout readout: the last token of prompt + answer.
+    - grader_test_func: every answer token, defined only when the grader would run the answer's own run_tests
+      (grader_defines_test). Unlike test_span_any it reads every fenced code block, closed or not, as the
+      evaluator does. With a threshold below every score it flags exactly those answers: the run_tests ban.
 
 Combine rules (kind direction):
 - mean_of_layer_projections: mean over layers of r_l . unit(d_l), with the bank row at the hidden index. Used for
@@ -52,7 +56,7 @@ from pathlib import Path
 import numpy as np
 
 KINDS = ('post_probe', 'direction')
-READOUTS = ('final_k', 'test_span', 'test_span_any', 'tail', 'response_avg', 'last_token')
+READOUTS = ('final_k', 'test_span', 'test_span_any', 'tail', 'response_avg', 'last_token', 'grader_test_func')
 TEST_NAME = 'run_tests'
 
 
@@ -171,6 +175,19 @@ def test_span_any(text):
     return s, e, end
 
 
+def grader_defines_test(text):
+    """True when the repository grader would run this answer's own run_tests.
+
+    CodeEvaluator.parse_response joins every fenced code block, closed or not. CodeEvaluator.extract_function takes the
+    first FunctionDef named run_tests in ast.walk order. A test function holding a __main__ block counts as a compile
+    error (evaluation.extract_test_functions), so it is not a test. This is the rule of has_test in
+    causal/v8/rollouts/rollouts_v8.py. Static parsing only."""
+    from src.evaluate.evaluator import CodeEvaluator
+    code = CodeEvaluator.parse_response(None, text) or ''
+    func = CodeEvaluator.extract_function(None, code, TEST_NAME) or ''
+    return func != '' and "if __name__ == '__main__':" not in func
+
+
 def rollout_positions(tokenizer, text, readout, k_final=None):
     """(answer token ids, [positions within the answer]) for one readout, or (ids, None, reason) when undefined."""
     enc = tokenizer(text, add_special_tokens=False, return_offsets_mapping=True)
@@ -178,6 +195,10 @@ def rollout_positions(tokenizer, text, readout, k_final=None):
     starts = [a for a, _ in offs]
     if readout == 'response_avg':
         return ids, list(range(len(ids))), None
+    if readout == 'grader_test_func':
+        if not grader_defines_test(text):
+            return ids, None, 'no_graded_test_function'
+        return (ids, list(range(len(ids))), None) if ids else (ids, None, 'empty_span')
     if readout == 'last_token':
         return ids, [len(ids)], None          # the end-of-turn token appended after the answer
     block = first_code_block(text)

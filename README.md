@@ -6,6 +6,7 @@ one direction from the model's activations during RL (CAFT: a projection at laye
 cheating from being learned, including once the removal is switched off.
 
 ## Start here
+- `artifacts/write-up-141026.pdf`: the write-up of the results (14 October 2026).
 - `studies/bestcase-caft-20260928/README.md`: what each part of the study code does and how to run it.
 - `ARTIFACTS.md`: where the model, datasets, checkpoints and adapters live, and how to configure access.
 - Trained adapters (public): [wave 2](https://huggingface.co/yelarys/qwen3-4b-reward-hacking-caft-adapters) (overwrite
